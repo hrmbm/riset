@@ -482,7 +482,28 @@ els.forEach(function(el){var nik=el.getAttribute('data-facenik');if(got[nik]){el
 }catch(e){}
 }
 }
-function loadMyDescriptor(){var gen=SESSION_GEN;return api('getMyFaceData',[]).then(function(r){if(stale(gen))return null;if(r&&r.descriptor){S.myDescriptor=r.descriptor;faceCachePutDesc(S.user.nik,r.photoVer||0,r.descriptor);}return r;}).catch(function(){return null;});}
+function loadMyDescriptor(){
+  var gen=SESSION_GEN;
+  return api('getMyFaceData',[]).then(function(r){
+    if(stale(gen))return null;
+    if(r&&r.descriptor){
+      var desc = r.descriptor;
+      // Parse jika server mengembalikan string format Postgres atau JSON
+      if(typeof desc === 'string') {
+        try {
+          if(desc.trim().startsWith('{')) {
+            desc = JSON.parse('[' + desc.slice(1, -1) + ']');
+          } else {
+            desc = JSON.parse(desc);
+          }
+        } catch(e) { desc = null; }
+      }
+      S.myDescriptor=desc;
+      faceCachePutDesc(S.user.nik,r.photoVer||0,desc);
+    }
+    return r;
+  }).catch(function(){return null;});
+}
 function getRefDescriptor(){var d=faceCacheGetDesc(S.user.nik,faceVerOf(S.user.nik))||S.myDescriptor;if(!d&&!CAM.refLoading){CAM.refLoading=true;loadMyDescriptor().then(function(){CAM.refLoading=false;}).catch(function(){CAM.refLoading=false;});}return d;}
 function localDistance(desc){var ref=getRefDescriptor();if(!ref||!desc)return null;var sum=0;for(var i=0;i<128;i++){var q=desc[i]-ref[i];sum+=q*q;}return Math.sqrt(sum);}
 function normalizeFaceDescriptor(value){if(Array.isArray(value)){return value.map(Number)}if(typeof value==='string'){var parsed;try{parsed=JSON.parse(value)}catch(e){throw new Error('Face descriptor tidak dapat dibaca.')}if(Array.isArray(parsed)){return parsed.map(Number)}}if(value&&typeof value.length==='number'){return Array.from(value,Number)}throw new Error('Face descriptor tidak valid.')}
@@ -499,14 +520,23 @@ if(fn==='getMasterCuti')return(await rpc('get_master_cuti',{p_token:getToken()})
 if(fn==='getSisaCuti')return rpc('get_sisa_cuti',{p_token:getToken(),p_kode:args[1]||'CT'});
 if(fn==='getMyPendingRequests')return(await rpc('get_my_pending_requests',{p_token:getToken()}))||{absensi:[],cuti:[]};
 if(fn==='changeMyPassword')return rpc('change_my_password',{p_token:getToken(),p_old_pin:args[1],p_new_pin:args[2]});
-if(fn==='simpanAbsensi'){var p=args[0]||{};return rpc('submit_attendance',{p_token:getToken(),p_tipe:p.tipe,p_lat:p.latitude,p_lon:p.longitude,p_acc:p.accuracy,p_descriptor:JSON.stringify(normalizeFaceDescriptor(p.faceDescriptor)),p_catatan:p.catatan||'',p_address:p.address||'',p_foto_base64:p.fotoBase64||null},timeoutMs||40000);}
+if(fn==='simpanAbsensi'){
+  var p=args[0]||{};
+  // Format descriptor menjadi string array literal Postgres: {-0.17,0.02,...}
+  var descStr = p.faceDescriptor ? '{' + Array.from(p.faceDescriptor).join(',') + '}' : null;
+  return rpc('submit_attendance',{p_token:getToken(),p_tipe:p.tipe,p_lat:p.latitude,p_lon:p.longitude,p_acc:p.accuracy,p_descriptor:descStr,p_catatan:p.catatan||'',p_address:p.address||''});
+}
 if(fn==='submitCuti'){var c=args[0]||{};return rpc('submit_cuti',{p_token:getToken(),p_kode:c.kode,p_mulai:c.tanggalMulai,p_selesai:c.tanggalSelesai,p_alasan:c.alasan,p_dokumen:c.dokumen});}
 if(fn==='getRiwayatCuti')return(await rpc('get_riwayat_cuti',{p_token:getToken()}))||[];
 if(fn==='getPendingApprovalsFull')return rpc('get_pending_approvals',{p_token:getToken()});
 if(fn==='processApproval')return rpc('process_approval',{p_token:getToken(),p_id:args[2],p_action:(args[3]==='APPROVE')?'APPROVE':'REJECT',p_alasan:args[4]||''});
 if(fn==='processCutiApproval')return rpc('process_cuti_approval',{p_token:getToken(),p_id:args[2],p_action:(args[3]==='APPROVE')?'APPROVE':'REJECT',p_alasan:args[4]||''});
 if(fn==='getKaryawanSummary')return rpc('get_karyawan_summary',{p_token:getToken()});
-if(fn==='saveMyFaceDescriptor')return rpc('save_my_face',{p_token:getToken(),p_descriptor:args[1],p_photo:args[2]||null});
+if(fn==='saveMyFaceDescriptor'){
+  // Format descriptor menjadi string array literal Postgres
+  var descStr = args[1] ? '{' + Array.from(args[1]).join(',') + '}' : null;
+  return rpc('save_my_face',{p_token:getToken(),p_descriptor:descStr,p_photo:args[2]||null});
+}
 if(fn==='uploadAbsensiFoto')return{success:true,message:'async'};
 if(fn==='getFacePhotos')return rpc('get_face_photos',{p_token:getToken(),p_niks:args[0]});
 if(fn==='getMyFaceData')return rpc('get_my_face_data',{p_token:getToken()});
@@ -597,8 +627,29 @@ function changePin(){var o=$('pinOld').value.trim(),n=$('pinNew').value.trim(),n
 function loadBootstrap(){var gen=SESSION_GEN;return api('getFastBootstrap',[S.user.nik],30000).then(function(b){S.booting=false;if(stale(gen))return;S.user.employee=b.profile;S.user.role=b.profile.role||S.user.role;DATA.faceVer[S.user.nik]=b.profile.facePhotoVer||0;S.office=b.office;S.status=b.status;S.sisaCT=b.sisaCuti;S.face=b.faceStatus||{registered:false,canRegister:false};S.approver=(S.user.role==='HR'||S.user.role==='ADMIN'||b.hasSubordinates===true);S.pendingTotal=b.pendingTotal||0;saveSession();applyRoleMenus();var cur=currentScr();var g=ROLE_GATE[cur];if(g&&g.indexOf(S.user.role)<0){go('s-home');}renderHome();updateBadges();loadTeam();loadMyRequests();}).catch(function(e){S.booting=false;if(stale(gen))return;api('getStatusHariIni',[S.user.nik]).then(function(st){if(stale(gen))return;S.status=st;renderHome()}).catch(function(){});});}
 function updateBadges(){var n=S.pendingTotal||0;var b=$('tabBadge');b.textContent=n;b.style.display=n?'block':'none';var b2=$('inboxBadge');b2.textContent=n;b2.style.display=n?'inline-block':'none';}
 function gpsWarm(){if(!navigator.geolocation)return;navigator.geolocation.getCurrentPosition(function(p){setGps(p)},function(){},{enableHighAccuracy:true,timeout:12000,maximumAge:60000});if(GPS.watchId==null){GPS.watchId=navigator.geolocation.watchPosition(function(p){setGps(p)},function(){},{enableHighAccuracy:true,maximumAge:10000});}}
-function setGps(p){if(!GPS.pos||p.coords.accuracy<GPS.pos.accuracy){GPS.pos={latitude:p.coords.latitude,longitude:p.coords.longitude,accuracy:p.coords.accuracy};GPS.at=Date.now()}if(ATT.type&&$('s-att').classList.contains('on')&&!$('attStep1').style.display){renderGpsUi();}}
-function refreshGps(){if(!navigator.geolocation){toast('GPS tidak didukung');return}$('gpsInfo').textContent='⏳ Memperbarui lokasi...';navigator.geolocation.getCurrentPosition(function(p){setGps(p);renderGpsUi()},function(e){$('gpsInfo').textContent='❌ '+e.message},{enableHighAccuracy:true,timeout:15000,maximumAge:0});}
+function setGps(p){
+  if(!GPS.pos||p.coords.accuracy<GPS.pos.accuracy){
+    GPS.pos={latitude:p.coords.latitude,longitude:p.longitude,accuracy:p.coords.accuracy};
+    GPS.at=Date.now();
+  }
+  // Perbaikan: Hapus pengecekan style.display yang menyebabkan bug
+  if(ATT.type && $('s-att').classList.contains('on')){
+    renderGpsUi();
+  }
+}
+function refreshGps(){
+  if(!navigator.geolocation){toast('GPS tidak didukung');return}
+  $('gpsInfo').textContent='⏳ Memperbarui lokasi...';
+  navigator.geolocation.getCurrentPosition(
+    function(p){setGps(p);renderGpsUi()},
+    function(e){
+      $('gpsInfo').textContent='❌ '+e.message;
+      // Fallback: Jika GPS utama timeout tapi watchPosition sudah dapat lokasi, tetap render peta
+      if(GPS.pos) renderGpsUi();
+    },
+    {enableHighAccuracy:true,timeout:15000,maximumAge:0}
+  );
+}
 function jarakMeter(a,b,c,d){var R=6371000,r=Math.PI/180,dLa=(c-a)*r,dLo=(d-b)*r,x=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(a*r)*Math.cos(c*r)*Math.sin(dLo/2)*Math.sin(dLo/2);return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
 function inOfficeCheck(){var p=GPS.pos,o=S.office;if(!p||!o)return{inOffice:false,reason:!p?'no-gps':'no-office'};var d=jarakMeter(p.latitude,p.longitude,o.latitude,o.longitude);return{inOffice:(d<=o.radius&&p.accuracy<=o.maxAccuracy),distance:d,office:o};}
 function mapContainerLoading(key,el){var ld=el.querySelector('.map-loading');if(!ld){ld=document.createElement('div');ld.className='map-loading';el.appendChild(ld);}ld.textContent=MAP_CONFIG.strings.loading;}
