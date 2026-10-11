@@ -524,9 +524,10 @@ if(fn==='getMyPendingRequests')return(await rpc('get_my_pending_requests',{p_tok
 if(fn==='changeMyPassword')return rpc('change_my_password',{p_token:getToken(),p_old_pin:args[1],p_new_pin:args[2]});
 if(fn==='simpanAbsensi'){
   var p=args[0]||{};
-  // Pakai overload SQL p_descriptor TEXT + p_foto_base64 TEXT.
-  // JSON array diparse oleh fungsi SQL; keberadaan p_foto_base64 memilih overload yang benar.
-  var descStr = p.faceDescriptor ? JSON.stringify(Array.from(p.faceDescriptor, Number)) : null;
+  // Kirim descriptor sebagai literal array PostgreSQL agar tetap cocok bila
+  // PostgREST/Supabase memilih overload submit_attendance dengan double precision[].
+  // Bentuk yang dipakai: {-0.17,0.02,...}, bukan JSON [ -0.17, 0.02, ... ].
+  var descStr = p.faceDescriptor ? '{' + Array.from(p.faceDescriptor, function(x){var n=Number(x);if(!Number.isFinite(n))throw new Error('Face descriptor berisi angka tidak valid.');return String(n);}).join(',') + '}' : null;
   return rpc('submit_attendance_with_photo',{p_token:getToken(),p_tipe:p.tipe,p_lat:p.latitude,p_lon:p.longitude,p_acc:p.accuracy,p_descriptor:descStr,p_catatan:p.catatan||'',p_address:p.address||'',p_foto_base64:null});
 }
 if(fn==='submitCuti'){var c=args[0]||{};return rpc('submit_cuti',{p_token:getToken(),p_kode:c.kode,p_mulai:c.tanggalMulai,p_selesai:c.tanggalSelesai,p_alasan:c.alasan,p_dokumen:c.dokumen});}
