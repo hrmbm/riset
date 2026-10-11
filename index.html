@@ -540,7 +540,8 @@ if(fn==='saveMyFaceDescriptor'){
   var descStr = args[1] ? '{' + Array.from(args[1]).join(',') + '}' : null;
   return rpc('save_my_face',{p_token:getToken(),p_descriptor:descStr,p_photo:args[2]||null});
 }
-if(fn==='uploadAbsensiFoto')return{success:true,message:'async'};
+if(fn==='uploadAbsensiFoto')return callExistingApiFunction('uploadAbsensiFoto',[getToken(),String(args[0]||''),String(args[1]||'')],45000);
+if(fn==='getEvidenceSignedUrl')return callExistingApiFunction('getEvidenceSignedUrl',[getToken(),String(args[0]||'')],20000);
 if(fn==='getFacePhotos')return rpc('get_face_photos',{p_token:getToken(),p_niks:args[0]});
 if(fn==='getMyFaceData')return rpc('get_my_face_data',{p_token:getToken()});
 if(fn==='getTeamActivity')return rpc('get_team_activity',{p_token:getToken(),p_date:args[0]||null});
@@ -908,10 +909,42 @@ if(fotoBase64&&attendanceId){
 faceCachePutDesc(S.user.nik,faceVerOf(S.user.nik),desc);S.myDescriptor=desc;
 if(S.approver){refreshPending();}
 S.status={masuk:ATT.type==='MASUK'?true:(S.status||{}).masuk,pulang:ATT.type==='PULANG'?true:(S.status||{}).pulang,jamMasuk:ATT.type==='MASUK'?res.jam:(S.status||{}).jamMasuk,jamPulang:ATT.type==='PULANG'?res.jam:(S.status||{}).jamPulang,statusApproval:res.statusApproval};$('attStep2').style.display='none';$('attDone').style.display='block';$('attStep').textContent='Selesai';$('doneTitle').textContent=res.statusApproval==='VALID'?(ATT.type==='MASUK'?'Clock In berhasil':'Clock Out berhasil'):'Pengajuan terkirim';$('doneMsg').textContent=res.message;}catch(e){if(e&&e.message!=='STALE'){var msg=(e&&e.message)?e.message:String(e||'Kesalahan tidak diketahui.');alert('Pengiriman absensi gagal. Pesan server: '+msg+'\n\nSesi tidak akan dihapus otomatis oleh proses kirim. Periksa pesan ini sebelum mencoba lagi.');}b.disabled=false;b.textContent='Kirim';}ATT.submitting=false;}
-async function uploadEvidenceAsync(absensiId,dataUrl){var lastErr=null;for(var attempt=1;attempt<=3;attempt++){try{var client=await getSb();var path=S.user.nik+'/'+absensiId+'.jpg';var b64=String(dataUrl||'').split(',')[1];if(!b64)throw new Error('Foto evidence kosong.');var bytes=Uint8Array.from(atob(b64),function(c){return c.charCodeAt(0)});var up=await client.storage.from('evidence').upload(path,bytes,{contentType:'image/jpeg',upsert:true});if(up.error)throw up.error;/* Simpan path stabil, bukan signed URL yang kedaluwarsa. */var saved=await api('saveEvidencePath',[absensiId,path,path],25000);return saved;}catch(e){lastErr=e;if(attempt<3)await new Promise(function(r){setTimeout(r,800*attempt);});}}throw lastErr||new Error('Upload evidence gagal.');}
-
+async function callExistingApiFunction(fn,args,timeoutMs){
+  var controller=typeof AbortController!=='undefined'?new AbortController():null;
+  var timer=controller?setTimeout(function(){controller.abort();},timeoutMs||30000):null;
+  try{
+    var response=await fetch(SUPABASE_URL+'/functions/v1/api',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SUPABASE_ANON_KEY,'Authorization':'Bearer '+SUPABASE_ANON_KEY},
+      body:JSON.stringify({fn:fn,args:args||[]}),
+      signal:controller?controller.signal:undefined
+    });
+    var body={};try{body=await response.json();}catch(e){}
+    if(!response.ok||body.ok===false)throw new Error(body.error||body.message||('API foto gagal ('+response.status+').'));
+    return body.result;
+  }catch(e){
+    if(e&&e.name==='AbortError')throw new Error('Permintaan penyimpanan foto melewati batas waktu.');
+    throw e;
+  }finally{if(timer)clearTimeout(timer);}
+}
+async function uploadEvidenceAsync(absensiId,dataUrl){
+  var lastErr=null;
+  for(var attempt=1;attempt<=3;attempt++){
+    try{
+      if(!dataUrl||String(dataUrl).indexOf('data:image/')!==0)throw new Error('Foto evidence kosong atau formatnya tidak valid.');
+      return await api('uploadAbsensiFoto',[String(absensiId),dataUrl],45000);
+    }catch(e){lastErr=e;if(attempt<3)await new Promise(function(r){setTimeout(r,800*attempt);});}
+  }
+  throw lastErr||new Error('Upload evidence gagal.');
+}
 function evidenceStoragePath(value){var s=String(value||'').trim();if(!s||s.indexOf('data:')===0)return '';var m=s.match(/\/storage\/v1\/object\/(?:sign|authenticated|public)\/evidence\/([^?]+)/i);if(m){try{return decodeURIComponent(m[1]);}catch(e){return m[1];}}if(/^https?:\/\//i.test(s))return '';return s.replace(/^\/+/, '').replace(/^evidence\//i,'');}
-async function resolveEvidenceDisplayUrl(value){var s=String(value||'').trim();if(!s)return '';if(s.indexOf('data:')===0)return s;var path=evidenceStoragePath(s);if(!path)return s;var client=await getSb();var result=await client.storage.from('evidence').createSignedUrl(path,60*60);if(result&&result.error)throw result.error;var url=result&&result.data&&result.data.signedUrl;if(!url)throw new Error('URL foto privat tidak tersedia.');return url;}
+async function resolveEvidenceDisplayUrl(value){
+  var s=String(value||'').trim();if(!s)return '';if(s.indexOf('data:')===0)return s;
+  var path=evidenceStoragePath(s);if(!path)return s;
+  var result=await api('getEvidenceSignedUrl',[path],20000);
+  if(!result.signedUrl)throw new Error('URL foto privat tidak tersedia.');
+  return result.signedUrl;
+}
 async function prepareEvidenceForDisplay(a){if(!a)return;var source=a.fotoUrl||a.foto_url||a.fotoBase64||a.foto_base64||a.photo_url||'';a._fotoDisplayUrl='';if(!source)return;try{a._fotoDisplayUrl=await resolveEvidenceDisplayUrl(source);}catch(e){console.warn('Foto privat tidak dapat dibuka:',e);a._fotoDisplayUrl='';}}
 function snapPhoto(){var v=$('attVideo');var w=Math.min(480,v.videoWidth||480),h=Math.round(w*(v.videoHeight||360)/(v.videoWidth||480));var c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(v,0,0,w,h);return c.toDataURL('image/jpeg',.5);}
 function snapFacePhoto(v,maxDim,q){var w=v.videoWidth||320,h=v.videoHeight||240;var scale=Math.min(1,(maxDim||160)/Math.max(w,h));var cw=Math.round(w*scale),ch=Math.round(h*scale);var c=document.createElement('canvas');c.width=cw;c.height=ch;c.getContext('2d').drawImage(v,0,0,cw,ch);return c.toDataURL('image/jpeg',q||0.65);}
