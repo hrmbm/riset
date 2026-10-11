@@ -628,15 +628,21 @@ function loadBootstrap(){var gen=SESSION_GEN;return api('getFastBootstrap',[S.us
 function updateBadges(){var n=S.pendingTotal||0;var b=$('tabBadge');b.textContent=n;b.style.display=n?'block':'none';var b2=$('inboxBadge');b2.textContent=n;b2.style.display=n?'inline-block':'none';}
 function gpsWarm(){if(!navigator.geolocation)return;navigator.geolocation.getCurrentPosition(function(p){setGps(p)},function(){},{enableHighAccuracy:true,timeout:12000,maximumAge:60000});if(GPS.watchId==null){GPS.watchId=navigator.geolocation.watchPosition(function(p){setGps(p)},function(){},{enableHighAccuracy:true,maximumAge:10000});}}
 function setGps(p){
-  if(!GPS.pos||p.coords.accuracy<GPS.pos.accuracy){
-    GPS.pos={latitude:p.coords.latitude,longitude:p.longitude,accuracy:p.coords.accuracy};
-    GPS.at=Date.now();
+  var lat = Number(p.coords.latitude);
+  var lon = Number(p.coords.longitude);
+  var acc = Number(p.coords.accuracy);
+  if(!isFinite(lat) || !isFinite(lon)) return; // jangan simpan data rusak
+  if(!GPS.pos || acc < GPS.pos.accuracy){
+    GPS.pos = {latitude: lat, longitude: lon, accuracy: acc};
+    GPS.at = Date.now();
   }
-  // Perbaikan: Hapus pengecekan style.display yang menyebabkan bug
   if(ATT.type && $('s-att').classList.contains('on')){
     renderGpsUi();
   }
 }
+function validLL(a,b){
+  return typeof a==='number' && isFinite(a) && typeof b==='number' && isFinite(b);
+}  
 function refreshGps(){
   if(!navigator.geolocation){toast('GPS tidak didukung');return}
   $('gpsInfo').textContent='⏳ Memperbarui lokasi...';
@@ -649,6 +655,18 @@ function refreshGps(){
     },
     {enableHighAccuracy:true,timeout:15000,maximumAge:0}
   );
+}
+  function parseDescriptor(d){
+  if(Array.isArray(d) && d.length === 128) return d.map(Number);
+  if(typeof d === 'string'){
+    var s = d.trim();
+    if(s.startsWith('{') && !s.startsWith('{{')) s = '[' + s.slice(1,-1) + ']'; // Postgres vector "{...}"
+    try{
+      var arr = JSON.parse(s);
+      if(Array.isArray(arr) && arr.length === 128) return arr.map(Number);
+    }catch(e){}
+  }
+  return null;
 }
 function jarakMeter(a,b,c,d){var R=6371000,r=Math.PI/180,dLa=(c-a)*r,dLo=(d-b)*r,x=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(a*r)*Math.cos(c*r)*Math.sin(dLo/2)*Math.sin(dLo/2);return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
 function inOfficeCheck(){var p=GPS.pos,o=S.office;if(!p||!o)return{inOffice:false,reason:!p?'no-gps':'no-office'};var d=jarakMeter(p.latitude,p.longitude,o.latitude,o.longitude);return{inOffice:(d<=o.radius&&p.accuracy<=o.maxAccuracy),distance:d,office:o};}
@@ -674,10 +692,18 @@ function loadFaceApiScript(){return new Promise(function(res,rej){if(typeof face
 function scheduleNets(){var run=function(){ensureNets().catch(function(e){console.warn('nets:',e)})};if(window.requestIdleCallback)requestIdleCallback(run,{timeout:5000});else setTimeout(run,1200);}
 function ensureNets(){if(NETS.ready)return Promise.resolve();if(NETS.promise)return NETS.promise;NETS.promise=(async function(){await loadFaceApiScript();await Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)]);NETS.ready=true;})();return NETS.promise;}
 function nextAttType(){var st=S.status||{};return st.masuk&&!st.pulang?'PULANG':'MASUK'}
-async function startAttendance(type){if(S.submitting)return;if(!S.face.registered){toast('Face ID belum terdaftar. Hubungi HR.');return}var st=S.status||{};if(type==='MASUK'&&st.masuk){toast('Sudah Clock In hari ini.');return}if(type==='PULANG'&&st.pulang){toast('Sudah Clock Out hari ini.');return}if(type==='PULANG'&&!st.masuk){toast('Anda belum Clock In.');return}ATT.type=type;ATT.submitting=false;ATT.outside=false;ATT.outsideOk=false;ATT.lastOutsideAt=0;if(MAPS.att&&MAPS.att.map){try{MAPS.att.map.off();MAPS.att.map.remove()}catch(e){}MAPS.att=null;}ATT_MAP=null;CAM.state='detecting';CAM.win=[];CAM.override=false;CAM.present=false;$('camOverride').style.display='none';
-saveLastScreen('s-home',null);
-$('attTitle').textContent=type==='MASUK'?'Clock In':'Clock Out';$('attStep').textContent='Langkah 1 dari 2';var now=new Date();$('attDate').textContent=now.getDate()+' '+bulanID(now)+' '+now.getFullYear();$('attStep1').style.display='block';$('attStep2').style.display='none';$('attDone').style.display='none';$('btnNext1').disabled=true;$('mapBox').innerHTML='<div class="empty" style="padding-top:110px">📍 Mengambil lokasi...</div>';$('gpsInfo').textContent='⏳ Menunggu GPS...';$('gpsWarn').style.display='none';go('s-att');refreshGps();camStart().catch(function(e){$('camStatus').textContent='❌ Kamera: '+e.message});ensureNets().catch(function(e){$('camStatus').textContent='❌ AI: '+e.message});}
-function renderGpsUi(){var p=GPS.pos;if(!p)return;var chk=inOfficeCheck();
+function startAttendance(tipe){
+  ...
+  loadMyDescriptor().then(function(d){
+    if(!d){
+      $('camStatus').textContent = '⚠️ Data wajah tidak ditemukan. Daftarkan Face ID dulu.';
+      $('camStatus').style.color = '#e67700';
+    }
+  }).catch(function(e){
+    $('camStatus').textContent = '❌ Gagal memuat data wajah: ' + e.message;
+  });
+  ...
+}
 ensureLeaflet().then(function(){
 if(!ATT_MAP||!$('mapLeaflet')){$('mapBox').innerHTML='<div id="mapLeaflet" style="width:100%;height:100%"></div>';initAttMap(p,chk);}else{updateAttMap(p,chk);}
 }).catch(function(e){$('mapBox').innerHTML='<div class="empty" style="padding-top:110px">⚠️ Peta gagal dimuat: '+esc(e.message)+'</div>';});
@@ -698,9 +724,15 @@ if(!CAM.present&&(now-CAM.presentAt)>FACE_UI_CONFIG.faceLostGraceMs){CAM.state='
 if(!CAM.present){return;}
 var ref=getRefDescriptor();
 if(!ref){CAM.state='neutral';st.textContent=FACE_UI_CONFIG.status.neutral;st.style.color=FACE_UI_CONFIG.colors.neutral;$('btnKirim').disabled=!(CAM.desc&&now-CAM.descAt<=FACE_UI_CONFIG.freshSubmitMs);ov.style.display='none';return;}
-var best=CAM.win.length?Math.min.apply(null,CAM.win):null;
-if(best!==null&&best<=FACE_UI_CONFIG.localThreshold){CAM.state='match';st.textContent=FACE_UI_CONFIG.status.match;st.style.color=FACE_UI_CONFIG.colors.match;$('btnKirim').disabled=!(CAM.desc&&now-CAM.descAt<=FACE_UI_CONFIG.freshSubmitMs);ov.style.display='none';}
-else{CAM.state='mismatch';st.textContent=FACE_UI_CONFIG.status.mismatch;st.style.color=FACE_UI_CONFIG.colors.mismatch;$('btnKirim').disabled=!CAM.override;ov.style.display=CAM.override?'none':'block';ov.innerHTML='<a href="#" onclick="enableOverride();return false">'+FACE_UI_CONFIG.overrideLinkText+'</a>';}
+var best = CAM.win.length ? Math.min.apply(null, CAM.win) : null;
+if(best !== null && best <= FACE_UI_CONFIG.localThreshold){
+  CAM.state='match';
+  st.textContent = '✓ Cocok (jarak ' + best.toFixed(3) + ' / batas ' + FACE_UI_CONFIG.localThreshold + ')';
+  ...
+}else if(best !== null){
+  CAM.state='mismatch';
+  st.textContent = '✗ Tidak cocok (jarak ' + best.toFixed(3) + ') – mendekat & pencahayaan merata';
+  ...
 }
 function enableOverride(){CAM.override=true;$('btnKirim').disabled=false;$('camOverride').style.display='none';toast('Server akan memverifikasi wajah Anda saat kirim.');}
 function attStep2(){$('attStep1').style.display='none';$('attStep2').style.display='block';$('attStep').textContent='Langkah 2 dari 2';if(!ATT.outsideOk)$('attNote').value='';$('camStatus').textContent=NETS.ready?FACE_UI_CONFIG.status.detecting:'⏳ Memuat AI...';$('camStatus').style.color='#fff';$('btnKirim').disabled=true;updateFaceState();}
