@@ -527,7 +527,7 @@ if(fn==='simpanAbsensi'){
   // Pakai overload SQL p_descriptor TEXT + p_foto_base64 TEXT.
   // JSON array diparse oleh fungsi SQL; keberadaan p_foto_base64 memilih overload yang benar.
   var descStr = p.faceDescriptor ? JSON.stringify(Array.from(p.faceDescriptor, Number)) : null;
-  return rpc('submit_attendance',{p_token:getToken(),p_tipe:p.tipe,p_lat:p.latitude,p_lon:p.longitude,p_acc:p.accuracy,p_descriptor:descStr,p_catatan:p.catatan||'',p_address:p.address||'',p_foto_base64:p.fotoBase64||null});
+  return rpc('submit_attendance_with_photo',{p_token:getToken(),p_tipe:p.tipe,p_lat:p.latitude,p_lon:p.longitude,p_acc:p.accuracy,p_descriptor:descStr,p_catatan:p.catatan||'',p_address:p.address||'',p_foto_base64:p.fotoBase64||null});
 }
 if(fn==='submitCuti'){var c=args[0]||{};return rpc('submit_cuti',{p_token:getToken(),p_kode:c.kode,p_mulai:c.tanggalMulai,p_selesai:c.tanggalSelesai,p_alasan:c.alasan,p_dokumen:c.dokumen});}
 if(fn==='getRiwayatCuti')return(await rpc('get_riwayat_cuti',{p_token:getToken()}))||[];
