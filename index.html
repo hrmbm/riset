@@ -761,10 +761,20 @@ ATT_MAP.userMarker=L.marker([p.latitude,p.longitude],{icon:userMarkerIcon()}).ad
 fitAttMap(p,chk);
 }
 function fitAttMap(p,chk){
-if(!ATT_MAP||!ATT_MAP.map)return;
+if(!ATT_MAP||!ATT_MAP.map||!p||!validLL(p.latitude,p.longitude))return;
 var m=ATT_MAP.map;
-if(ATT_MAP.officeCircle){
-var b=ATT_MAP.officeCircle.getBounds().extend([p.latitude,p.longitude]);
+if(chk&&chk.office&&validLL(chk.office.latitude,chk.office.longitude)){
+// Jangan memanggil officeCircle.getBounds(): Leaflet menghitung bounds Circle
+// melalui referensi internal ke map. Jika lifecycle layer/map sedang bertabrakan,
+// referensi itu dapat belum tersedia dan memunculkan layerPointToLatLng undefined.
+// Hitung batas radius dari koordinat kantor secara langsung, lalu masukkan posisi GPS.
+var lat=chk.office.latitude,lon=chk.office.longitude;
+var radius=Math.max(0,Number(chk.office.radius)||0);
+var latDelta=radius/111320;
+var cosLat=Math.max(Math.abs(Math.cos(lat*Math.PI/180)),0.01);
+var lonDelta=radius/(111320*cosLat);
+var b=L.latLngBounds([lat-latDelta,lon-lonDelta],[lat+latDelta,lon+lonDelta]);
+b.extend([p.latitude,p.longitude]);
 m.fitBounds(b.pad(0.25),{maxZoom:MAP_CONFIG.zoom.attendanceMax});
 }else m.setView([p.latitude,p.longitude],MAP_CONFIG.zoom.attendanceFallback);
 ATT_MAP.fitted=true;
