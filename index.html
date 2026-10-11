@@ -524,9 +524,10 @@ if(fn==='getMyPendingRequests')return(await rpc('get_my_pending_requests',{p_tok
 if(fn==='changeMyPassword')return rpc('change_my_password',{p_token:getToken(),p_old_pin:args[1],p_new_pin:args[2]});
 if(fn==='simpanAbsensi'){
   var p=args[0]||{};
-  // Format descriptor menjadi string array literal Postgres: {-0.17,0.02,...}
-  var descStr = p.faceDescriptor ? '{' + Array.from(p.faceDescriptor).join(',') + '}' : null;
-  return rpc('submit_attendance',{p_token:getToken(),p_tipe:p.tipe,p_lat:p.latitude,p_lon:p.longitude,p_acc:p.accuracy,p_descriptor:descStr,p_catatan:p.catatan||'',p_address:p.address||''});
+  // Pakai overload SQL p_descriptor TEXT + p_foto_base64 TEXT.
+  // JSON array diparse oleh fungsi SQL; keberadaan p_foto_base64 memilih overload yang benar.
+  var descStr = p.faceDescriptor ? JSON.stringify(Array.from(p.faceDescriptor, Number)) : null;
+  return rpc('submit_attendance',{p_token:getToken(),p_tipe:p.tipe,p_lat:p.latitude,p_lon:p.longitude,p_acc:p.accuracy,p_descriptor:descStr,p_catatan:p.catatan||'',p_address:p.address||'',p_foto_base64:p.fotoBase64||null});
 }
 if(fn==='submitCuti'){var c=args[0]||{};return rpc('submit_cuti',{p_token:getToken(),p_kode:c.kode,p_mulai:c.tanggalMulai,p_selesai:c.tanggalSelesai,p_alasan:c.alasan,p_dokumen:c.dokumen});}
 if(fn==='getRiwayatCuti')return(await rpc('get_riwayat_cuti',{p_token:getToken()}))||[];
@@ -892,9 +893,9 @@ function attStep2(){$('attStep1').style.display='none';$('attStep2').style.displ
 function cancelAttendance(){camStop();go('s-home');}
 function finishAttendance(){camStop();loadBootstrap();go('s-home');}
 async function submitAttendance(){if(ATT.submitting)return;var desc=(CAM.desc&&Date.now()-CAM.descAt<FACE_UI_CONFIG.freshSubmitMs)?CAM.desc:null;if(!desc){toast('Wajah belum terdeteksi. Tunggu sebentar...');return}var p=GPS.pos;if(!p){toast('GPS belum tersedia.');return}var catatan=$('attNote').value.trim();if(ATT.outside&&!catatan){toast('Catatan wajib diisi untuk absen luar radius.');return}ATT.submitting=true;var b=$('btnKirim');b.disabled=true;b.innerHTML='<span class="spin"></span> Mengirim...';try{var fotoBase64=null;try{fotoBase64=snapPhoto();}catch(e){console.warn('snapshot evidence gagal:',e);}if(!fotoBase64){if(!confirm('⚠️ Foto bukti gagal diambil. Tetap kirim tanpa foto? Pengajuan yang membutuhkan persetujuan atasan tidak akan muncul di antrean tanpa foto.')){b.disabled=false;b.textContent='Kirim';ATT.submitting=false;return;}}var payload={nik:S.user.nik,tipe:ATT.type,latitude:p.latitude,longitude:p.longitude,accuracy:p.accuracy,address:'',faceDescriptor:desc,catatan:catatan,fotoBase64:fotoBase64};var res=await api('simpanAbsensi',[payload],40000);
-/* Upload foto hanya bila RPC mengembalikan ID record yang bisa dipakai server. */
+/* Foto dikirim dalam RPC submit_attendance dan disimpan oleh overload SQL p_foto_base64.
+   Jangan unggah ulang lewat Storage di sini agar tidak menimpa kolom foto_url dengan format lain. */
 var attendanceId=res&&(res.id||res.absensiId||res.absensi_id||res.attendance_id);
-if(fotoBase64&&attendanceId){try{await uploadEvidenceAsync(attendanceId,fotoBase64);}catch(uploadErr){alert('Absensi sudah tercatat, tetapi foto bukti belum berhasil disimpan. Detail: '+(uploadErr&&uploadErr.message?uploadErr.message:String(uploadErr))+'\nSimpan informasi ini dan hubungi admin; jangan kirim ulang absensi yang sama.');}}else if(fotoBase64&&!attendanceId){console.warn('Foto bukti diambil, tetapi server tidak mengembalikan ID record absensi; foto belum diunggah.');}
 faceCachePutDesc(S.user.nik,faceVerOf(S.user.nik),desc);S.myDescriptor=desc;
 if(S.approver){refreshPending();}
 S.status={masuk:ATT.type==='MASUK'?true:(S.status||{}).masuk,pulang:ATT.type==='PULANG'?true:(S.status||{}).pulang,jamMasuk:ATT.type==='MASUK'?res.jam:(S.status||{}).jamMasuk,jamPulang:ATT.type==='PULANG'?res.jam:(S.status||{}).jamPulang,statusApproval:res.statusApproval};$('attStep2').style.display='none';$('attDone').style.display='block';$('attStep').textContent='Selesai';$('doneTitle').textContent=res.statusApproval==='VALID'?(ATT.type==='MASUK'?'Clock In berhasil':'Clock Out berhasil'):'Pengajuan terkirim';$('doneMsg').textContent=res.message;}catch(e){if(e&&e.message!=='STALE'){var msg=(e&&e.message)?e.message:String(e||'Kesalahan tidak diketahui.');alert('Pengiriman absensi gagal. Pesan server: '+msg+'\n\nSesi tidak akan dihapus otomatis oleh proses kirim. Periksa pesan ini sebelum mencoba lagi.');}b.disabled=false;b.textContent='Kirim';}ATT.submitting=false;}
