@@ -743,9 +743,14 @@ ATT_MAP=null;
 ATT_MAP_INIT=null;
 }
 function initAttMap(p,chk){
-destroyAttMap();
+// Hindari menghancurkan peta saat proses inisialisasi/pembaruan masih berjalan.
+// Pemusnahan peta dilakukan saat sesi absensi baru dimulai oleh startAttendance().
+if(!p||!validLL(p.latitude,p.longitude))return;
+if(ATT_MAP&&ATT_MAP.map){
+try{updateAttMap(p,chk);return}catch(e){console.warn('Attendance map reuse failed:',e);}
+}
 var m=leafletBase('mapLeaflet','att',{zoom:MAP_CONFIG.controls.attendanceZoom},function(){renderGpsUi();});
-if(!m)return;
+if(!m)throw new Error('Leaflet tidak berhasil membuat peta absensi.');
 ATT_MAP={map:m,fitted:false,officeCircle:null,userMarker:null,accCircle:null,lastLat:p.latitude,lastLon:p.longitude};
 if(chk.office){
 ATT_MAP.officeCircle=L.circle([chk.office.latitude,chk.office.longitude],{radius:chk.office.radius,color:MAP_CONFIG.radiusCircle.color,weight:MAP_CONFIG.radiusCircle.weight,fillColor:MAP_CONFIG.radiusCircle.fillColor,fillOpacity:MAP_CONFIG.radiusCircle.fillOpacity}).addTo(m);
