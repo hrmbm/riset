@@ -212,7 +212,7 @@ input,select,textarea{font-family:inherit;font-size:15px}
 .topbar .sitemap{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:20px;color:var(--txt)}
 .topbar.red .sitemap{color:#fff}
 .leaflet-control-zoom a{width:30px!important;height:30px!important;line-height:30px!important;font-size:14px!important}
-<style id="icon-theme">
+/* icon-theme */
 .ic-back{width:20px;height:20px;object-fit:contain;display:block}
 .topbar .back{background:rgba(0,0,0,.05)}
 .topbar.red .back{background:rgba(255,255,255,.28)}
@@ -236,7 +236,6 @@ input,select,textarea{font-family:inherit;font-size:15px}
 .ci{overflow:hidden}
 .ci>img{width:22px;height:22px;object-fit:contain;border-radius:8px;display:block}
 .clk-ic{width:20px;height:20px;flex-shrink:0}
-</style>
 </style>
 <base target="_blank">
 </head>
@@ -293,7 +292,7 @@ setTimeout(function(){if(!window.__APP_BOOTED){show('⚠️ Aplikasi tidak seles
 <script>
 var SUPABASE_URL='https://viynlhmupknbsvmysvdr.supabase.co';
 var SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZpeW5saG11cGtuYnN2bXlzdmRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0OTgzMzQsImV4cCI6MjEwNzA3NDMzNH0.gCptzMDirS5DGPDs51nVAT1UPlzgwD0pwMc-c-DwaF8';
-var APP_VERSION='6.0-SUPABASE-REHOLZ';
+var APP_VERSION='6.0-SUPABASE-REHOLZ-MAPFIX1';
 var MODEL_URL='https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model/';
 var FACE_API_URL='https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/dist/face-api.js';
 var FACE_MATCH_THRESHOLD=0.55;
@@ -371,7 +370,7 @@ throw e;
 }
 }
 var S={user:null,office:null,status:null,sisaCT:null,face:{registered:false,canRegister:false},pendingTotal:0,approver:false,myDescriptor:null,freshLogin:false,booting:false};
-var GPS={pos:null,at:0,watchId:null};var CAM={stream:null,run:false,desc:null,descAt:0,state:'detecting',win:[],present:false,presentAt:0,override:false,refLoading:false};var NETS={ready:false,promise:null};var ATT={type:'MASUK',submitting:false,outside:false,outsideOk:false,lastOutsideAt:0};var LOGM={y:new Date().getFullYear(),m:new Date().getMonth()+1};var CACHE={masterCuti:null,masterCutiAt:0};var DATA={cutiList:[],empList:[],appr:null,myReq:null,faceList:[],team:[],faceVer:{},locList:[],karList:[],karOpts:null};var FACESELF={stream:null,run:false,desc:null,descAt:0,present:false,presentAt:0};var MAPS={};var ATT_MAP=null;var ORG={list:[],byNik:{},children:{},expanded:{}};var ORG_SEARCH_T=null;var LOC_MAP=null,LOC_MARKER=null,LOC_CIRCLE=null,LOC_EDIT=null;var FACECACHE=null;
+var GPS={pos:null,at:0,watchId:null};var CAM={stream:null,run:false,desc:null,descAt:0,state:'detecting',win:[],present:false,presentAt:0,override:false,refLoading:false};var NETS={ready:false,promise:null};var ATT={type:'MASUK',submitting:false,outside:false,outsideOk:false,lastOutsideAt:0};var LOGM={y:new Date().getFullYear(),m:new Date().getMonth()+1};var CACHE={masterCuti:null,masterCutiAt:0};var DATA={cutiList:[],empList:[],appr:null,myReq:null,faceList:[],team:[],faceVer:{},locList:[],karList:[],karOpts:null};var FACESELF={stream:null,run:false,desc:null,descAt:0,present:false,presentAt:0};var MAPS={};var ATT_MAP=null;var ATT_MAP_INIT=null;var ORG={list:[],byNik:{},children:{},expanded:{}};var ORG_SEARCH_T=null;var LOC_MAP=null,LOC_MARKER=null,LOC_CIRCLE=null,LOC_EDIT=null;var FACECACHE=null;
 function $(id){return document.getElementById(id)}
 var IC={absensi:"data:image/png;base64,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",cuti:"data:image/png;base64,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",pk:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAABBmlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGCSYAACFgMGhty8kqIgdyeFiMgoBQYkkJhcXMCAGzAyMHy7BiIZGC7r4lGHC3CmpBYnA+kPQFxSBLQcaGQKkC2SDmFXgNhJEHYPiF0UEuQMZC8AsjXSkdhJSOzykoISIPsESH1yQRGIfQfItsnNKU1GuJuBJzUvNBhIRwCxDEMxQxCDO4MTGX7ACxDhmb+IgcHiKwMD8wSEWNJMBobtrQwMErcQYipAP/C3MDBsO1+QWJQIFmIBYqa0NAaGT8sZGHgjGRiELzAwcEVj2oGICxx+VQD71Z0hHwjTGXIYUoEingx5DMkMekCWEYMBgyGDGQCSpUCz8yM2qAAAAqBJREFUeJztmMtu2kAYhb9BAc80yypiEYe+XwmJqemmUjfdtgQ7JX1ALgvEOh5jVKYL7AQwBHyBRFGPNEIgefj8X+b8tjDGGN6wKq8NsE/vF/BUlZEbUAhRJsdOZQJ8jX7KBHiqqK3q/TbJqXSW5yJjQIdzAJSqcszEbwFcxJ87ghvDffv+g4UA9/aahl1/hjQs76BSDnbuFP/FEIQzel6fwWjKU38LoMRm2gJYideC52iuSICUVTpOC2XVeNQRXe8hDZnSYmPlBjzgIgENu87XtoOUkkcd0PPuGYwmlH1Sis1pJvlySJIMMBhN+eX5hGGEUgr39jNXl/VlCZrlRsaY3GdooWNGAA37go7TQkpJEGq6fp/hOI5kzFTkgE8BCg6L3jpkHbfdRFk1Ah3x03/YmW4DmcqgtIP66rKO224hlUUYhnT9cmqyMGACUAE+XdbpOE2UdUYQzun6/RRk1gwVBhQrC5NEso1VkwQ6ouffo/U89/4vWN0eR1lVHKKkFxZApRJft9hM8sa+e46NXF6cknj+r+F4iufdo8MZSkraThOlqrm3fgFwtxevQq3+NBhNufP7BDpCyRodp7nu09v23VOQhSNoWCZtOJ5w5/fRQYRSFh2nRcO+KDzppAB3l0RcOyId2eF4wp33hyCccS5rfCkJbitgFiVW1+v9Rs8ilJRPcBhTylTzBLjfgyuxp67Ddb0HdDjn3JK4ty3sJHJCEPdzOYCHKPHUJdyErt9H6wgpJa5zw5X9sRDMi4BZkqH10iWCcMYHq4rbvsbeClfcSXPXoDEGWavitm9Ka4htSs2Dh8gAj/FD07k87kNTLsBE8Twaa7s1FhlWIQ/gOtXRla+KT/iKJnuTpKKXYerJoff56mNdx73HNx/B/4BF9Q+oIgR11/1qeQAAAABJRU5ErkJggg=="};var CHEV='<img src="'+IC.pk+'" style="width:7px;height:12px;object-fit:contain;vertical-align:middle;margin-left:3px">';function icImg(k){return '<img src="'+IC[k]+'" style="width:22px;height:22px;object-fit:contain">';}function nIcon(k){if(k==="absensi"||k==="cuti")return icImg(k);if(k==="check")return '<svg viewBox="0 0 24 24" style="width:22px;height:22px"><circle cx="12" cy="12" r="11" fill="#d9f2df"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#2f9e44" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';return '<svg viewBox="0 0 24 24" style="width:22px;height:22px" fill="none" stroke="#c2255c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 10-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M10.3 21a2 2 0 003.4 0"/></svg>';}
 
@@ -398,7 +397,7 @@ function resetRuntimeState(){
 S.office=null;S.status=null;S.sisaCT=null;S.face={registered:false,canRegister:false};S.pendingTotal=0;S.approver=false;S.myDescriptor=null;
 GPS.pos=null;GPS.at=0;if(GPS.watchId!=null){try{navigator.geolocation.clearWatch(GPS.watchId)}catch(e){}GPS.watchId=null;}
 CAM.stream=null;CAM.run=false;CAM.desc=null;CAM.descAt=0;CAM.state='detecting';CAM.win=[];CAM.present=false;CAM.presentAt=0;CAM.override=false;CAM.refLoading=false;
-ATT.type='MASUK';ATT.submitting=false;ATT.outside=false;ATT.outsideOk=false;ATT.lastOutsideAt=0;ATT_MAP=null;
+ATT.type='MASUK';ATT.submitting=false;ATT.outside=false;ATT.outsideOk=false;ATT.lastOutsideAt=0;destroyAttMap();
 DATA.cutiList=[];DATA.empList=[];DATA.appr=null;DATA.myReq=null;DATA.faceList=[];DATA.team=[];DATA.faceVer={};DATA.locList=[];DATA.karList=[];DATA.karOpts=null;
 CACHE.masterCuti=null;CACHE.masterCutiAt=0;
 ORG.list=[];ORG.byNik={};ORG.children={};ORG.expanded={};
@@ -670,47 +669,177 @@ function refreshGps(){
 }
 function jarakMeter(a,b,c,d){var R=6371000,r=Math.PI/180,dLa=(c-a)*r,dLo=(d-b)*r,x=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(a*r)*Math.cos(c*r)*Math.sin(dLo/2)*Math.sin(dLo/2);return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
 function inOfficeCheck(){var p=GPS.pos,o=S.office;if(!p||!o)return{inOffice:false,reason:!p?'no-gps':'no-office'};var d=jarakMeter(p.latitude,p.longitude,o.latitude,o.longitude);return{inOffice:(d<=o.radius&&p.accuracy<=o.maxAccuracy),distance:d,office:o};}
-function mapContainerLoading(key,el){var ld=el.querySelector('.map-loading');if(!ld){ld=document.createElement('div');ld.className='map-loading';el.appendChild(ld);}ld.textContent=MAP_CONFIG.strings.loading;}
+function mapContainerLoading(key,el){
+var ld=el.querySelector('.map-loading');
+if(!ld){ld=document.createElement('div');ld.className='map-loading';el.appendChild(ld);}
+ld.textContent=MAP_CONFIG.strings.loading;
+}
 function mapContainerReady(key,el){var ld=el.querySelector('.map-loading');if(ld)ld.remove();}
-function mapContainerFailed(key,el,retry){var ld=el.querySelector('.map-loading');if(ld)ld.remove();var fd=el.querySelector('.map-failed');if(fd)fd.remove();fd=document.createElement('div');fd.className='map-loading';fd.innerHTML='<div style="text-align:center">'+MAP_CONFIG.strings.failed+'<br><button class="btn btn-blue" style="width:auto;padding:8px 14px;margin-top:8px">'+MAP_CONFIG.strings.retry+'</button></div>';fd.querySelector('button').onclick=retry;el.appendChild(fd);}
-function attachTiles(map,key,el,retry){var idx=0;function add(){if(idx>=MAP_CONFIG.tiles.length){mapContainerFailed(key,el,retry);return;}var l=L.tileLayer(MAP_CONFIG.tiles[idx],{maxZoom:19,attribution:MAP_CONFIG.tileAttribution});var switched=false;l.on('tileerror',function(){if(!switched){switched=true;map.removeLayer(l);idx++;add();}});l.on('load',function(){mapContainerReady(key,el);});l.addTo(map);mapContainerLoading(key,el);}add();}
-function leafletBase(elId,key,opts,retry){if(typeof L==='undefined')return null;try{var el=document.getElementById(elId);if(!el)return null;var existing=MAPS[key]&&MAPS[key].map;if(existing){var existingEl=null;try{existingEl=existing.getContainer()}catch(e){}if(existingEl===el){setTimeout(function(){try{existing.invalidateSize({pan:false})}catch(e){}},0);return existing;}try{existing.off();existing.remove()}catch(e){}MAPS[key]=null;}var m=L.map(elId,{zoomControl:!!(opts&&opts.zoom),attributionControl:false});if(opts&&opts.zoom&&MAP_CONFIG.controls.zoomPosition)m.zoomControl.setPosition(MAP_CONFIG.controls.zoomPosition);MAPS[key]={map:m};attachTiles(m,key,el,retry);setTimeout(function(){try{if(MAPS[key]&&MAPS[key].map===m)m.invalidateSize({pan:false})}catch(e){}},300);return m;}catch(e){return null}}
-function userMarkerIcon(){var cfg=MAP_CONFIG.userMarker;var inner=avaInner(S.user.nik,S.user.nama,faceVerOf(S.user.nik));var bg=(inner.indexOf('<img')===0)?'transparent':cfg.fallbackBg;var html='<div style="width:'+cfg.size+'px;height:'+cfg.size+'px;border-radius:50%;overflow:hidden;border:'+cfg.borderWeight+'px solid '+cfg.borderColor+';box-shadow:0 2px 8px rgba(0,0,0,.45);background:'+bg+';color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">'+inner+'</div>';return L.divIcon({className:'',html:html,iconSize:[cfg.size,cfg.size],iconAnchor:[cfg.size/2,cfg.size/2]});}
-function initAttMap(p,chk){var m=leafletBase('mapLeaflet','att',{zoom:MAP_CONFIG.controls.attendanceZoom},function(){renderGpsUi();});if(!m)return;ATT_MAP={map:m,fitted:false,officeCircle:null,userMarker:null,accCircle:null,lastLat:p.latitude,lastLon:p.longitude};
-if(chk.office){ATT_MAP.officeCircle=L.circle([chk.office.latitude,chk.office.longitude],{radius:chk.office.radius,color:MAP_CONFIG.radiusCircle.color,weight:MAP_CONFIG.radiusCircle.weight,fillColor:MAP_CONFIG.radiusCircle.fillColor,fillOpacity:MAP_CONFIG.radiusCircle.fillOpacity}).addTo(m);L.circleMarker([chk.office.latitude,chk.office.longitude],{radius:MAP_CONFIG.officeMarker.radius,color:MAP_CONFIG.officeMarker.color,fillColor:MAP_CONFIG.officeMarker.color,fillOpacity:1}).addTo(m);}
+function mapContainerFailed(key,el,retry){
+var ld=el.querySelector('.map-loading');if(ld)ld.remove();
+var fd=el.querySelector('.map-failed');if(fd)fd.remove();
+fd=document.createElement('div');fd.className='map-loading map-failed';
+fd.innerHTML='<div style="text-align:center">'+MAP_CONFIG.strings.failed+'<br><button class="btn btn-blue" style="width:auto;padding:8px 14px;margin-top:8px">'+MAP_CONFIG.strings.retry+'</button></div>';
+fd.querySelector('button').onclick=retry;el.appendChild(fd);
+}
+function attachTiles(map,key,el,retry){
+var idx=0;
+function add(){
+if(!map||map._container==null||!el||!el.isConnected)return;
+if(idx>=MAP_CONFIG.tiles.length){mapContainerFailed(key,el,retry);return;}
+var l=L.tileLayer(MAP_CONFIG.tiles[idx],{maxZoom:19,attribution:MAP_CONFIG.tileAttribution});
+var switched=false;
+l.on('tileerror',function(){
+if(switched)return;
+switched=true;
+try{if(map.hasLayer(l))map.removeLayer(l)}catch(e){}
+idx++;add();
+});
+l.on('load',function(){if(el.isConnected)mapContainerReady(key,el);});
+l.addTo(map);mapContainerLoading(key,el);
+}
+add();
+}
+function leafletBase(elId,key,opts,retry){
+if(typeof L==='undefined')return null;
+var el=document.getElementById(elId);
+if(!el)return null;
+try{
+var existing=MAPS[key]&&MAPS[key].map;
+if(existing){
+var existingEl=null;
+try{existingEl=existing.getContainer()}catch(e){}
+if(existingEl===el){
+setTimeout(function(){try{existing.invalidateSize({pan:false})}catch(e){}},0);
+return existing;
+}
+try{existing.off();existing.remove()}catch(e){}
+MAPS[key]=null;
+}
+var m=L.map(el,{zoomControl:!!(opts&&opts.zoom),attributionControl:false});
+if(opts&&opts.zoom&&MAP_CONFIG.controls.zoomPosition)m.zoomControl.setPosition(MAP_CONFIG.controls.zoomPosition);
+MAPS[key]={map:m};
+attachTiles(m,key,el,retry);
+setTimeout(function(){
+try{if(MAPS[key]&&MAPS[key].map===m&&m._container&&m._container.isConnected)m.invalidateSize({pan:false})}catch(e){}
+},300);
+return m;
+}catch(e){
+console.error('Leaflet map init failed:',e);
+return null;
+}
+}
+function userMarkerIcon(){
+var cfg=MAP_CONFIG.userMarker;
+var inner=avaInner(S.user.nik,S.user.nama,faceVerOf(S.user.nik));
+var bg=(inner.indexOf('<img')===0)?'transparent':cfg.fallbackBg;
+var html='<div style="width:'+cfg.size+'px;height:'+cfg.size+'px;border-radius:50%;overflow:hidden;border:'+cfg.borderWeight+'px solid '+cfg.borderColor+';box-shadow:0 2px 8px rgba(0,0,0,.45);background:'+bg+';color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">'+inner+'</div>';
+return L.divIcon({className:'',html:html,iconSize:[cfg.size,cfg.size],iconAnchor:[cfg.size/2,cfg.size/2]});
+}
+function destroyAttMap(){
+if(ATT_MAP&&ATT_MAP.map){try{ATT_MAP.map.off();ATT_MAP.map.remove()}catch(e){}}
+if(MAPS.att){try{if(MAPS.att.map)MAPS.att.map.off()}catch(e){}MAPS.att=null;}
+ATT_MAP=null;
+ATT_MAP_INIT=null;
+}
+function initAttMap(p,chk){
+destroyAttMap();
+var m=leafletBase('mapLeaflet','att',{zoom:MAP_CONFIG.controls.attendanceZoom},function(){renderGpsUi();});
+if(!m)return;
+ATT_MAP={map:m,fitted:false,officeCircle:null,userMarker:null,accCircle:null,lastLat:p.latitude,lastLon:p.longitude};
+if(chk.office){
+ATT_MAP.officeCircle=L.circle([chk.office.latitude,chk.office.longitude],{radius:chk.office.radius,color:MAP_CONFIG.radiusCircle.color,weight:MAP_CONFIG.radiusCircle.weight,fillColor:MAP_CONFIG.radiusCircle.fillColor,fillOpacity:MAP_CONFIG.radiusCircle.fillOpacity}).addTo(m);
+L.circleMarker([chk.office.latitude,chk.office.longitude],{radius:MAP_CONFIG.officeMarker.radius,color:MAP_CONFIG.officeMarker.color,fillColor:MAP_CONFIG.officeMarker.color,fillOpacity:1}).addTo(m);
+}
 ATT_MAP.accCircle=L.circle([p.latitude,p.longitude],{radius:Math.max(p.accuracy,5),color:MAP_CONFIG.accuracyCircle.color,weight:MAP_CONFIG.accuracyCircle.weight,dashArray:MAP_CONFIG.accuracyCircle.dashArray,fillColor:MAP_CONFIG.accuracyCircle.fillColor,fillOpacity:MAP_CONFIG.accuracyCircle.fillOpacity}).addTo(m);
 ATT_MAP.userMarker=L.marker([p.latitude,p.longitude],{icon:userMarkerIcon()}).addTo(m);
-fitAttMap(p,chk);}
-function fitAttMap(p,chk){if(!ATT_MAP)return;var m=ATT_MAP.map;
-if(ATT_MAP.officeCircle){var b=ATT_MAP.officeCircle.getBounds().extend([p.latitude,p.longitude]);m.fitBounds(b.pad(0.25),{maxZoom:MAP_CONFIG.zoom.attendanceMax});}
-else{m.setView([p.latitude,p.longitude],MAP_CONFIG.zoom.attendanceFallback);}
-ATT_MAP.fitted=true;}
-function updateAttMap(p,chk){if(!ATT_MAP)return;var ll=[p.latitude,p.longitude];ATT_MAP.userMarker.setLatLng(ll);ATT_MAP.userMarker.setIcon(userMarkerIcon());ATT_MAP.accCircle.setLatLng(ll);ATT_MAP.accCircle.setRadius(Math.max(p.accuracy,5));
-if(ATT_MAP.fitted&&MAP_CONFIG.follow.animate){var moved=jarakMeter(ATT_MAP.lastLat,ATT_MAP.lastLon,p.latitude,p.longitude);if(moved>MAP_CONFIG.follow.panThresholdMeter){ATT_MAP.map.panTo(ll,{animate:true});ATT_MAP.lastLat=p.latitude;ATT_MAP.lastLon=p.longitude;}}}
+fitAttMap(p,chk);
+}
+function fitAttMap(p,chk){
+if(!ATT_MAP||!ATT_MAP.map)return;
+var m=ATT_MAP.map;
+if(ATT_MAP.officeCircle){
+var b=ATT_MAP.officeCircle.getBounds().extend([p.latitude,p.longitude]);
+m.fitBounds(b.pad(0.25),{maxZoom:MAP_CONFIG.zoom.attendanceMax});
+}else m.setView([p.latitude,p.longitude],MAP_CONFIG.zoom.attendanceFallback);
+ATT_MAP.fitted=true;
+}
+function updateAttMap(p,chk){
+if(!ATT_MAP||!ATT_MAP.map)return;
+var ll=[p.latitude,p.longitude];
+if(!validLL(ll[0],ll[1]))return;
+if(!ATT_MAP.userMarker||!ATT_MAP.accCircle)return;
+ATT_MAP.userMarker.setLatLng(ll);
+ATT_MAP.userMarker.setIcon(userMarkerIcon());
+ATT_MAP.accCircle.setLatLng(ll);
+ATT_MAP.accCircle.setRadius(Math.max(p.accuracy,5));
+if(ATT_MAP.fitted&&MAP_CONFIG.follow.animate){
+var moved=jarakMeter(ATT_MAP.lastLat,ATT_MAP.lastLon,p.latitude,p.longitude);
+if(moved>MAP_CONFIG.follow.panThresholdMeter){
+ATT_MAP.map.panTo(ll,{animate:true});
+ATT_MAP.lastLat=p.latitude;ATT_MAP.lastLon=p.longitude;
+}
+}
+}
+
 function buildDetMap(a){ensureLeaflet().then(function(){var m=leafletBase('detMap','det',{zoom:MAP_CONFIG.controls.detailZoom},function(){buildDetMap(a);});if(!m||!a.latitude)return;try{L.circleMarker([a.latitude,a.longitude],{radius:MAP_CONFIG.detailMarker.radius,color:MAP_CONFIG.detailMarker.borderColor,weight:MAP_CONFIG.detailMarker.weight,fillColor:MAP_CONFIG.detailMarker.color,fillOpacity:1}).addTo(m);m.setView([a.latitude,a.longitude],MAP_CONFIG.zoom.detail);}catch(e){}}).catch(function(){});}
 function loadFaceApiScript(){return new Promise(function(res,rej){if(typeof faceapi!=='undefined')return res();var s=document.createElement('script');s.src=FACE_API_URL;s.onload=res;s.onerror=function(){rej(new Error('Gagal memuat face-api.js'))};document.head.appendChild(s);});}
 function scheduleNets(){var run=function(){ensureNets().catch(function(e){console.warn('nets:',e)})};if(window.requestIdleCallback)requestIdleCallback(run,{timeout:5000});else setTimeout(run,1200);}
 function ensureNets(){if(NETS.ready)return Promise.resolve();if(NETS.promise)return NETS.promise;NETS.promise=(async function(){await loadFaceApiScript();await Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)]);NETS.ready=true;})();return NETS.promise;}
 function nextAttType(){var st=S.status||{};return st.masuk&&!st.pulang?'PULANG':'MASUK'}
-function startAttendance(tipe){
-  ...
-  loadMyDescriptor().then(function(d){
-    if(!d){
-      $('camStatus').textContent = '⚠️ Data wajah tidak ditemukan. Daftarkan Face ID dulu.';
-      $('camStatus').style.color = '#e67700';
-    }
-  }).catch(function(e){
-    $('camStatus').textContent = '❌ Gagal memuat data wajah: ' + e.message;
-  });
-  ...
+async function startAttendance(type){
+if(ATT.submitting)return;
+if(!S.face.registered){toast('Face ID belum terdaftar. Hubungi HR.');return}
+var st=S.status||{};
+if(type==='MASUK'&&st.masuk){toast('Sudah Clock In hari ini.');return}
+if(type==='PULANG'&&st.pulang){toast('Sudah Clock Out hari ini.');return}
+if(type==='PULANG'&&!st.masuk){toast('Anda belum Clock In.');return}
+ATT.type=type;ATT.submitting=false;ATT.outside=false;ATT.outsideOk=false;ATT.lastOutsideAt=0;
+destroyAttMap();
+CAM.state='detecting';CAM.win=[];CAM.override=false;CAM.present=false;CAM.desc=null;CAM.descAt=0;
+$('camOverride').style.display='none';
+saveLastScreen('s-home',null);
+$('attTitle').textContent=type==='MASUK'?'Clock In':'Clock Out';
+$('attStep').textContent='Langkah 1 dari 2';
+var now=new Date();
+$('attDate').textContent=now.getDate()+' '+bulanID(now)+' '+now.getFullYear();
+$('attStep1').style.display='block';$('attStep2').style.display='none';$('attDone').style.display='none';
+$('btnNext1').disabled=true;
+$('mapBox').innerHTML='<div class="empty" style="padding-top:110px">📍 Mengambil lokasi...</div>';
+$('gpsInfo').textContent='⏳ Menunggu GPS...';$('gpsWarn').style.display='none';
+go('s-att');refreshGps();
+camStart().catch(function(e){$('camStatus').textContent='❌ Kamera: '+e.message});
+ensureNets().catch(function(e){$('camStatus').textContent='❌ AI: '+e.message});
+loadMyDescriptor().then(function(d){
+if(!d){$('camStatus').textContent='⚠️ Data wajah tidak ditemukan. Daftarkan Face ID dulu.';$('camStatus').style.color='#e67700';}
+}).catch(function(e){$('camStatus').textContent='❌ Gagal memuat data wajah: '+e.message;});
 }
-ensureLeaflet().then(function(){
-if(!ATT_MAP||!$('mapLeaflet')){$('mapBox').innerHTML='<div id="mapLeaflet" style="width:100%;height:100%"></div>';initAttMap(p,chk);}else{updateAttMap(p,chk);}
-}).catch(function(e){$('mapBox').innerHTML='<div class="empty" style="padding-top:110px">⚠️ Peta gagal dimuat: '+esc(e.message)+'</div>';});
+function renderGpsUi(){
+var p=GPS.pos;if(!p)return;
+var chk=inOfficeCheck();
+if(ATT_MAP){
+try{updateAttMap(p,chk)}catch(e){console.warn('Attendance map update failed:',e);destroyAttMap();}
+}else if(!ATT_MAP_INIT){
+ATT_MAP_INIT=ensureLeaflet().then(function(){
+if(ATT_MAP)return;
+if(!$('s-att')||!$('s-att').classList.contains('on'))return;
+var box=$('mapBox');if(!box)return;
+var el=$('mapLeaflet');
+if(!el){box.innerHTML='<div id="mapLeaflet" style="width:100%;height:100%"></div>';el=$('mapLeaflet');}
+if(!el||el.clientWidth===0||el.clientHeight===0){setTimeout(renderGpsUi,80);return;}
+initAttMap(p,chk);
+}).catch(function(e){
+console.error('Attendance Leaflet load failed:',e);
+if($('mapBox'))$('mapBox').innerHTML='<div class="empty" style="padding-top:110px">⚠️ Peta gagal dimuat: '+esc(e.message)+'</div>';
+}).finally(function(){ATT_MAP_INIT=null;});
+}
 $('gpsInfo').textContent='✅ Akurasi ±'+Math.round(p.accuracy)+' m'+(chk.office?' • Radius kantor '+chk.office.radius+' m':'');
-var low=p.accuracy>(S.office?S.office.maxAccuracy:50);$('gpsWarn').style.display=low?'flex':'none';$('btnNext1').disabled=false;
-if(!chk.reason&&!chk.inOffice){ATT.outside=true;if(GPS.at!==ATT.lastOutsideAt&&!ATT.outsideOk){ATT.lastOutsideAt=GPS.at;openOutside();}}
-else if(chk.inOffice){ATT.outside=false;}
+var low=p.accuracy>(S.office?S.office.maxAccuracy:50);
+$('gpsWarn').style.display=low?'flex':'none';$('btnNext1').disabled=false;
+if(!chk.reason&&!chk.inOffice){
+ATT.outside=true;
+if(GPS.at!==ATT.lastOutsideAt&&!ATT.outsideOk){ATT.lastOutsideAt=GPS.at;openOutside();}
+}else if(chk.inOffice)ATT.outside=false;
 }
 function openOutside(){$('outNote').value='';$('ovOutside').classList.add('on');}
 function outsideProceed(){var note=$('outNote').value.trim();if(!note){toast('Catatan wajib diisi.');return}ATT.outsideOk=true;$('attNote').value=note;$('ovOutside').classList.remove('on');attStep2();}
@@ -719,22 +848,28 @@ function attNext1(){if(ATT.outside&&!ATT.outsideOk){openOutside();return}attStep
 async function camStart(){if(CAM.stream)return;var v=$('attVideo');var st=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480}},audio:false});CAM.stream=st;v.srcObject=st;await v.play();CAM.run=true;camLoop();}
 function camStop(){CAM.run=false;if(CAM.stream){CAM.stream.getTracks().forEach(function(t){t.stop()});CAM.stream=null}}
 async function camLoop(){while(CAM.run&&CAM.stream){try{if(NETS.ready){var d=await faceapi.detectSingleFace($('attVideo'),new faceapi.TinyFaceDetectorOptions({inputSize:320,scoreThreshold:.4})).withFaceLandmarks().withFaceDescriptor();if(d&&d.descriptor){CAM.desc=Array.from(d.descriptor);CAM.descAt=Date.now();CAM.present=true;CAM.presentAt=Date.now();var dist=localDistance(CAM.desc);if(dist!==null){CAM.win.push(dist);if(CAM.win.length>FACE_UI_CONFIG.smoothingWindow)CAM.win.shift();}}else{CAM.present=false;}}}catch(e){}updateFaceState();await new Promise(function(r){setTimeout(r,130)});}}
-function updateFaceState(){if($('attStep2').style.display==='none')return;var st=$('camStatus');var ov=$('camOverride');var now=Date.now();
-if(!CAM.present&&(now-CAM.presentAt)>FACE_UI_CONFIG.faceLostGraceMs){CAM.state='detecting';CAM.win=[];st.textContent=FACE_UI_CONFIG.status.detecting;st.style.color=FACE_UI_CONFIG.colors.detecting;$('btnKirim').disabled=true;ov.style.display='none';return;}
-if(!CAM.present){return;}
-var ref=getRefDescriptor();
-if(!ref){CAM.state='neutral';st.textContent=FACE_UI_CONFIG.status.neutral;st.style.color=FACE_UI_CONFIG.colors.neutral;$('btnKirim').disabled=!(CAM.desc&&now-CAM.descAt<=FACE_UI_CONFIG.freshSubmitMs);ov.style.display='none';return;}
-var best = CAM.win.length ? Math.min.apply(null, CAM.win) : null;
-if(best !== null && best <= FACE_UI_CONFIG.localThreshold){
-  CAM.state='match';
-  st.textContent = '✓ Cocok (jarak ' + best.toFixed(3) + ' / batas ' + FACE_UI_CONFIG.localThreshold + ')';
-  ...
-}else if(best !== null){
-  CAM.state='mismatch';
-  st.textContent = '✗ Tidak cocok (jarak ' + best.toFixed(3) + ') – mendekat & pencahayaan merata';
-  ...
+function updateFaceState(){
+if($('attStep2').style.display==='none')return;
+var st=$('camStatus'),ov=$('camOverride'),now=Date.now();
+if(!CAM.present&&(now-CAM.presentAt)>FACE_UI_CONFIG.faceLostGraceMs){
+CAM.state='detecting';CAM.win=[];st.textContent=FACE_UI_CONFIG.status.detecting;st.style.color=FACE_UI_CONFIG.colors.detecting;$('btnKirim').disabled=true;ov.style.display='none';return;
 }
-function enableOverride(){CAM.override=true;$('btnKirim').disabled=false;$('camOverride').style.display='none';toast('Server akan memverifikasi wajah Anda saat kirim.');}
+if(!CAM.present)return;
+var ref=getRefDescriptor();
+if(!ref){
+CAM.state='neutral';st.textContent=FACE_UI_CONFIG.status.neutral;st.style.color=FACE_UI_CONFIG.colors.neutral;
+$('btnKirim').disabled=!(CAM.desc&&now-CAM.descAt<=FACE_UI_CONFIG.freshSubmitMs);ov.style.display='none';return;
+}
+var best=CAM.win.length?Math.min.apply(null,CAM.win):null;
+if(best!==null&&best<=FACE_UI_CONFIG.localThreshold){
+CAM.state='match';st.textContent=FACE_UI_CONFIG.status.match;st.style.color=FACE_UI_CONFIG.colors.match;
+$('btnKirim').disabled=!(CAM.desc&&now-CAM.descAt<=FACE_UI_CONFIG.freshSubmitMs);ov.style.display='none';
+}else{
+CAM.state='mismatch';st.textContent=FACE_UI_CONFIG.status.mismatch;st.style.color=FACE_UI_CONFIG.colors.mismatch;
+$('btnKirim').disabled=!CAM.override;ov.style.display=CAM.override?'none':'block';
+ov.innerHTML='<a href="#" onclick="enableOverride();return false">'+FACE_UI_CONFIG.overrideLinkText+'</a>';
+}
+}
 function attStep2(){$('attStep1').style.display='none';$('attStep2').style.display='block';$('attStep').textContent='Langkah 2 dari 2';if(!ATT.outsideOk)$('attNote').value='';$('camStatus').textContent=NETS.ready?FACE_UI_CONFIG.status.detecting:'⏳ Memuat AI...';$('camStatus').style.color='#fff';$('btnKirim').disabled=true;updateFaceState();}
 function cancelAttendance(){camStop();go('s-home');}
 function finishAttendance(){camStop();loadBootstrap();go('s-home');}
