@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="preconnect" href="https://unpkg.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin>
+<link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin>
+<link rel="preconnect" href="https://b.basemaps.cartocdn.com" crossorigin>
 <meta name="theme-color" content="#d63031">
 <title>Presensi</title>
 <style>
@@ -760,6 +765,8 @@ if(!map||map._container==null||!el||!el.isConnected)return;
 if(idx>=MAP_CONFIG.tiles.length){mapContainerFailed(key,el,retry);return;}
 var l=L.tileLayer(MAP_CONFIG.tiles[idx],{maxZoom:19,attribution:MAP_CONFIG.tileAttribution});
 var switched=false;
+// Hilangkan overlay begitu tile pertama benar-benar tampil; tidak perlu menunggu seluruh tile selesai.
+l.on('tileload',function(){if(el.isConnected)mapContainerReady(key,el);});
 l.on('tileerror',function(){
 if(switched)return;
 switched=true;
@@ -767,7 +774,8 @@ try{if(map.hasLayer(l))map.removeLayer(l)}catch(e){}
 idx++;add();
 });
 l.on('load',function(){if(el.isConnected)mapContainerReady(key,el);});
-l.addTo(map);mapContainerLoading(key,el);
+mapContainerLoading(key,el);
+l.addTo(map);
 }
 add();
 }
