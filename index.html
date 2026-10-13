@@ -311,7 +311,7 @@ setTimeout(function(){if(!window.__APP_BOOTED&&!window.__APP_PREPARING_ASSETS){s
 <script>
 var SUPABASE_URL='https://viynlhmupknbsvmysvdr.supabase.co';
 var SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZpeW5saG11cGtuYnN2bXlzdmRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0OTgzMzQsImV4cCI6MjEwNzA3NDMzNH0.gCptzMDirS5DGPDs51nVAT1UPlzgwD0pwMc-c-DwaF8';
-var APP_VERSION='6.1-SUPABASE-REHOLZ-MAPFIX1-CACHE-DIAG122';
+var APP_VERSION='6.1-SUPABASE-REHOLZ-MAPFIX1-CACHE-DIAG123-PARALLEL-MAP';
 var MODEL_URL='https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model/';
 var FACE_API_URL='https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/dist/face-api.js';
 var FACE_MATCH_THRESHOLD=0.55;
@@ -845,20 +845,29 @@ function initAttMap(p,chk){
 mapDiag('attendance_map_init',{hasGps:!!p,accuracyM:p?Math.round(p.accuracy):null,hasOffice:!!(chk&&chk.office)});
 // Hindari menghancurkan peta saat proses inisialisasi/pembaruan masih berjalan.
 // Pemusnahan peta dilakukan saat sesi absensi baru dimulai oleh startAttendance().
-if(!p||!validLL(p.latitude,p.longitude))return;
+if(p&& !validLL(p.latitude,p.longitude))return;
 if(ATT_MAP&&ATT_MAP.map){
-try{updateAttMap(p,chk);return}catch(e){console.warn('Attendance map reuse failed:',e);}
+try{if(p)updateAttMap(p,chk);return}catch(e){console.warn('Attendance map reuse failed:',e);}
 }
 var m=leafletBase('mapLeaflet','att',{zoom:MAP_CONFIG.controls.attendanceZoom},function(){renderGpsUi();});
 if(!m)throw new Error('Leaflet tidak berhasil membuat peta absensi.');
-ATT_MAP={map:m,fitted:false,officeCircle:null,userMarker:null,accCircle:null,lastLat:p.latitude,lastLon:p.longitude};
+ATT_MAP={map:m,fitted:false,officeCircle:null,userMarker:null,accCircle:null,lastLat:p?p.latitude:null,lastLon:p?p.longitude:null};
 if(chk.office){
 ATT_MAP.officeCircle=L.circle([chk.office.latitude,chk.office.longitude],{radius:chk.office.radius,color:MAP_CONFIG.radiusCircle.color,weight:MAP_CONFIG.radiusCircle.weight,fillColor:MAP_CONFIG.radiusCircle.fillColor,fillOpacity:MAP_CONFIG.radiusCircle.fillOpacity}).addTo(m);
 L.circleMarker([chk.office.latitude,chk.office.longitude],{radius:MAP_CONFIG.officeMarker.radius,color:MAP_CONFIG.officeMarker.color,fillColor:MAP_CONFIG.officeMarker.color,fillOpacity:1}).addTo(m);
 }
+if(p){
 ATT_MAP.accCircle=L.circle([p.latitude,p.longitude],{radius:Math.max(p.accuracy,5),color:MAP_CONFIG.accuracyCircle.color,weight:MAP_CONFIG.accuracyCircle.weight,dashArray:MAP_CONFIG.accuracyCircle.dashArray,fillColor:MAP_CONFIG.accuracyCircle.fillColor,fillOpacity:MAP_CONFIG.accuracyCircle.fillOpacity}).addTo(m);
 ATT_MAP.userMarker=L.marker([p.latitude,p.longitude],{icon:userMarkerIcon()}).addTo(m);
 fitAttMap(p,chk);
+}else if(chk.office&&validLL(chk.office.latitude,chk.office.longitude)){
+// Tampilan awal sementara: pusat kantor. GPS tetap diproses paralel.
+m.setView([chk.office.latitude,chk.office.longitude],MAP_CONFIG.controls.attendanceZoom);
+}else{
+// Belum ada lokasi kantor yang tersedia; tampilkan peta pada pusat Indonesia sementara.
+m.setView([-2.5,118],5);
+}
+mapDiag('attendance_map_preview_ready',{center:p?'gps':(chk.office?'office':'indonesia')});
 }
 function fitAttMap(p,chk){
 if(!ATT_MAP||!ATT_MAP.map||!p||!validLL(p.latitude,p.longitude))return;
@@ -884,7 +893,15 @@ if(!ATT_MAP||!ATT_MAP.map)return;
 if(MAP_DIAG.refreshStartedAt&&!MAP_DIAG.refreshUpdateLogged&&Date.now()-MAP_DIAG.refreshStartedAt<30000){MAP_DIAG.refreshUpdateLogged=true;mapDiag('attendance_map_updated_after_refresh',{elapsedMs:Date.now()-MAP_DIAG.refreshStartedAt,accuracyM:p&&isFinite(p.accuracy)?Math.round(p.accuracy):null,hasOffice:!!(chk&&chk.office)});}
 var ll=[p.latitude,p.longitude];
 if(!validLL(ll[0],ll[1]))return;
-if(!ATT_MAP.userMarker||!ATT_MAP.accCircle)return;
+if(!ATT_MAP.userMarker||!ATT_MAP.accCircle){
+// GPS pertama tiba setelah peta preview tampil: tambahkan marker/akurasi lalu sesuaikan pusat.
+if(!ATT_MAP.accCircle)ATT_MAP.accCircle=L.circle(ll,{radius:Math.max(p.accuracy,5),color:MAP_CONFIG.accuracyCircle.color,weight:MAP_CONFIG.accuracyCircle.weight,dashArray:MAP_CONFIG.accuracyCircle.dashArray,fillColor:MAP_CONFIG.accuracyCircle.fillColor,fillOpacity:MAP_CONFIG.accuracyCircle.fillOpacity}).addTo(ATT_MAP.map);
+if(!ATT_MAP.userMarker)ATT_MAP.userMarker=L.marker(ll,{icon:userMarkerIcon()}).addTo(ATT_MAP.map);
+ATT_MAP.lastLat=p.latitude;ATT_MAP.lastLon=p.longitude;
+fitAttMap(p,chk);
+mapDiag('attendance_map_gps_attached_to_preview',{accuracyM:isFinite(p.accuracy)?Math.round(p.accuracy):null});
+return;
+}
 ATT_MAP.userMarker.setLatLng(ll);
 ATT_MAP.userMarker.setIcon(userMarkerIcon());
 ATT_MAP.accCircle.setLatLng(ll);
@@ -903,6 +920,19 @@ function loadFaceApiScript(){return new Promise(function(res,rej){if(typeof face
 function scheduleNets(){var run=function(){ensureNets().catch(function(e){console.warn('nets:',e)})};if(window.requestIdleCallback)requestIdleCallback(run,{timeout:5000});else setTimeout(run,1200);}
 function ensureNets(){if(NETS.ready)return Promise.resolve();if(NETS.promise)return NETS.promise;NETS.promise=(async function(){await loadFaceApiScript();await Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL)]);NETS.ready=true;})().catch(function(e){NETS.promise=null;throw e;});return NETS.promise;}
 function nextAttType(){var st=S.status||{};return st.masuk&&!st.pulang?'PULANG':'MASUK'}
+function startAttMapEarly(){
+// Mulai Leaflet dan tile bersamaan dengan permintaan GPS, bukan sesudah GPS.
+mapDiag('attendance_map_early_start',{hasOffice:!!S.office,hasGps:!!GPS.pos});
+var box=$('mapBox');if(!box)return;
+if(!$('mapLeaflet'))box.innerHTML='<div id="mapLeaflet" style="width:100%;height:100%"></div>';
+ensureLeaflet().then(function(){
+if(!$('s-att')||!$('s-att').classList.contains('on'))return;
+if(!ATT_MAP) initAttMap(GPS.pos,inOfficeCheck());
+}).catch(function(e){
+mapDiag('attendance_map_early_error',{message:e&&e.message});
+console.warn('Early attendance map load failed:',e);
+});
+}
 async function startAttendance(type){
 if(ATT.submitting)return;
 if(!S.face.registered){toast('Face ID belum terdaftar. Hubungi HR.');return}
@@ -921,9 +951,9 @@ var now=new Date();
 $('attDate').textContent=now.getDate()+' '+bulanID(now)+' '+now.getFullYear();
 $('attStep1').style.display='block';$('attStep2').style.display='none';$('attDone').style.display='none';
 $('btnNext1').disabled=true;
-$('mapBox').innerHTML='<div class="empty" style="padding-top:110px">📍 Mengambil lokasi...</div>';
-$('gpsInfo').textContent='⏳ Menunggu GPS...';$('gpsWarn').style.display='none';
-go('s-att');refreshGps();
+$('mapBox').innerHTML='<div id="mapLeaflet" style="width:100%;height:100%"></div>';
+$('gpsInfo').textContent='⏳ Memuat peta dan mengambil GPS bersamaan...';$('gpsWarn').style.display='none';
+go('s-att');startAttMapEarly();refreshGps();
 camStart().catch(function(e){$('camStatus').textContent='❌ Kamera: '+e.message});
 ensureNets().catch(function(e){$('camStatus').textContent='❌ AI: '+e.message});
 loadMyDescriptor().then(function(d){
