@@ -6,14 +6,20 @@
  */
 'use strict';
 
-const RH_SW_RELEASE = 'v79-approver-page-access';
-const RH_EXPECTED_HTML_RELEASE = 'v14.9.2-approver-page-access';
-const RH_SHELL_CACHE = 'rehholz-app-shell-v79';
-const RH_ASSET_CACHE = 'reholz-app-assets-v2';
+const RH_SW_RELEASE = 'v80-pwa-egress-rules';
+const RH_EXPECTED_HTML_RELEASE = 'v14.9.3-pwa-optimization';
+const RH_SHELL_CACHE = 'rehholz-app-shell-v80';
+const RH_ASSET_CACHE = 'reholz-app-assets-v3';
+const RH_CDN_CACHE = 'reholz-cdn-libs-v1';
 const RH_ASSET_URLS = [
+  './manifest.webmanifest',
   './assets/reholz-logo-green.png',
   './assets/reholz-logo-white.png',
-  './assets/reholz-logo-print.png'
+  './assets/reholz-logo-print.png',
+  './assets/pwa-192x192.png',
+  './assets/pwa-512x512.png',
+  './assets/pwa-maskable-512x512.png',
+  './assets/apple-touch-icon.png'
 ];
 const RH_SCOPE_URL = new URL(self.registration.scope);
 // GitHub Pages serves index.html automatically at the scope directory URL.
@@ -32,10 +38,35 @@ function isScopedAsset(urlValue) {
   try {
     const u = new URL(urlValue);
     if (u.origin !== RH_SCOPE_URL.origin) return false;
-    return /^assets\/reholz-logo-(green|white|print)\.png$/i.test(
-      u.pathname.slice(RH_SCOPE_URL.pathname.length).replace(/^\//, '')
-    );
+    const rel = u.pathname.slice(RH_SCOPE_URL.pathname.length).replace(/^\//, '');
+    return /^manifest\.webmanifest$/i.test(rel) ||
+      /^assets\/(?:reholz-logo-(?:green|white|print)|pwa-(?:192x192|512x512|maskable-512x512)|apple-touch-icon)\.png$/i.test(rel);
   } catch (_) { return false; }
+}
+
+function isImmutableCdnAsset(urlValue) {
+  try {
+    const u = new URL(urlValue);
+    if (u.protocol !== 'https:') return false;
+    if (u.hostname === 'cdn.jsdelivr.net' && (u.pathname.includes('@vladmandic/face-api@1.7.12/') || u.pathname.includes('leaflet@1.9.4/') || u.pathname.includes('@supabase/supabase-js@2'))) return true;
+    if (u.hostname === 'unpkg.com' && (u.pathname.includes('leaflet@1.9.4/') || u.pathname.includes('@supabase/supabase-js@2'))) return true;
+    return false;
+  } catch (_) { return false; }
+}
+
+async function cdnCacheFirst(request) {
+  const cache = await caches.open(RH_CDN_CACHE);
+  const hit = await cache.match(request);
+  if (hit) return hit;
+  try {
+    const res = await fetch(request);
+    if (res && (res.ok || res.type === 'opaque')) {
+      try { await cache.put(request, res.clone()); } catch (_) {}
+    }
+    return res;
+  } catch (_) {
+    return new Response('', { status: 504 });
+  }
 }
 
 function noCacheRequest(url) {
@@ -80,11 +111,11 @@ async function cacheAssets() {
     try {
       const res = await fetch(new URL(u, RH_SCOPE_URL).href, { cache: 'no-store', credentials: 'same-origin' });
       if (res && res.ok) await cache.put(new URL(u, RH_SCOPE_URL).href, res);
-    } catch (_) { /* logo tetap diambil dari jaringan bila gagal */ }
+    } catch (_) { /* asset tetap diambil dari jaringan bila gagal */ }
   }));
 }
 
-/* Logo: cache-first agar tampil utuh walau jaringan lambat/offline,
+/* Logo & PWA assets: cache-first agar tampil utuh walau jaringan lambat/offline,
  * dengan penyegaran latar dari jaringan bila tersedia. */
 async function assetResponse(request) {
   const cache = await caches.open(RH_ASSET_CACHE);
@@ -115,7 +146,8 @@ self.addEventListener('activate', event => {
     const names = await caches.keys();
     await Promise.all(names
       .filter(name => (name.startsWith('rehholz-app-shell-') && name !== RH_SHELL_CACHE) ||
-                      (name.startsWith('rehholz-app-assets-') && name !== RH_ASSET_CACHE))
+                      (name.startsWith('rehholz-app-assets-') && name !== RH_ASSET_CACHE) ||
+                      (name.startsWith('reholz-cdn-libs-') && name !== RH_CDN_CACHE))
       .map(name => caches.delete(name)));
     try { await cacheAssets(); } catch (_) {}
 
@@ -177,6 +209,10 @@ self.addEventListener('fetch', event => {
   if (request.method !== 'GET') return;
   if (isScopedAsset(request.url)) {
     event.respondWith(assetResponse(request));
+    return;
+  }
+  if (isImmutableCdnAsset(request.url)) {
+    event.respondWith(cdnCacheFirst(request));
     return;
   }
   if (request.mode !== 'navigate' || !isAppNavigation(request.url)) return;

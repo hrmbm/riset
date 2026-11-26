@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="id"><head>
-<meta name="reholz-release" content="v14.9.2-approver-page-access">
+<meta name="reholz-release" content="v14.9.3-pwa-optimization">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
 <link rel="preconnect" href="https://unpkg.com" crossorigin="">
@@ -9,7 +9,14 @@
 <link rel="preconnect" href="https://a.basemaps.cartocdn.com" crossorigin="">
 <link rel="preconnect" href="https://b.basemaps.cartocdn.com" crossorigin="">
 <meta name="theme-color" content="#007850">
-<meta name="app-release" content="v14.9.2-approver-page-access">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ReHolz">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/pwa-192x192.png">
+<meta name="app-release" content="v14.9.3-pwa-optimization">
 <title>ReHolz HRIS</title>
 <meta name="description" content="Portal sistem terintegrasi untuk mengelola data karyawan ReHolz.">
 <meta property="og:title" content="ReHolz HRIS">
@@ -4280,6 +4287,21 @@ window.__APP_PREPARING_ASSETS = true;
 
     </div>
 
+    <div class="card" id="rhMobPwaCard" style="padding:6px 16px;display:none">
+      <button class="sheet-item" id="rhMobPwaBtn" type="button" onclick="window.rhPwa && window.rhPwa.promptInstall()">
+        <div class="si" style="background:#E6F2E9;border-color:rgba(0,120,80,0.18)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#007850" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M5 20h14"></path>
+          </svg>
+        </div>
+        <span style="flex:1;text-align:left">
+          <span style="display:block;font-weight:700">Pasang Aplikasi (PWA)</span>
+          <small id="rhMobPwaSub" style="display:block;font-size:11px;color:var(--txt-muted);font-weight:500">Akses lebih cepat dari layar utama perangkat</small>
+        </span>
+        <span class="arr"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#8FA79A" stroke-width="2.2" stroke-linecap="round"><path d="M9 18l6-6-6-6"></path></svg></span>
+      </button>
+    </div>
+
     <div class="card" style="padding:6px 16px">
       <button class="sheet-item" onclick="doLogout()">
         <div class="si" style="background:#F7ECE9;border-color:rgba(143,66,50,0.18)">
@@ -4291,7 +4313,7 @@ window.__APP_PREPARING_ASSETS = true;
         <span class="arr"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#8FA79A" stroke-width="2.2" stroke-linecap="round"><path d="M9 18l6-6-6-6"></path></svg></span>
       </button>
     </div>
-    <div class="hint" id="verTxt">Versi 13.9.0</div>
+    <div class="hint" id="verTxt">Versi 14.9.3</div>
   </div>
 </section>
 
@@ -4429,6 +4451,28 @@ window.__APP_PREPARING_ASSETS = true;
   </div>
 </div>
 
+<!-- Offline Connectivity Indicator & PWA Install Guide -->
+<div id="rhOfflineBanner" class="rh-offline-banner" role="status" aria-live="polite" style="display:none">
+  <span class="rh-offline-dot" aria-hidden="true"></span>
+  <span>Mode Offline — Menampilkan data tersimpan lokal</span>
+</div>
+
+<div class="overlay" id="ovPwaInstallGuide" onclick="if(event.target===this && window.rhPwa) window.rhPwa.closeGuide()">
+  <div class="sheet">
+    <div class="grab"></div>
+    <button type="button" class="rh-sheet-x" onclick="window.rhPwa && window.rhPwa.closeGuide()" aria-label="Tutup">&#10005;</button>
+    <div style="display:flex;align-items:center;gap:12px;margin:4px 0 12px">
+      <img src="/assets/pwa-192x192.png" alt="ReHolz HRIS" style="width:48px;height:48px;border-radius:12px;box-shadow:0 4px 12px rgba(0,76,51,0.18)">
+      <div>
+        <h3 style="margin:0;justify-content:flex-start" id="rhPwaGuideTitle">Pasang ReHolz HRIS</h3>
+        <p style="margin:2px 0 0;font-size:12px;color:var(--txt-muted)">Jalankan seperti aplikasi native di perangkat Anda</p>
+      </div>
+    </div>
+    <div id="rhPwaGuideSteps" style="background:#F4F8F5;border:1px solid #DCE7DE;border-radius:14px;padding:14px;font-size:13.5px;line-height:1.55;color:#1E2B23;margin-bottom:14px"></div>
+    <button type="button" class="btn btn-blue" onclick="window.rhPwa && window.rhPwa.closeGuide()">Mengerti</button>
+  </div>
+</div>
+
 <!-- Bottom Navigation Bar with Consistent 3D Wood & Leaf Icons -->
 <nav id="tabbar" style="display: none;">
   <button class="on" data-t="s-home" onclick="go('s-home')">
@@ -4554,8 +4598,8 @@ window.__APP_PREPARING_ASSETS = true;
 var SUPABASE_URL = 'https://qfnlnaaamgbdfpapalvc.supabase.co';
 var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmbmxuYWFhbWdiZGZwYXBhbHZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1NTA4NjQsImV4cCI6MjExMTEyNjg2NH0.Lv1G6JWnllMwKNoSeBXP9wToU_fkdt4Q-WKnOet0_Mc';
 var APP_VERSION = '6.9-REHOLZ-REIMBURSEMENT-REALIZATION-APPROVAL-SDR'; // Kept in sync with existing app-version RPC to avoid forced reload loops.
-var RH_HTML_RELEASE = 'v14.9.2-approver-page-access';
-var RH_DISPLAY_VERSION = 'v14.9.1';
+var RH_HTML_RELEASE = 'v14.9.3-pwa-optimization';
+var RH_DISPLAY_VERSION = 'v14.9.3';
 var RH_RELEASE_STORAGE_KEY = 'reh_html_release_seen';
 var RH_RELEASE_UPGRADE_ACTIVE = false;
 var MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model/';
@@ -4627,6 +4671,339 @@ var OUTSIDE_DIALOG = {
   notePlaceholder: 'Keterangan *',
   primary: 'Lanjut Clock In',
   secondary: 'Periksa lokasi lagi'
+};
+
+/* ---------- PWA Install & Offline Connectivity Controller ---------- */
+var RH_PWA_STATE = {
+  deferredPrompt: null,
+  isInstalled: false,
+  isIOS: false
+};
+(function initRhPwa() {
+  function detectInstalled() {
+    try {
+      return window.matchMedia('(display-mode: standalone)').matches ||
+        window.matchMedia('(display-mode: fullscreen)').matches ||
+        window.navigator.standalone === true;
+    } catch (e) { return false; }
+  }
+  function detectIOS() {
+    try {
+      var ua = (window.navigator.userAgent || '').toLowerCase();
+      return /iphone|ipad|ipod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    } catch (e) { return false; }
+  }
+  RH_PWA_STATE.isInstalled = detectInstalled();
+  RH_PWA_STATE.isIOS = detectIOS();
+
+  function syncPwaUi() {
+    RH_PWA_STATE.isInstalled = detectInstalled();
+    var mobCard = document.getElementById('rhMobPwaCard');
+    var mobSub = document.getElementById('rhMobPwaSub');
+    var deskBtn = document.getElementById('rkTopPwaBtn');
+    var menuPwa = document.getElementById('rkUserMenuPwa');
+    var installed = RH_PWA_STATE.isInstalled;
+    if (mobCard) mobCard.style.display = installed ? 'none' : '';
+    if (mobSub) {
+      mobSub.textContent = RH_PWA_STATE.deferredPrompt
+        ? 'Ketuk untuk langsung memasang di layar utama'
+        : (RH_PWA_STATE.isIOS ? 'Panduan pemasangan Safari (Add to Home Screen)' : 'Pasang untuk akses cepat & mode aplikasi');
+    }
+    var canShowDesk = !installed && (!!RH_PWA_STATE.deferredPrompt || RH_PWA_STATE.isIOS);
+    if (deskBtn) deskBtn.style.display = canShowDesk ? 'inline-flex' : 'none';
+    if (menuPwa) menuPwa.style.display = installed ? 'none' : '';
+  }
+
+  function syncOnlineBanner() {
+    var banner = document.getElementById('rhOfflineBanner');
+    if (!banner) return;
+    var online = typeof navigator === 'undefined' ? true : navigator.onLine !== false;
+    banner.style.display = online ? 'none' : 'flex';
+  }
+
+  function openGuide(isIos) {
+    var ov = document.getElementById('ovPwaInstallGuide');
+    var title = document.getElementById('rhPwaGuideTitle');
+    var steps = document.getElementById('rhPwaGuideSteps');
+    if (!ov || !steps) return;
+    if (isIos) {
+      if (title) title.textContent = 'Pasang di iPhone / iPad';
+      steps.innerHTML = '1. Ketuk tombol <b>Share</b> (ikon kotak dengan panah ke atas) pada bilah Safari.<br>2. Gulir ke bawah lalu pilih <b>Add to Home Screen / Tambah ke Layar Utama</b>.<br>3. Ketuk <b>Add / Tambah</b> di pojok kanan atas.';
+    } else {
+      if (title) title.textContent = 'Pasang Aplikasi ReHolz HRIS';
+      steps.innerHTML = '1. Buka menu browser (ikon <b>⋮</b> atau ikon pasang di bilah alamat).<br>2. Pilih <b>Install App / Tambahkan ke Layar Utama</b>.<br>3. Konfirmasi untuk menjalankan ReHolz HRIS dalam mode layar penuh.';
+    }
+    ov.classList.add('on');
+  }
+
+  function closeGuide() {
+    var ov = document.getElementById('ovPwaInstallGuide');
+    if (ov) ov.classList.remove('on');
+  }
+
+  async function promptInstall() {
+    if (RH_PWA_STATE.isInstalled) {
+      toast('Aplikasi sudah terpasang di perangkat ini.');
+      return false;
+    }
+    if (RH_PWA_STATE.deferredPrompt) {
+      try {
+        var dp = RH_PWA_STATE.deferredPrompt;
+        await dp.prompt();
+        var choice = await dp.userChoice;
+        RH_PWA_STATE.deferredPrompt = null;
+        if (choice && choice.outcome === 'accepted') {
+          RH_PWA_STATE.isInstalled = true;
+          toast('Aplikasi ReHolz HRIS berhasil dipasang.');
+        }
+        syncPwaUi();
+        return !!(choice && choice.outcome === 'accepted');
+      } catch (e) {
+        openGuide(RH_PWA_STATE.isIOS);
+        return false;
+      }
+    }
+    openGuide(RH_PWA_STATE.isIOS);
+    return false;
+  }
+
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    RH_PWA_STATE.deferredPrompt = e;
+    syncPwaUi();
+  });
+  window.addEventListener('appinstalled', function () {
+    RH_PWA_STATE.isInstalled = true;
+    RH_PWA_STATE.deferredPrompt = null;
+    syncPwaUi();
+  });
+  window.addEventListener('online', syncOnlineBanner);
+  window.addEventListener('offline', syncOnlineBanner);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { syncPwaUi(); syncOnlineBanner(); });
+  } else {
+    syncPwaUi();
+    syncOnlineBanner();
+  }
+  window.rhPwa = {
+    promptInstall: promptInstall,
+    openGuide: openGuide,
+    closeGuide: closeGuide,
+    syncUi: syncPwaUi,
+    isInstalled: function () { return RH_PWA_STATE.isInstalled; },
+    isOnline: function () { return typeof navigator === 'undefined' ? true : navigator.onLine !== false; }
+  };
+})();
+
+/* ---------- Flexible Work Rules & Area Restrictions Engine ---------- */
+var RH_WORK_RULES_STORAGE_KEY = 'rh_work_rules_v1';
+var RH_STANDARD_AREAS = [
+  { value: 'Area 1', code: 'A1', defaultLabel: 'Area 1', standbyOk: true, sickOk: true },
+  { value: 'Area 2', code: 'A2', defaultLabel: 'Area 2', standbyOk: true, sickOk: true },
+  { value: 'Area 3', code: 'A3', defaultLabel: 'Area 3', standbyOk: true, sickOk: true },
+  { value: 'Area 4', code: 'A4', defaultLabel: 'Area 4', standbyOk: true, sickOk: true },
+  { value: 'Area lainnya', code: 'AX', defaultLabel: 'Area Lain', standbyOk: true, sickOk: true },
+  { value: 'Area Sekitar', code: 'SBY', defaultLabel: 'Area Sekitar', standbyOk: false, sickOk: false }
+];
+
+function rhDefaultWorkRules() {
+  var areas = {};
+  RH_STANDARD_AREAS.forEach(function (a) {
+    areas[a.value] = {
+      enabled: true,
+      label: a.defaultLabel,
+      allowRegular: true,
+      allowPiket: true,
+      allowStandby: a.standbyOk,
+      allowSickOutside: a.sickOk
+    };
+  });
+  return {
+    version: 1,
+    updatedAt: null,
+    updatedBy: '',
+    areas: areas,
+    employeeAreaRules: {},
+    attendancePolicy: {
+      requireOutsideNote: true,
+      standbyNoteOptional: true,
+      lockClockOutAreaToClockIn: true,
+      localFaceThreshold: 0.60,
+      freshSubmitMs: 8000,
+      allowManualFaceOverride: true
+    }
+  };
+}
+
+function rhNormalizeWorkRules(raw) {
+  var base = rhDefaultWorkRules();
+  if (!raw || typeof raw !== 'object') return base;
+  if (raw.areas && typeof raw.areas === 'object') {
+    RH_STANDARD_AREAS.forEach(function (a) {
+      var src = raw.areas[a.value];
+      if (src && typeof src === 'object') {
+        base.areas[a.value] = {
+          enabled: src.enabled !== false,
+          label: String(src.label || a.defaultLabel).trim() || a.defaultLabel,
+          allowRegular: src.allowRegular !== false,
+          allowPiket: src.allowPiket !== false,
+          allowStandby: a.value === 'Area Sekitar' ? false : (src.allowStandby !== false),
+          allowSickOutside: a.value === 'Area Sekitar' ? false : (src.allowSickOutside !== false)
+        };
+      }
+    });
+  }
+  if (raw.employeeAreaRules && typeof raw.employeeAreaRules === 'object') {
+    Object.keys(raw.employeeAreaRules).forEach(function (nik) {
+      var r = raw.employeeAreaRules[nik];
+      if (!r || typeof r !== 'object') return;
+      var k = String(nik).trim();
+      if (!k) return;
+      var mode = String(r.mode || 'ALL').toUpperCase() === 'RESTRICTED' ? 'RESTRICTED' : 'ALL';
+      var list = Array.isArray(r.allowedAreas) ? r.allowedAreas.filter(function (v) {
+        return RH_STANDARD_AREAS.some(function (a) { return a.value === v; });
+      }) : [];
+      base.employeeAreaRules[k] = { mode: mode, allowedAreas: list };
+    });
+  }
+  if (raw.attendancePolicy && typeof raw.attendancePolicy === 'object') {
+    var p = raw.attendancePolicy;
+    base.attendancePolicy.requireOutsideNote = p.requireOutsideNote !== false;
+    base.attendancePolicy.standbyNoteOptional = p.standbyNoteOptional !== false;
+    base.attendancePolicy.lockClockOutAreaToClockIn = p.lockClockOutAreaToClockIn !== false;
+    var thr = Number(p.localFaceThreshold);
+    if (isFinite(thr) && thr >= 0.35 && thr <= 0.85) base.attendancePolicy.localFaceThreshold = Math.round(thr * 100) / 100;
+    var fsm = Number(p.freshSubmitMs);
+    if (isFinite(fsm) && fsm >= 3000 && fsm <= 30000) base.attendancePolicy.freshSubmitMs = Math.round(fsm);
+    base.attendancePolicy.allowManualFaceOverride = p.allowManualFaceOverride !== false;
+  }
+  base.updatedAt = raw.updatedAt || null;
+  base.updatedBy = raw.updatedBy || '';
+  return base;
+}
+
+var RH_WORK_RULES = rhDefaultWorkRules();
+function rhApplyWorkRulesToRuntime(rules) {
+  RH_WORK_RULES = rhNormalizeWorkRules(rules);
+  if (typeof FACE_UI_CONFIG === 'object' && FACE_UI_CONFIG) {
+    FACE_UI_CONFIG.localThreshold = RH_WORK_RULES.attendancePolicy.localFaceThreshold;
+    FACE_UI_CONFIG.freshSubmitMs = RH_WORK_RULES.attendancePolicy.freshSubmitMs;
+  }
+  try { localStorage.setItem(RH_WORK_RULES_STORAGE_KEY, JSON.stringify(RH_WORK_RULES)); } catch (e) {}
+  return RH_WORK_RULES;
+}
+(function bootWorkRulesFromStorage() {
+  try {
+    var saved = localStorage.getItem(RH_WORK_RULES_STORAGE_KEY);
+    if (saved) rhApplyWorkRulesToRuntime(JSON.parse(saved));
+  } catch (e) {}
+})();
+
+function rhGetAllowedAreasForUser(nik, context) {
+  var rules = RH_WORK_RULES || rhDefaultWorkRules();
+  var ctx = String(context || 'REGULAR').toUpperCase();
+  var id = String(nik || (S && S.user && S.user.nik) || '').trim();
+  var empRule = id && rules.employeeAreaRules ? rules.employeeAreaRules[id] : null;
+  var restrictedSet = (empRule && empRule.mode === 'RESTRICTED' && Array.isArray(empRule.allowedAreas))
+    ? empRule.allowedAreas : null;
+  return RH_STANDARD_AREAS.filter(function (a) {
+    var cfg = (rules.areas && rules.areas[a.value]) || {};
+    if (cfg.enabled === false) return false;
+    if (ctx === 'STANDBY' && (!a.standbyOk || cfg.allowStandby === false)) return false;
+    if (ctx === 'PIKET' && cfg.allowPiket === false) return false;
+    if (ctx === 'SICK' && (!a.sickOk || cfg.allowSickOutside === false)) return false;
+    if (ctx === 'REGULAR' && cfg.allowRegular === false) return false;
+    if (restrictedSet && restrictedSet.indexOf(a.value) < 0) return false;
+    return true;
+  }).map(function (a) {
+    var cfg = (rules.areas && rules.areas[a.value]) || {};
+    var label = String(cfg.label || a.defaultLabel || a.value);
+    if (ctx === 'STANDBY' && a.value === 'Area lainnya' && label.indexOf('SDLL') < 0) label = label + ' (SDLL)';
+    if (ctx === 'PIKET' && a.value === 'Area lainnya' && label.indexOf('PL') < 0) label = label + ' (PL)';
+    return { value: a.value, code: a.code, label: label };
+  });
+}
+
+function rhPopulateAreaSelect(sel, nik, context, placeholderText) {
+  if (!sel) return [];
+  var prev = sel.value;
+  var allowed = rhGetAllowedAreasForUser(nik, context);
+  var html = '<option value="">' + esc(placeholderText || 'Pilih area...') + '</option>';
+  if (!allowed.length) {
+    html += '<option value="" disabled>Semua area dibatasi untuk akun ini (hubungi HR)</option>';
+  } else {
+    allowed.forEach(function (item) {
+      html += '<option value="' + esc(item.value) + '">' + esc(item.label) + '</option>';
+    });
+  }
+  sel.innerHTML = html;
+  if (prev && allowed.some(function (x) { return x.value === prev; })) sel.value = prev;
+  else sel.value = '';
+  return allowed;
+}
+
+var RH_WORK_RULES_LAST_SYNC = 0;
+async function rhLoadWorkRules(force) {
+  if (!force && RH_WORK_RULES_LAST_SYNC && (Date.now() - RH_WORK_RULES_LAST_SYNC) < 300000) {
+    return RH_WORK_RULES;
+  }
+  try {
+    var cached = await RHMediaCache.kvGet('workRules');
+    if (!force && cached && cached.rules && cached.at && (Date.now() - cached.at) < 300000) {
+      rhApplyWorkRulesToRuntime(cached.rules);
+      RH_WORK_RULES_LAST_SYNC = cached.at;
+      return RH_WORK_RULES;
+    }
+  } catch (e) {}
+  try {
+    var tok = getToken();
+    if (!tok) return RH_WORK_RULES;
+    var resp = await rpcUncached('hr_get_app_rules', { p_token: tok, p_nik: (S && S.user && S.user.nik) || null }, 15000);
+    var loaded = resp && (resp.rules || resp.data || (resp.areas ? resp : null));
+    if (loaded && typeof loaded === 'object') {
+      rhApplyWorkRulesToRuntime(loaded);
+      RH_WORK_RULES_LAST_SYNC = Date.now();
+      try { RHMediaCache.kvSet('workRules', { rules: RH_WORK_RULES, at: RH_WORK_RULES_LAST_SYNC }); } catch (e) {}
+    }
+  } catch (e) {
+    // RPC opsional: gunakan aturan tersimpan lokal apabila RPC belum dibuat di database.
+  }
+  return RH_WORK_RULES;
+}
+
+async function rhSaveWorkRules(nextRules) {
+  var normalized = rhNormalizeWorkRules(nextRules);
+  normalized.updatedAt = new Date().toISOString();
+  normalized.updatedBy = (S && S.user && (S.user.nama || S.user.nik)) || 'SUPERADMIN';
+  rhApplyWorkRulesToRuntime(normalized);
+  RH_WORK_RULES_LAST_SYNC = Date.now();
+  try { await RHMediaCache.kvSet('workRules', { rules: normalized, at: RH_WORK_RULES_LAST_SYNC }); } catch (e) {}
+  var remoteSynced = false, remoteMessage = '';
+  try {
+    var resp = await rpcUncached('hr_save_app_rules', { p_token: getToken(), p_rules: normalized }, 20000);
+    if (resp && resp.ok !== false) remoteSynced = true;
+    remoteMessage = (resp && resp.message) || '';
+  } catch (e) {
+    remoteMessage = (e && e.message) || '';
+  }
+  try { rhReadInvalidate(); } catch (e) {}
+  try {
+    if ($('ctSickArea')) rhPopulateAreaSelect($('ctSickArea'), S && S.user && S.user.nik, 'SICK', 'Pilih area');
+    if (document.getElementById('rkTorSickArea')) rhPopulateAreaSelect(document.getElementById('rkTorSickArea'), S && S.user && S.user.nik, 'SICK', 'Pilih area');
+  } catch (e) {}
+  try { rhLogActivity('UPDATE', 'SETTINGS', 'Aturan Pekerjaan & Area', 'Pembatasan area / kebijakan diperbarui' + (remoteSynced ? ' (server)' : ' (lokal)'), 'OK'); } catch (e) {}
+  return { ok: true, rules: normalized, remoteSynced: remoteSynced, remoteMessage: remoteMessage };
+}
+
+window.rhWorkRules = {
+  standardAreas: RH_STANDARD_AREAS,
+  get: function () { return RH_WORK_RULES; },
+  defaultRules: rhDefaultWorkRules,
+  normalize: rhNormalizeWorkRules,
+  load: rhLoadWorkRules,
+  save: rhSaveWorkRules,
+  getAllowedAreasForUser: rhGetAllowedAreasForUser,
+  populateAreaSelect: rhPopulateAreaSelect
 };
 
 /* Log error lokal: hanya tersimpan di browser/perangkat ini, maksimal 100 entri. */
@@ -4745,16 +5122,31 @@ function stale(gen) { return gen !== SESSION_GEN; }
 // SESSION_GEN itself remains module-scoped so session mutation stays centralized.
 window.rhGetSessionGeneration = function() { return SESSION_GEN; };
 
-/* Read dedupe: menggabungkan request identik, menjaga scope per sesi,
- * membatasi memori, dan membuang hasil gagal agar retry tidak memakai error lama. */
-var RH_READ_DEDUPE_TTL = 2500;
-var RH_READ_DEDUPE_MAX = 96;
+/* Read dedupe & tiered SWR cache: menggabungkan request identik,
+ * mengurangi egress kuota pada data semi-statis, menjaga scope per sesi,
+ * dan membuang hasil gagal agar retry tidak memakai error lama. */
+var RH_READ_DEDUPE_TTL = 4000;
+var RH_READ_DEDUPE_MAX = 128;
 var RH_READ_DEDUPE = Object.create(null);
+function rhReadTtlForFn(fnName) {
+  var name = String(fnName || '').toLowerCase();
+  if (/^(get_master_cuti|get_delegate_options|get_lokasi_kantor|hr_get_attendance_schedule|hr_get_working_calendar|hr_get_incentive_formula|hr_get_reimbursement_limits|hr_get_incentive_signatories|hr_get_incentive_exclusions|hr_get_app_rules|get_org_chart)$/.test(name)) {
+    return 300000; // 5 menit untuk data master & konfigurasi semi-statis
+  }
+  if (/^(hr_get_employee_directory_summary|hr_get_employee_directory|get_karyawan_summary|get_face_photos)$/.test(name)) {
+    return 90000; // 90 detik untuk direktori & foto referensi
+  }
+  if (/^(hr_get_dashboard_panels|hr_attendance_today|hr_leave_yearly_stats|hr_get_leave_list_v2|hr_get_my_attendance_dayoff_context|hr_attendance_summary)$/.test(name)) {
+    return 45000; // 45 detik untuk ringkasan dashboard & laporan
+  }
+  return RH_READ_DEDUPE_TTL;
+}
 function rhReadDedupeTrim() {
   var now = Date.now(), keys = Object.keys(RH_READ_DEDUPE);
   keys.forEach(function(key) {
     var entry = RH_READ_DEDUPE[key];
-    if (entry && !entry.pending && now - entry.at > RH_READ_DEDUPE_TTL) delete RH_READ_DEDUPE[key];
+    var ttl = (entry && entry.ttl) || RH_READ_DEDUPE_TTL;
+    if (entry && !entry.pending && now - entry.at > ttl) delete RH_READ_DEDUPE[key];
   });
   keys = Object.keys(RH_READ_DEDUPE);
   while (keys.length > RH_READ_DEDUPE_MAX) {
@@ -4768,11 +5160,12 @@ function rhReadDedupeTrim() {
     keys = Object.keys(RH_READ_DEDUPE);
   }
 }
-function rhReadDedupe(key, producer) {
+function rhReadDedupe(key, producer, ttlMs) {
   var cacheKey = String(key), now = Date.now(), hit = RH_READ_DEDUPE[cacheKey];
-  if (hit && hit.promise && (hit.pending || (now - hit.at) < RH_READ_DEDUPE_TTL)) return hit.promise;
+  var ttl = Number(ttlMs) > 0 ? Number(ttlMs) : RH_READ_DEDUPE_TTL;
+  if (hit && hit.promise && (hit.pending || (now - hit.at) < (hit.ttl || ttl))) return hit.promise;
   if (hit) delete RH_READ_DEDUPE[cacheKey];
-  var entry = { at: now, pending: true, promise: null };
+  var entry = { at: now, ttl: ttl, pending: true, promise: null };
   entry.promise = Promise.resolve().then(producer).then(function(value) {
     entry.pending = false; entry.at = Date.now(); rhReadDedupeTrim(); return value;
   }, function(error) {
@@ -4784,6 +5177,7 @@ function rhReadDedupe(key, producer) {
   return entry.promise;
 }
 function rhReadInvalidate() { RH_READ_DEDUPE = Object.create(null); }
+window.rhClearReadCache = rhReadInvalidate;
 function rhReadSessionScope() {
   var user = (typeof S !== 'undefined' && S && S.user) || {};
   return String(SESSION_GEN) + '|' + String(user.nik || 'anonymous') + '|' + String(user.role || '').toUpperCase();
@@ -4804,7 +5198,7 @@ async function rpc(fn, params, timeoutMs) {
   if (RH_RPC_MUTATION.test(String(fn || ''))) rhReadInvalidate();
   if (RH_RPC_READ_WHITELIST.test(String(fn || ''))) {
     var cacheKey = rhReadSessionScope() + '|' + String(fn) + '|' + rhReadParamsKey(params);
-    return rhReadDedupe(cacheKey, function () { return rpcUncached(fn, params, timeoutMs); });
+    return rhReadDedupe(cacheKey, function () { return rpcUncached(fn, params, timeoutMs); }, rhReadTtlForFn(fn));
   }
   return rpcUncached(fn, params, timeoutMs);
 }
@@ -5788,7 +6182,7 @@ async function rhWarmPhotoRows(rows, gen) {
       }
     }
   }
-  await Promise.all([worker(), worker(), worker()]);
+  await Promise.all([worker(), worker()]);
   refreshCachedFaceNodes();
   return { warmed: warmed, total: all.length };
 }
@@ -5806,14 +6200,28 @@ async function prewarmSemiStaticData(options) {
   RH_PREWARM_PROMISE = (async function() {
     try { await RHMediaCache.readyPromise; } catch (e) {}
     if (stale(gen)) return false;
+    var cachedParts = await Promise.all([
+      RHMediaCache.kvGet('empSummary'),
+      RHMediaCache.kvGet('karData'),
+      RHMediaCache.kvGet('photoWarmMeta')
+    ]);
+    if (stale(gen)) return false;
+    var ec = cachedParts[0], kc = cachedParts[1], warmMeta = cachedParts[2];
+    var now = Date.now();
+    var selfId = String(S.user && S.user.nik || '');
+    var warmFresh = !options.force && warmMeta && warmMeta.nik === selfId && warmMeta.release === RH_HTML_RELEASE && warmMeta.at && (now - warmMeta.at) < 21600000;
     var rows = [], directoryRole = ['HR','ADMIN','SUPERADMIN'].indexOf(role) >= 0;
     if (directoryRole) {
-      // HR/Admin/Superadmin may access the company directory. Load its current roster
-      // before warming face photos; this fixes the post-reboot state where no photo list existed.
-      var directory = null;
-      try { directory = await api('hrGetEmployeeDirectory', [], 45000); } catch (e) { console.warn('[ReHolz] Employee directory prewarm failed:', e && e.message || e); }
-      if (stale(gen)) return false;
-      var directoryRows = rhRosterRows(directory);
+      var empCacheFresh = !options.force && ec && Array.isArray(ec.list) && ec.list.length && ec.at && (now - ec.at) < 1800000;
+      var directoryRows = [];
+      if (empCacheFresh) {
+        directoryRows = ec.list;
+      } else {
+        var directory = null;
+        try { directory = await api('hrGetEmployeeDirectory', [], 45000); } catch (e) { console.warn('[ReHolz] Employee directory prewarm failed:', e && e.message || e); }
+        if (stale(gen)) return false;
+        directoryRows = rhRosterRows(directory);
+      }
       if (directoryRows.length) {
         rows = directoryRows.map(function(x) {
           var id = String(x.nik || x.employee_id || x.employeeId || '');
@@ -5822,13 +6230,9 @@ async function prewarmSemiStaticData(options) {
           return Object.assign({}, x, { nik:id, faceVer:ver });
         }).filter(function(x){return !!x.nik;});
         DATA.empList = directoryRows;
-        DATA._empAt = Date.now();
-        RHMediaCache.kvSet('empSummary', { list:directoryRows, at:DATA._empAt, release:RH_HTML_RELEASE });
+        DATA._empAt = empCacheFresh ? ec.at : now;
+        if (!empCacheFresh) RHMediaCache.kvSet('empSummary', { list:directoryRows, at:DATA._empAt, release:RH_HTML_RELEASE });
       } else {
-        // If the network is unavailable, preserve existing roster data and warm any known rows.
-        var cached = await Promise.all([RHMediaCache.kvGet('empSummary'), RHMediaCache.kvGet('karData')]);
-        if (stale(gen)) return false;
-        var ec = cached[0], kc = cached[1];
         var known = ec && Array.isArray(ec.list) && ec.list.length ? ec.list :
           (kc && Array.isArray(kc.list) ? kc.list : (DATA.empList.length ? DATA.empList : DATA.karList));
         rows = (known || []).map(function(x) {
@@ -5841,24 +6245,29 @@ async function prewarmSemiStaticData(options) {
         if (kc && Array.isArray(kc.list) && !DATA.karList.length) DATA.karList = kc.list;
       }
     } else {
-      // A normal employee never prefetches the company-wide roster.
       rows = [{ nik:S.user.nik, nama:S.user.nama, faceVer:(S.user.employee || {}).facePhotoVer || DATA.faceVer[S.user.nik] || 0 }];
       if (S.approver) {
         try {
           var teamDate = todayISO();
-          var teamResp = await api('getTeamActivity', [teamDate], 30000);
-          if (stale(gen)) return false;
-          DATA.team = (teamResp && teamResp.list) || [];
-          DATA._teamMeta = { nik:String(S.user.nik), gen:gen, date:teamDate, at:Date.now() };
-          RHMediaCache.kvSet('teamActivity', { date:teamDate, list:DATA.team, at:Date.now(), release:RH_HTML_RELEASE });
-          rows = rows.concat(DATA.team || []);
+          if (DATA.team && DATA.team.length && DATA._teamMeta && DATA._teamMeta.date === teamDate && !options.force) {
+            rows = rows.concat(DATA.team);
+          } else {
+            var teamResp = await api('getTeamActivity', [teamDate], 30000);
+            if (stale(gen)) return false;
+            DATA.team = (teamResp && teamResp.list) || [];
+            DATA._teamMeta = { nik:String(S.user.nik), gen:gen, date:teamDate, at:Date.now() };
+            RHMediaCache.kvSet('teamActivity', { date:teamDate, list:DATA.team, at:Date.now(), release:RH_HTML_RELEASE });
+            rows = rows.concat(DATA.team || []);
+          }
         } catch (e) { console.warn('[ReHolz] Team summary prewarm failed:', e && e.message || e); }
       }
     }
     if (stale(gen)) return false;
-    var photoResult = await rhWarmPhotoRows(rows, gen);
+    var photoResult = warmFresh ? { warmed: 0, total: rows.length, skippedCooldown: true } : await rhWarmPhotoRows(rows, gen);
+    if (!warmFresh && !stale(gen)) {
+      try { RHMediaCache.kvSet('photoWarmMeta', { at: Date.now(), nik: selfId, release: RH_HTML_RELEASE, count: rows.length }); } catch (e) {}
+    }
     if (!stale(gen) && currentScr() === 's-emp') renderEmpList('');
-    console.info('[ReHolz] Semi-static cache ready:', { release:RH_HTML_RELEASE, rosterRows:rows.length, photoCache:photoResult });
     return photoResult;
   })().catch(function(e) { console.warn('[ReHolz] Semi-static prewarm did not complete; app stays usable:', e && e.message || e); return false; }).then(function(r) { RH_PREWARM_PROMISE = null; return r; });
   return RH_PREWARM_PROMISE;
@@ -6471,6 +6880,7 @@ function renderFaceBanner() {
 
 function renderAkun() {
   if (!S.user) return Promise.resolve(false);
+  if (window.rhPwa && typeof window.rhPwa.syncUi === 'function') window.rhPwa.syncUi();
   var e = S.user.employee || {};
   var accountAvatar = $('akunAva');
   accountAvatar.setAttribute('data-facenik', String(S.user.nik));
@@ -6593,6 +7003,8 @@ function refreshAppData() {
   var btn = $('btnRefreshAppData'), label = $('menuRefreshLabel');
   if (btn && btn.disabled) return Promise.resolve(false);
   if (btn) { btn.disabled = true; btn.setAttribute('aria-busy', 'true'); }
+  try { rhReadInvalidate(); } catch (e) {}
+  try { rhLoadWorkRules(true).catch(function() {}); } catch (e) {}
   var setRefreshLabel = function(text) { if (label) label.textContent = text; };
   setRefreshLabel('Memperbarui profil…');
   var gen = SESSION_GEN;
@@ -6748,6 +7160,8 @@ function loadBootstrap() {
     updateBadges();
     loadTeam();
     loadMyRequests();
+    // Muat aturan kerja & pembatasan area terbaru secara non-blocking.
+    rhLoadWorkRules(false).catch(function() {});
     // Warm role-authorized employee summaries and photo bytes in the background; never block dashboard entry.
     prewarmSemiStaticData().catch(function(e) { console.warn('[ReHolz] Prewarm deferred:', e && e.message || e); });
     prewarmTimeoffReferenceData();
@@ -7458,8 +7872,8 @@ async function startAttendance(type) {
   // Render seketika dari fix GPS yang sudah hangat; refreshGps() di bawah memperbaruinya.
   if (GPS.pos) { try { renderGpsUi(); } catch (e) {} }
   refreshGps();
-  camStart().catch(function(e) { $('camStatus').textContent = '❌ Kamera tidak dapat digunakan. Periksa izin kamera dan coba lagi.'; });
-  ensureNets().catch(function(e) { $('camStatus').textContent = '❌ Verifikasi wajah belum tersedia. Coba lagi.'; });
+  // Kamera & model AI baru dimulai saat memasuki Langkah 2 (attStep2) agar Step 1 dan
+  // dialog pilihan Area di luar kantor bebas dari beban inferensi main-thread.
   loadMyDescriptor().then(function(d) {
     if (!d) {
       $('camStatus').textContent = '⚠️ Data Face ID belum ditemukan. Tambahkan foto profil melalui menu Akun.';
@@ -7473,6 +7887,9 @@ async function startAttendance(type) {
 function renderGpsUi() {
   var p = GPS.pos;
   if (!p) return;
+  var ov = $('ovOutside');
+  // Jangan mutasi DOM/peta di belakang saat pengguna sedang memilih Area di dialog luar kantor.
+  if (ov && ov.classList.contains('on')) return;
   var chk = inOfficeCheck();
   if (ATT_MAP) {
     try { updateAttMap(p, chk); } catch (e) { destroyAttMap(); }
@@ -7551,21 +7968,26 @@ function openOutside() {
     ? (' Akurasi GPS ±' + Math.round(chk.accuracy) + ' m masih memotong batas radius, tetapi titik koordinat berada di luar; server menilai jarak titik GPS.')
     : '';
   if (primary) primary.textContent = ATT.type === 'PULANG' ? 'Lanjut Clock Out' : 'Lanjut Clock In';
+  var userNik = S && S.user && S.user.nik;
+  var standbyToday = rhIsStandbyToday();
+  var rules = RH_WORK_RULES || rhDefaultWorkRules();
+  var lockClockOut = !(rules.attendancePolicy && rules.attendancePolicy.lockClockOutAreaToClockIn === false);
+  var standbyNoteOpt = !(rules.attendancePolicy && rules.attendancePolicy.standbyNoteOptional === false) && standbyToday;
 
   if (ATT.type === 'PULANG') {
     if(title) title.textContent='Clock Out · Di luar kantor';
     if(msg) msg.textContent='';
     if(areaField) areaField.style.display='';
     if(label) label.textContent='Area Clock Out *';
-    if(note)note.placeholder=rhIsStandbyToday()?'Catatan Clock Out (opsional saat Standby)':'Keterangan Clock Out di luar kantor *';
-    if(area && ATT.areaLock) {
-      area.innerHTML = '<option value="' + ATT.areaLock + '">' + ATT.areaLock + ' · mengikuti Clock In</option>';
+    if(note)note.placeholder=standbyNoteOpt?'Catatan Clock Out (opsional saat Standby)':'Keterangan Clock Out di luar kantor *';
+    if(area && ATT.areaLock && lockClockOut) {
+      area.innerHTML = '<option value="' + esc(ATT.areaLock) + '">' + esc(ATT.areaLock) + ' · mengikuti Clock In</option>';
       area.value = ATT.areaLock;
       area.disabled = true;
-      if(body) body.textContent=(where ? where + ' ' : '') + 'Area Clock Out mengikuti area Clock In hari ini.' + (rhIsStandbyToday()?' Catatan opsional saat Standby.':'') + accuracyNote;
+      if(body) body.textContent=(where ? where + ' ' : '') + 'Area Clock Out mengikuti area Clock In hari ini.' + (standbyNoteOpt?' Catatan opsional saat Standby.':'') + accuracyNote;
     } else {
-      if(body) body.textContent=(where ? where + ' ' : '') + (rhIsStandbyToday()?'Pilih area Clock Out. Catatan opsional saat Standby.':'Pilih area dan isi keterangan Clock Out di luar kantor.') + accuracyNote;
-      if(area) area.innerHTML='<option value="">Pilih area...</option><option value="Area 1">Area 1</option><option value="Area 2">Area 2</option><option value="Area 3">Area 3</option><option value="Area 4">Area 4</option><option value="Area lainnya">Area Lain</option><option value="Area Sekitar">Area Sekitar</option>';
+      if(body) body.textContent=(where ? where + ' ' : '') + (standbyNoteOpt?'Pilih area Clock Out. Catatan opsional saat Standby.':'Pilih area dan isi keterangan Clock Out di luar kantor.') + accuracyNote;
+      if(area) rhPopulateAreaSelect(area, userNik, standbyToday ? 'STANDBY' : 'REGULAR', 'Pilih area...');
     }
   } else if (ATT.dayOffChoice === 'STANDBY') {
     if(title)title.textContent='Standby · Dinas Luar pada Hari Libur';
@@ -7574,16 +7996,15 @@ function openOutside() {
     if(areaField)areaField.style.display='';
     if(label)label.textContent='Area Standby *';
     if(note)note.placeholder='Catatan Standby (opsional)';
-    if(area)area.innerHTML='<option value="">Pilih area...</option><option value="Area 1">Area 1</option><option value="Area 2">Area 2</option><option value="Area 3">Area 3</option><option value="Area 4">Area 4</option><option value="Area lainnya">Area Lain (SDLL)</option>';
+    if(area) rhPopulateAreaSelect(area, userNik, 'STANDBY', 'Pilih area...');
   } else if (ATT.dayOffChoice === 'PIKET') {
     if(title)title.textContent='Piket · Hari Libur';
-    if(body)body.textContent=(where ? where + ' ' : '') + 'Pilih Area 1–4, Area Lain, atau Area Sekitar; isi keterangan Piket.' + accuracyNote;
+    if(body)body.textContent=(where ? where + ' ' : '') + 'Pilih area Piket yang tersedia; isi keterangan Piket.' + accuracyNote;
     if(msg)msg.textContent='';
     if(areaField)areaField.style.display='';
     if(label)label.textContent='Area Piket *';
     if(note)note.placeholder='Keterangan Piket *';
-    // SBY is outside by GPS but office-equivalent for Surabaya; the server still assigns the ordinary P code.
-    if(area)area.innerHTML='<option value="">Pilih area...</option><option value="Area 1">Area 1</option><option value="Area 2">Area 2</option><option value="Area 3">Area 3</option><option value="Area 4">Area 4</option><option value="Area lainnya">Area Lain (PL)</option><option value="Area Sekitar">Area Sekitar</option>';
+    if(area) rhPopulateAreaSelect(area, userNik, 'PIKET', 'Pilih area...');
   } else {
     if(title)title.textContent='Anda berada di luar kantor';
     if(body)body.textContent=(where ? where + ' ' : '') + 'Pilih area dan isi keterangan Clock In di luar kantor.' + accuracyNote;
@@ -7591,10 +8012,10 @@ function openOutside() {
     if(areaField)areaField.style.display='';
     if(label)label.textContent='Area *';
     if(note)note.placeholder='Keterangan Clock In di luar kantor *';
-    if(area)area.innerHTML='<option value="">Pilih area...</option><option value="Area 1">Area 1</option><option value="Area 2">Area 2</option><option value="Area 3">Area 3</option><option value="Area 4">Area 4</option><option value="Area lainnya">Area Lain</option><option value="Area Sekitar">Area Sekitar</option>';
+    if(area) rhPopulateAreaSelect(area, userNik, 'REGULAR', 'Pilih area...');
   }
   $('outNote').value = '';
-  if (ATT.type !== 'PULANG' || !ATT.areaLock) $('outArea').value = '';
+  if (ATT.type !== 'PULANG' || !ATT.areaLock || !lockClockOut) $('outArea').value = '';
   $('ovOutside').classList.add('on');
 }
 
@@ -7743,6 +8164,12 @@ function rhSoftWarn(key, error) {
 
 async function camLoop() {
   while (CAM.run && CAM.stream) {
+    var step2El = $('attStep2');
+    var ovOut = $('ovOutside');
+    if (!step2El || step2El.style.display === 'none' || (ovOut && ovOut.classList.contains('on'))) {
+      await new Promise(function(r) { setTimeout(r, 220); });
+      continue;
+    }
     try {
       if (NETS.ready) {
         var d = await faceapi.detectSingleFace($('attVideo'), new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.4 })).withFaceLandmarks().withFaceDescriptor();
@@ -7819,13 +8246,14 @@ function updateFaceState() {
     ov.style.display = 'none';
     updateFaceInfo();
   } else {
+    var allowManualOverride = !(RH_WORK_RULES && RH_WORK_RULES.attendancePolicy && RH_WORK_RULES.attendancePolicy.allowManualFaceOverride === false);
     CAM.state = 'mismatch';
     st.textContent = FACE_UI_CONFIG.status.mismatch;
     st.style.color = FACE_UI_CONFIG.colors.mismatch;
     $('btnKirim').disabled = !CAM.override;
-    ov.style.display = CAM.override ? 'none' : 'block';
+    ov.style.display = (CAM.override || !allowManualOverride) ? 'none' : 'block';
     updateFaceInfo();
-    if (!ov.firstChild) ov.innerHTML = '<a href="#" onclick="enableOverride();return false" style="display:inline-block;padding:10px 14px;background:rgba(0,0,0,.45);border-radius:10px">' + FACE_UI_CONFIG.overrideLinkText + '</a>';
+    if (allowManualOverride && !ov.firstChild) ov.innerHTML = '<a href="#" onclick="enableOverride();return false" style="display:inline-block;padding:10px 14px;background:rgba(0,0,0,.45);border-radius:10px">' + FACE_UI_CONFIG.overrideLinkText + '</a>';
   }
 }
 
@@ -7843,9 +8271,11 @@ function attStep2() {
   $('attStep2').style.display = 'block';
   $('attStep').textContent = 'Langkah 2 dari 2';
   if (!ATT.outsideOk) $('attNote').value = '';
-  $('camStatus').textContent = NETS.ready ? FACE_UI_CONFIG.status.detecting : '⏳ Memuat AI...';
+  $('camStatus').textContent = NETS.ready ? FACE_UI_CONFIG.status.detecting : '⏳ Memuat kamera & AI...';
   $('camStatus').style.color = '#fff';
   $('btnKirim').disabled = true;
+  camStart().catch(function() { $('camStatus').textContent = '❌ Kamera tidak dapat digunakan. Periksa izin kamera dan coba lagi.'; });
+  ensureNets().catch(function() { $('camStatus').textContent = '❌ Verifikasi wajah belum tersedia. Coba lagi.'; });
   updateFaceState();
 }
 
@@ -8438,25 +8868,28 @@ var RH_TIMEOFF_PREWARM_GEN = -1;
 function prewarmTimeoffReferenceData() {
   var gen = SESSION_GEN;
   if (RH_TIMEOFF_PREWARM_PROMISE && RH_TIMEOFF_PREWARM_GEN === gen) return RH_TIMEOFF_PREWARM_PROMISE;
+  var TTL_6H = 21600000;
   var masterTask = RHMediaCache.kvGet('masterCuti').then(function(c) {
     if (stale(gen)) return;
+    var fresh = c && Array.isArray(c.list) && c.list.length && c.at && (Date.now() - c.at) < TTL_6H && c.release === RH_HTML_RELEASE;
     if (c && Array.isArray(c.list) && c.list.length && (!CACHE.masterCuti || !CACHE.masterCuti.length)) {
       CACHE.masterCuti = c.list; CACHE.masterCutiAt = c.at || 0;
     }
+    if (fresh) return null;
     return api('getMasterCuti', [], 20000);
   }).then(function(list) {
-    if (stale(gen)) return;
-    if (Array.isArray(list)) {
-      CACHE.masterCuti = list; CACHE.masterCutiAt = Date.now();
-      return RHMediaCache.kvSet('masterCuti', { list:list, at:CACHE.masterCutiAt, release:RH_HTML_RELEASE });
-    }
+    if (stale(gen) || !Array.isArray(list)) return;
+    CACHE.masterCuti = list; CACHE.masterCutiAt = Date.now();
+    return RHMediaCache.kvSet('masterCuti', { list:list, at:CACHE.masterCutiAt, release:RH_HTML_RELEASE });
   }).catch(function(e) { console.warn('[ReHolz] Time-off reference prewarm skipped:', e && e.message || e); });
   var delegateTask = Promise.all([RHMediaCache.kvGet('delegateOptions'), RHMediaCache.readyPromise]).then(function(parts) {
     if (stale(gen)) return null;
     var c = parts[0];
+    var fresh = c && Array.isArray(c.rows) && c.at && (Date.now() - c.at) < TTL_6H && c.release === RH_HTML_RELEASE;
     if (c && Array.isArray(c.rows) && !DELEGATE_OPTIONS.loaded) {
       DELEGATE_OPTIONS.rows = c.rows; DELEGATE_OPTIONS.loaded = true;
     }
+    if (fresh) return null;
     return rpc('get_delegate_options', { p_token:getToken() }, 20000);
   }).then(function(rows) {
     if (stale(gen) || rows == null) return;
@@ -8769,9 +9202,12 @@ function submitReimbursementRequest(){
 function onCutiKode() {
   var sel = $('ctKode');
   var h7 = $('ctH7Notice'); if (h7) h7.style.display = isH7Timeoff(sel.value) ? 'block' : 'none';
-  var sickWrap=$('ctSickOutsideWrap'), sickSel=$('ctSickOutside'), sickArea=$('ctSickAreaWrap');
+  var sickWrap=$('ctSickOutsideWrap'), sickSel=$('ctSickOutside'), sickArea=$('ctSickAreaWrap'), sickAreaSel=$('ctSickArea');
   if(sickWrap)sickWrap.style.display=sel.value==='SDR'?'block':'none';
   if(sickArea)sickArea.style.display=sel.value==='SDR'&&sickSel&&sickSel.value==='1'?'block':'none';
+  if (sickAreaSel && sel.value === 'SDR') {
+    rhPopulateAreaSelect(sickAreaSel, S && S.user && S.user.nik, 'SICK', 'Pilih area');
+  }
   // Lampiran selalu tersedia dan opsional untuk semua kategori Time Off.
   $('ctDocWrap').style.display = 'block';
   if (sel.value === 'CT') {
@@ -12342,22 +12778,36 @@ function showHrPlaceholder(title, group, description) {
         <div class="rk-sub">
           <button data-p="my-approvals"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#007850" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="m8 11 2 2 5-5M8 16h8"/></svg>Menunggu Persetujuan</button>
           <button data-p="loc"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#007850" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Lokasi Kantor</button>
-          <button data-p="lap"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#007850" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6" rx="0.5"/><rect x="12" y="8" width="3" height="10" rx="0.5"/><rect x="17" y="5" width="3" height="13" rx="0.5"/></svg>Laporan HR</button>
-          <button data-p="users"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#007850" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5M18.5 8.5l1 1 2-2"/></svg>Manajemen User</button>
           <button data-p="log"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#007850" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l2.5 2.5"/><circle cx="12" cy="12" r="9"/></svg>Log Aktivitas</button>
-          <button data-p="attset"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#007850" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.7 2.94-.08-.02a1.7 1.7 0 0 0-1.78.47l-.06.06h-3.4l-.06-.08a1.7 1.7 0 0 0-1.78-.47l-.08.02-1.7-2.94.06-.06A1.7 1.7 0 0 0 9.6 15l-.02-.08V11.5l.08-.06a1.7 1.7 0 0 0 .47-1.78l-.02-.08 2.94-1.7.06.06a1.7 1.7 0 0 0 1.88.34l.08-.02h3.4l.06.08a1.7 1.7 0 0 0 1.78.47l.08-.02 1.7 2.94-.06.06A1.7 1.7 0 0 0 21.7 13l.02.08V15z"/></svg>Aturan Kehadiran</button>
-          <button data-p="calendar"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#007850" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01"/></svg>Kalender Kerja</button>
-          <button data-p="manage"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#007850" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4H4zM4 10h16v4H4zM4 16h10v4H4z"/><path d="M17 18h4M19 16v4"/></svg>Manajemen Data</button>
+          <button data-p="settings"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="#007850" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.7 2.94-.08-.02a1.7 1.7 0 0 0-1.78.47l-.06.06h-3.4l-.06-.08a1.7 1.7 0 0 0-1.78-.47l-.08.02-1.7-2.94.06-.06A1.7 1.7 0 0 0 9.6 15l-.02-.08V11.5l.08-.06a1.7 1.7 0 0 0 .47-1.78l-.02-.08 2.94-1.7.06.06a1.7 1.7 0 0 0 1.88.34l.08-.02h3.4l.06.08a1.7 1.7 0 0 0 1.78.47l.08-.02 1.7 2.94-.06.06A1.7 1.7 0 0 0 21.7 13l.02.08V15z"/></svg>Settings</button>
         </div>
       </div>
     </nav>
   </aside>
 
   <header class="rk-top" aria-label="Bilah alat desktop">
+    <div class="rk-top-dash-decor" id="rkTopDashDecor" style="display:none">
+      <div class="rk-top-dash-emblem" aria-hidden="true">
+        <svg viewBox="0 0 28 28" width="22" height="22" fill="none">
+          <path d="M14 3.5c4.5 0 8.5 3.1 8.5 7.9 0 5.4-4.7 10-8.5 13.1C10.2 21.4 5.5 16.8 5.5 11.4 5.5 6.6 9.5 3.5 14 3.5z" fill="#007850" fill-opacity="0.14" stroke="#007850" stroke-width="1.6"/>
+          <path d="M14 7.5v13M14 13l3.6-2.8M14 16.2l-3.4-2.4" stroke="#00553A" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="20.5" cy="7.5" r="2.2" fill="#B77932"/>
+        </svg>
+      </div>
+      <div class="rk-top-dash-copy">
+        <div class="rk-top-dash-kicker">REHOLZ WORKFORCE OVERVIEW</div>
+        <div class="rk-top-dash-title" id="rkTopDashGreeting">Dashboard Operasional HR</div>
+      </div>
+      <div class="rk-top-dash-date" id="rkTopDashDate"></div>
+    </div>
     <div class="rk-page-heading" id="rkPageHeading" aria-live="polite" style="display:none">
       <h1 id="rkTitle"></h1>
       <div class="rk-sub" id="rkSub"></div>
     </div>
+    <button class="rk-pwa-top-btn" id="rkTopPwaBtn" type="button" style="display:none" onclick="window.rhPwa && window.rhPwa.promptInstall()" title="Pasang aplikasi ReHolz HRIS">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 20h14"/></svg>
+      <span>Install App</span>
+    </button>
     <button class="rk-iconbtn" id="rkRefresh" type="button" title="Muat ulang data" aria-label="Muat ulang data">
       <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
     </button>
@@ -12395,6 +12845,10 @@ function showHrPlaceholder(title, group, description) {
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3M12 14v3"/></svg>
           <span>Ubah PIN</span>
         </button>
+        <button type="button" role="menuitem" data-rk-user-action="pwa" id="rkUserMenuPwa" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M5 20h14"/></svg>
+          <span>Pasang Aplikasi (PWA)</span>
+        </button>
         <div class="rk-user-menu-divider" role="separator"></div>
         <button type="button" role="menuitem" class="danger" data-rk-user-action="logout" id="rkUserMenuLogout">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 17l5-5-5-5M15 12H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/></svg>
@@ -12411,6 +12865,8 @@ function showHrPlaceholder(title, group, description) {
     <section class="rk-page" id="rkp-attmap"></section>
     <section class="rk-page" id="rkp-my-approvals"></section>
     <section class="rk-page" id="rkp-loc"></section>
+    <section class="rk-page" id="rkp-settings"></section>
+    <section class="rk-page" id="rkp-rules"></section>
     <section class="rk-page" id="rkp-attset"></section>
     <section class="rk-page" id="rkp-calendar"></section>
     <section class="rk-page" id="rkp-pfile"></section>
@@ -12489,6 +12945,8 @@ function showHrPlaceholder(title, group, description) {
     rekap: ['Laporan Absensi', 'Rekapitulasi kehadiran per karyawan dan rentang tanggal'],
     attset: ['Aturan Kehadiran', 'Atur jadwal cabang dan toleransi keterlambatan'],
     calendar: ['Kalender Kerja', 'Kelola hari libur nasional, hari kerja, dan hari libur'],
+    settings: ['Settings', 'Pusat konfigurasi sistem, aturan kerja, kalender, user, dan laporan HR'],
+    rules: ['Aturan Pekerjaan & Area', 'Kebijakan fleksibel presensi, pembatasan area karyawan, dan parameter operasional'],
     cuti: ['Rekap Time Off', 'Rekapitulasi Ketidak Hadiran Karyawan'],
     timeoffRequest: ['Cuti Karyawan', 'Daftar pengajuan cuti karyawan'],
     reimbursementRequest: ['Pengajuan Reimbursement', 'Pengajuan dan riwayat reimbursement khusus karyawan Hybrid'],
@@ -12569,6 +13027,7 @@ function showHrPlaceholder(title, group, description) {
     if(!adminNotice){adminNotice=document.createElement('div');adminNotice.id='rhAdminReadOnlyNotice';adminNotice.className='rk-readonly-admin-note';adminNotice.textContent='Akses Admin hanya untuk melihat data administrasi. Clock In dan Clock Out pribadi tetap tersedia.';var main=document.querySelector('#rhDesk .rk-main');if(main)main.insertBefore(adminNotice,main.firstChild);}
     adminNotice.style.display=(window.S&&S.user&&String(S.user.role||'').toUpperCase()==='ADMIN')?'block':'none';
     goPage(cur);
+    if (window.rhPwa && typeof window.rhPwa.syncUi === 'function') window.rhPwa.syncUi();
     if(!isDesktopLimited()||isDesktopApprover()){
       refreshBadge();
       // Prime the notification badge/panel immediately; do not wait for the bell to be clicked.
@@ -12576,8 +13035,8 @@ function showHrPlaceholder(title, group, description) {
     }
     if ((!isDesktopLimited()||isDesktopApprover()) && !window.__rhDeskNotifPollTimer) {
       window.__rhDeskNotifPollTimer = window.setInterval(function () {
-        if (document.body.classList.contains('rh-desk-on')) renderDeskNotifications();
-      }, 60000);
+        if (!document.hidden && document.body.classList.contains('rh-desk-on')) renderDeskNotifications();
+      }, 240000);
     }
   }
   function deactivate() {
@@ -12611,6 +13070,59 @@ function showHrPlaceholder(title, group, description) {
     }
   }
 
+  var SETTINGS_SUBPAGES = ['rules', 'attset', 'calendar', 'manage', 'users', 'lap'];
+  function updateTopDashDecor(isDashActive) {
+    var topBar = document.querySelector('#rhDesk .rk-top');
+    var decor = document.getElementById('rkTopDashDecor');
+    if (topBar) topBar.classList.toggle('is-dash-mode', !!isDashActive);
+    if (!decor) return;
+    decor.style.display = isDashActive ? 'flex' : 'none';
+    if (!isDashActive) return;
+    var grEl = document.getElementById('rkTopDashGreeting');
+    var dtEl = document.getElementById('rkTopDashDate');
+    if (grEl) {
+      var hr = Number(new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Jakarta', hour: '2-digit', hour12: false }).format(new Date())) || 9;
+      var sapa = hr < 11 ? 'Selamat Pagi' : (hr < 15 ? 'Selamat Siang' : (hr < 18 ? 'Selamat Sore' : 'Selamat Malam'));
+      var firstName = String((window.S && S.user && S.user.nama) || '').trim().split(/\s+/)[0];
+      grEl.textContent = firstName ? (sapa + ', ' + firstName) : 'Dashboard Operasional HR';
+    }
+    if (dtEl) {
+      try {
+        dtEl.textContent = new Intl.DateTimeFormat('id-ID', {
+          timeZone: 'Asia/Jakarta',
+          weekday: 'long',
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric'
+        }).format(new Date());
+      } catch (e) { dtEl.textContent = ''; }
+    }
+  }
+  function updateSettingsBreadcrumb(page, limitedAccess) {
+    var main = document.querySelector('#rhDesk .rk-main');
+    if (!main) return;
+    var bar = document.getElementById('rkSettingsBreadcrumb');
+    var show = !limitedAccess && SETTINGS_SUBPAGES.indexOf(page) >= 0;
+    if (!show) {
+      if (bar) bar.style.display = 'none';
+      return;
+    }
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.id = 'rkSettingsBreadcrumb';
+      bar.className = 'rk-settings-backbar';
+      var anchor = document.getElementById('rhAdminReadOnlyNotice');
+      if (anchor && anchor.nextSibling) main.insertBefore(bar, anchor.nextSibling);
+      else main.insertBefore(bar, main.firstChild);
+    }
+    var meta = TITLES[page] || ['Pengaturan', ''];
+    bar.innerHTML = '<button type="button" class="rk-settings-back-btn" id="rkBackToSettingsBtn"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg><span>Kembali ke Settings</span></button>' +
+      '<span class="rk-settings-crumb-sep">/</span><strong class="rk-settings-crumb-cur">' + escH(meta[0]) + '</strong>';
+    bar.style.display = 'flex';
+    var btn = document.getElementById('rkBackToSettingsBtn');
+    if (btn) btn.onclick = function () { goPage('settings'); };
+  }
+
   /* ---------------- Navigasi halaman ---------------- */
   function goPage(p) {
     // Legacy approval notifications may still use the old 'apr' destination.
@@ -12619,8 +13131,9 @@ function showHrPlaceholder(title, group, description) {
     if (!TITLES[p]) p = 'dash';
     if (!desktopPageAllowed(p)) p = isDesktopApprover() ? 'dash' : 'timeoffRequest';
     cur = p;
+    var navHighlightPage = SETTINGS_SUBPAGES.indexOf(p) >= 0 ? 'settings' : p;
     var btns = document.querySelectorAll('#rkNav button');
-    for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('on', btns[i].getAttribute('data-p') === p && (p !== 'timeoffRequest' || btns[i].getAttribute('data-timeoff-group') === timeOffRequestGroup));
+    for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('on', btns[i].getAttribute('data-p') === navHighlightPage && (p !== 'timeoffRequest' || btns[i].getAttribute('data-timeoff-group') === timeOffRequestGroup));
     var pages = document.querySelectorAll('#rhDesk .rk-page');
     for (var j = 0; j < pages.length; j++) pages[j].classList.toggle('on', pages[j].id === 'rkp-' + p);
     var T = document.getElementById('rkTitle'), Sb = document.getElementById('rkSub');
@@ -12635,16 +13148,22 @@ function showHrPlaceholder(title, group, description) {
       rekap: ['Laporan Absensi', ''],
       'incentive-settings': ['Setting Insentif', ''],
       'incentive-employee': ['Rekap Insentif', 'Rincian nominal, perhitungan harian, dan persetujuan'],
-      manage: ['Manajemen Data', 'Kelola data administrasi karyawan'],
+      settings: ['Settings', 'Pusat konfigurasi sistem, aturan kerja, jadwal, user, dan laporan HR'],
+      rules: ['Aturan Pekerjaan & Area', 'Kebijakan fleksibel presensi, pembatasan area karyawan, dan formula'],
+      attset: ['Aturan Kehadiran', 'Jadwal shift cabang dan toleransi keterlambatan'],
+      calendar: ['Kalender Kerja', 'Hari kerja, libur nasional, dan cuti bersama'],
+      users: ['Manajemen User', 'Peran akses, status akun, dan keamanan PIN'],
+      lap: ['Laporan HR', 'Laporan bulanan HR untuk dicetak dan diekspor'],
+      manage: ['Manajemen Data', 'Kelola penghapusan dan penyesuaian multi-faktor absensi'],
       reimbursementRequest: ['Pengajuan Reimbursement', 'Ajukan dan pantau reimbursement karyawan Hybrid'],
-      
     };
     var heading = headerTitles[p] || null;
-    if (pageHeading) pageHeading.style.display = heading ? 'flex' : 'none';
-    if (T) T.textContent = heading ? heading[0] : '';
-    if (Sb) Sb.textContent = heading ? heading[1] : '';
-    var limitedAccess=!desktopPageAllowed(p);
-    if(limitedAccess){if(pageHeading)pageHeading.style.display='none';if(T)T.textContent='';if(Sb)Sb.textContent='';}
+    var limitedAccess = !desktopPageAllowed(p);
+    if (pageHeading) pageHeading.style.display = (!limitedAccess && heading) ? 'flex' : 'none';
+    if (T) T.textContent = (!limitedAccess && heading) ? heading[0] : '';
+    if (Sb) Sb.textContent = (!limitedAccess && heading) ? heading[1] : '';
+    updateTopDashDecor(!limitedAccess && p === 'dash');
+    updateSettingsBreadcrumb(p, limitedAccess);
     if (!limitedAccess) {
       if (p === 'dash') renderDash();
       if (p === 'emp') renderEmpPage();
@@ -12653,8 +13172,9 @@ function showHrPlaceholder(title, group, description) {
       if (p === 'attmap') renderAttMapPage();
       if (p === 'rekap') renderRekapPage();
       if (p === 'cuti') renderCutiPage();
-        if (p === 'my-approvals') renderMyApprovalsPage();
-
+      if (p === 'my-approvals') renderMyApprovalsPage();
+      if (p === 'settings') renderSettingsHubPage();
+      if (p === 'rules') renderWorkRulesPage();
       if (p === 'loc') renderLocPage();
       if (p === 'attset') renderAttendanceRulesPage();
       if (p === 'calendar') renderWorkingCalendarPage();
@@ -12671,8 +13191,506 @@ function showHrPlaceholder(title, group, description) {
     if (p === 'timeoffRequest') renderTimeOffRequestPage(timeOffRequestGroup);
     updateDesktopLimitedOverlay();
     /* Buka otomatis grup sidebar yang memuat halaman aktif (pola HRMSMBM) */
-    var actBtn = document.querySelector('#rkNav button[data-p="' + p + '"]');
+    var actBtn = document.querySelector('#rkNav button[data-p="' + navHighlightPage + '"]');
     if (actBtn) { var grp = actBtn.closest('.rk-group'); if (grp) grp.classList.remove('closed'); }
+  }
+
+  /* ---------------- Settings Hub (Konsolidasi Sistem & Laporan) ---------------- */
+  function renderSettingsHubPage() {
+    var root = document.getElementById('rkp-settings');
+    if (!root) return;
+    if (!isDesktopAdmin()) {
+      root.innerHTML = '<section class="rk-card"><div class="rk-empty">Menu Settings hanya tersedia untuk HR, Admin, dan Superadmin.</div></section>';
+      return;
+    }
+    var rules = (window.rhWorkRules && typeof window.rhWorkRules.get === 'function') ? window.rhWorkRules.get() : null;
+    var restrictedCount = rules && rules.employeeAreaRules
+      ? Object.keys(rules.employeeAreaRules).filter(function (k) { return rules.employeeAreaRules[k] && rules.employeeAreaRules[k].mode === 'RESTRICTED'; }).length
+      : 0;
+    var cards = [
+      {
+        p: 'rules',
+        kicker: 'KEBIJAKAN FLEKSIBEL',
+        title: 'Aturan Pekerjaan & Area',
+        desc: 'Atur area dinas luar per karyawan, pembatasan tampilan dropdown frontend, kebijakan GPS/Face ID, serta parameter insentif & subsidi.',
+        badge: restrictedCount ? (restrictedCount + ' karyawan dibatasi') : 'Semua area aktif',
+        tone: 'emerald',
+        icon: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>'
+      },
+      {
+        p: 'attset',
+        kicker: 'SHIFT & TOLERANSI',
+        title: 'Aturan Kehadiran',
+        desc: 'Kelola jam masuk, jam pulang, nama shift, batas lebih awal, dan toleransi keterlambatan per cabang.',
+        badge: 'Jadwal Cabang',
+        tone: 'sage',
+        icon: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01"/></svg>'
+      },
+      {
+        p: 'calendar',
+        kicker: 'KALENDER PERUSAHAAN',
+        title: 'Kalender Kerja',
+        desc: 'Atur hari kerja, hari libur nasional, cuti bersama, serta penyesuaian hari per cabang.',
+        badge: 'Tahunan & Override',
+        tone: 'amber',
+        icon: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="12" cy="16" r="2"/></svg>'
+      },
+      {
+        p: 'manage',
+        kicker: 'KOREKSI & AUDIT',
+        title: 'Manajemen Data',
+        desc: 'Sesuaikan seluruh faktor absensi (jam, area, status lokasi, mode, status validasi) dan kelola penghapusan data.',
+        badge: desktopRole() === 'SUPERADMIN' ? 'Penyesuaian Multi-Faktor' : 'Mode Lihat',
+        tone: 'amber',
+        icon: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>'
+      },
+      {
+        p: 'users',
+        kicker: 'AKSES & KEAMANAN',
+        title: 'Manajemen User',
+        desc: 'Kelola peran pengguna (Karyawan, Admin, Superadmin), aktivasi akun, serta pengaturan ulang PIN.',
+        badge: 'Role & PIN',
+        tone: 'emerald',
+        icon: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>'
+      },
+      {
+        p: 'lap',
+        kicker: 'PELAPORAN BULANAN',
+        title: 'Laporan HR',
+        desc: 'Susun, pratinjau cetak, dan ekspor laporan ringkasan absensi serta ketidakhadiran bulanan HR.',
+        badge: 'Cetak & Excel',
+        tone: 'sage',
+        icon: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>'
+      }
+    ];
+    root.innerHTML =
+      '<section class="rk-card rk-settings-hero">' +
+        '<div class="rk-settings-hero-copy">' +
+          '<span class="rk-settings-eyebrow">SISTEM &amp; LAPORAN REHOLZ</span>' +
+          '<h2>Pusat Pengaturan &amp; Kontrol Kebijakan</h2>' +
+          '<p>Semua pengaturan aturan pekerjaan, pembatasan area karyawan, jadwal kehadiran, kalender kerja, manajemen data, user, dan laporan HR terkumpul dalam satu ruang terstruktur.</p>' +
+        '</div>' +
+        '<div class="rk-settings-hero-meta"><span>Peran aktif</span><b>' + escH(desktopRole() || 'ADMIN') + '</b></div>' +
+      '</section>' +
+      '<div class="rk-settings-grid">' +
+      cards.map(function (c) {
+        return '<button type="button" class="rk-settings-card tone-' + escH(c.tone) + '" data-rk-settings-go="' + escH(c.p) + '">' +
+          '<div class="rk-settings-card-top">' +
+            '<span class="rk-settings-card-ic">' + c.icon + '</span>' +
+            '<span class="rk-settings-card-badge">' + escH(c.badge) + '</span>' +
+          '</div>' +
+          '<span class="rk-settings-card-kicker">' + escH(c.kicker) + '</span>' +
+          '<h3>' + escH(c.title) + '</h3>' +
+          '<p>' + escH(c.desc) + '</p>' +
+          '<span class="rk-settings-card-cta">Buka Pengaturan <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>' +
+        '</button>';
+      }).join('') +
+      '</div>';
+    if (!root.__rhSettingsBound) {
+      root.__rhSettingsBound = true;
+      root.addEventListener('click', function (ev) {
+        var btn = ev.target.closest ? ev.target.closest('[data-rk-settings-go]') : null;
+        if (!btn) return;
+        goPage(btn.getAttribute('data-rk-settings-go'));
+      });
+    }
+  }
+
+  /* ---------------- Aturan Pekerjaan Fleksibel & Pembatasan Area Karyawan ---------------- */
+  var workRulesUI = { tab: 'areas', draft: null, selectedNik: '', empQuery: '', saving: false, formulaLoaded: false, formulaData: null, limitsData: null };
+  function cloneRules(obj) {
+    try { return JSON.parse(JSON.stringify(obj)); }
+    catch (e) { return window.rhWorkRules ? window.rhWorkRules.defaultRules() : {}; }
+  }
+  function renderWorkRulesPage() {
+    var root = document.getElementById('rkp-rules');
+    if (!root) return;
+    if (!isDesktopAdmin()) {
+      root.innerHTML = '<section class="rk-card"><div class="rk-empty">Halaman ini hanya tersedia untuk HR, Admin, dan Superadmin.</div></section>';
+      return;
+    }
+    var wr = window.rhWorkRules;
+    if (!wr) {
+      root.innerHTML = '<section class="rk-card"><div class="rk-empty">Modul aturan pekerjaan tidak ditemukan.</div></section>';
+      return;
+    }
+    if (!workRulesUI.draft) workRulesUI.draft = cloneRules(wr.get());
+    wr.load(false).then(function (fresh) {
+      if (!workRulesUI.saving) workRulesUI.draft = cloneRules(fresh);
+      paintWorkRulesPage();
+    }).catch(function () { paintWorkRulesPage(); });
+    ensureKar(false).then(function () {
+      if (cur === 'rules') paintWorkRulesPage();
+    }).catch(function () {});
+    paintWorkRulesPage();
+  }
+  function paintWorkRulesPage() {
+    var root = document.getElementById('rkp-rules');
+    if (!root || !window.rhWorkRules) return;
+    var wr = window.rhWorkRules;
+    var draft = workRulesUI.draft || cloneRules(wr.get());
+    workRulesUI.draft = draft;
+    var canWrite = isSuperAdminRole();
+    var disabledAttr = canWrite ? '' : ' disabled';
+    var people = (Array.isArray(DATA.karList) && DATA.karList.length ? DATA.karList : (empUI.fullList || [])).filter(function (x) {
+      return x && String(x.akun || x.status_akun || 'AKTIF').toUpperCase() !== 'NONAKTIF';
+    });
+    people = people.slice().sort(function (a, b) { return String(a.nama || a.nik || '').localeCompare(String(b.nama || b.nik || '')); });
+    var q = String(workRulesUI.empQuery || '').trim().toLowerCase();
+    var filteredPeople = q ? people.filter(function (x) {
+      return String(x.nama || '').toLowerCase().indexOf(q) >= 0 ||
+        String(x.nik || '').toLowerCase().indexOf(q) >= 0 ||
+        String(x.cabang || x.branch || '').toLowerCase().indexOf(q) >= 0;
+    }) : people;
+    if (workRulesUI.selectedNik && !people.some(function (x) { return String(x.nik) === String(workRulesUI.selectedNik); })) {
+      workRulesUI.selectedNik = '';
+    }
+    var restrictedEntries = Object.keys(draft.employeeAreaRules || {}).filter(function (nik) {
+      return draft.employeeAreaRules[nik] && draft.employeeAreaRules[nik].mode === 'RESTRICTED';
+    });
+    var selectedEmpRule = workRulesUI.selectedNik && draft.employeeAreaRules && draft.employeeAreaRules[workRulesUI.selectedNik]
+      ? draft.employeeAreaRules[workRulesUI.selectedNik]
+      : { mode: 'ALL', allowedAreas: wr.standardAreas.map(function (a) { return a.value; }) };
+
+    var html =
+      '<section class="rk-card rk-rules-hero">' +
+        '<div class="rk-rules-hero-head">' +
+          '<div>' +
+            '<span class="rk-settings-eyebrow">KONFIGURASI OPERASIONAL FLEKSIBEL</span>' +
+            '<h2>Aturan Pekerjaan, Kebijakan Area &amp; Pembatasan Karyawan</h2>' +
+            '<p>Kelola area dinas luar yang boleh muncul di aplikasi karyawan, kebijakan absensi &amp; Face ID, serta parameter subsidi dan insentif dari satu panel.</p>' +
+          '</div>' +
+          '<span class="rk-formula-role-pill">' + (canWrite ? 'MODE UBAH · SUPERADMIN' : 'MODE LIHAT · ' + escH(desktopRole())) + '</span>' +
+        '</div>' +
+        '<div class="rk-rules-tabs" role="tablist">' +
+          '<button type="button" class="' + (workRulesUI.tab === 'areas' ? 'on' : '') + '" data-rk-rules-tab="areas">1. Pembatasan Area &amp; Global</button>' +
+          '<button type="button" class="' + (workRulesUI.tab === 'policy' ? 'on' : '') + '" data-rk-rules-tab="policy">2. Kebijakan Presensi &amp; Face ID</button>' +
+          '<button type="button" class="' + (workRulesUI.tab === 'formula' ? 'on' : '') + '" data-rk-rules-tab="formula">3. Formula Insentif &amp; Reimbursement</button>' +
+        '</div>' +
+      '</section>';
+
+    if (workRulesUI.tab === 'areas') {
+      html +=
+        '<div class="rk-rules-grid">' +
+          '<section class="rk-card rk-rules-card">' +
+            '<div class="rk-section-head"><div><h3>Matriks Area Dinas Luar Global</h3><p class="rk-card-sub">Nonaktifkan atau sesuaikan ketersediaan area pada seluruh formulir frontend karyawan.</p></div></div>' +
+            '<div class="rk-table-wrap"><table class="rk-table rk-area-matrix-table"><thead><tr><th>Area Sistem</th><th>Label Tampil</th><th>Aktif</th><th>Reguler</th><th>Piket</th><th>Standby</th><th>Sakit DL</th></tr></thead><tbody>' +
+            wr.standardAreas.map(function (a) {
+              var cfg = (draft.areas && draft.areas[a.value]) || {};
+              return '<tr data-rk-area-row="' + escH(a.value) + '">' +
+                '<td><b>' + escH(a.value) + '</b><small style="display:block;color:#6E8275">' + escH(a.code) + '</small></td>' +
+                '<td><input type="text" class="rk-in rk-area-label-inp" data-rk-area-field="label" value="' + escH(cfg.label || a.defaultLabel) + '"' + disabledAttr + '></td>' +
+                '<td><input type="checkbox" data-rk-area-field="enabled"' + (cfg.enabled !== false ? ' checked' : '') + disabledAttr + '></td>' +
+                '<td><input type="checkbox" data-rk-area-field="allowRegular"' + (cfg.allowRegular !== false ? ' checked' : '') + disabledAttr + '></td>' +
+                '<td><input type="checkbox" data-rk-area-field="allowPiket"' + (cfg.allowPiket !== false ? ' checked' : '') + disabledAttr + '></td>' +
+                '<td><input type="checkbox" data-rk-area-field="allowStandby"' + (a.standbyOk ? (cfg.allowStandby !== false ? ' checked' : '') : '') + (!a.standbyOk ? ' disabled title="Area Sekitar tidak berlaku untuk Standby"' : disabledAttr) + '></td>' +
+                '<td><input type="checkbox" data-rk-area-field="allowSickOutside"' + (a.sickOk ? (cfg.allowSickOutside !== false ? ' checked' : '') : '') + (!a.sickOk ? ' disabled title="Area Sekitar tidak berlaku untuk Sakit DL"' : disabledAttr) + '></td>' +
+              '</tr>';
+            }).join('') +
+            '</tbody></table></div>' +
+          '</section>' +
+          '<section class="rk-card rk-rules-card">' +
+            '<div class="rk-section-head"><div><h3>Pembatasan Area Per Karyawan</h3><p class="rk-card-sub">Batasi area tertentu per orang agar opsi area yang tidak diizinkan tidak tampil pada frontend karyawan tersebut.</p></div></div>' +
+            '<div class="rk-rules-emp-picker">' +
+              '<label><span>Cari Karyawan</span><input type="search" id="rkRuleEmpSearch" class="rk-in" placeholder="Cari nama, NIK, atau cabang…" value="' + escH(workRulesUI.empQuery) + '"></label>' +
+              '<label><span>Pilih Karyawan</span><select id="rkRuleEmpSelect" class="rk-in"><option value="">-- Pilih karyawan --</option>' +
+                filteredPeople.map(function (x) {
+                  var nik = String(x.nik || '');
+                  var hasRes = draft.employeeAreaRules && draft.employeeAreaRules[nik] && draft.employeeAreaRules[nik].mode === 'RESTRICTED';
+                  return '<option value="' + escH(nik) + '"' + (nik === workRulesUI.selectedNik ? ' selected' : '') + '>' + escH((x.nama || nik) + ' (' + nik + ')' + (x.cabang ? ' · ' + x.cabang : '') + (hasRes ? ' [Dibatasi]' : '')) + '</option>';
+                }).join('') +
+              '</select></label>' +
+            '</div>' +
+            (workRulesUI.selectedNik ? (
+              '<div class="rk-rules-emp-editor" id="rkRulesEmpEditor">' +
+                '<div class="rk-rules-emp-mode">' +
+                  '<label><input type="radio" name="rkEmpAreaMode" value="ALL"' + (selectedEmpRule.mode !== 'RESTRICTED' ? ' checked' : '') + disabledAttr + '> Izinkan semua area global yang aktif</label>' +
+                  '<label><input type="radio" name="rkEmpAreaMode" value="RESTRICTED"' + (selectedEmpRule.mode === 'RESTRICTED' ? ' checked' : '') + disabledAttr + '> Batasi hanya area yang dicentang di bawah</label>' +
+                '</div>' +
+                '<div class="rk-emp-area-chips" id="rkEmpAreaChips">' +
+                  wr.standardAreas.map(function (a) {
+                    var allowed = selectedEmpRule.mode !== 'RESTRICTED' || (Array.isArray(selectedEmpRule.allowedAreas) && selectedEmpRule.allowedAreas.indexOf(a.value) >= 0);
+                    var cfg = (draft.areas && draft.areas[a.value]) || {};
+                    return '<label class="rk-emp-area-chip"><input type="checkbox" data-rk-emp-area="' + escH(a.value) + '"' + (allowed ? ' checked' : '') + (selectedEmpRule.mode !== 'RESTRICTED' || !canWrite ? ' disabled' : '') + '> <span>' + escH(cfg.label || a.defaultLabel) + '</span></label>';
+                  }).join('') +
+                '</div>' +
+                '<div class="rk-rules-emp-actions">' +
+                  '<button type="button" class="rk-btn" id="rkRuleEmpApply"' + disabledAttr + '>Terapkan ke Draft</button>' +
+                  '<button type="button" class="rk-btn ghost" id="rkRuleEmpClear"' + disabledAttr + '>Hapus Pembatasan Orang Ini</button>' +
+                '</div>' +
+              '</div>'
+            ) : '<div class="rk-note" style="margin-top:12px">Pilih karyawan di atas untuk mengatur pembatasan area khusus.</div>') +
+            '<div class="rk-rules-restricted-list">' +
+              '<h4>Daftar Karyawan dengan Pembatasan Area (' + restrictedEntries.length + ')</h4>' +
+              (restrictedEntries.length ? '<div class="rk-table-wrap"><table class="rk-table"><thead><tr><th>Karyawan</th><th>Area Diizinkan</th><th>Aksi</th></tr></thead><tbody>' +
+                restrictedEntries.map(function (nik) {
+                  var emp = people.find(function (p) { return String(p.nik) === String(nik); });
+                  var r = draft.employeeAreaRules[nik] || {};
+                  var list = Array.isArray(r.allowedAreas) ? r.allowedAreas : [];
+                  return '<tr><td><b>' + escH(emp ? emp.nama : nik) + '</b><small style="display:block;color:#6E8275">' + escH(nik) + '</small></td>' +
+                    '<td>' + (list.length ? list.map(function (v) { return '<span class="rk-pill ok" style="margin:2px">' + escH(v) + '</span>'; }).join(' ') : '<span class="rk-pill no">Tidak ada area diizinkan</span>') + '</td>' +
+                    '<td style="white-space:nowrap"><button type="button" class="rk-mini" data-rk-rule-pick-emp="' + escH(nik) + '">Ubah</button> ' +
+                    (canWrite ? '<button type="button" class="rk-mini" data-rk-rule-del-emp="' + escH(nik) + '">Reset</button>' : '') + '</td></tr>';
+                }).join('') +
+              '</tbody></table></div>' : '<div class="rk-empty" style="padding:14px">Belum ada karyawan yang dibatasi areanya. Semua karyawan melihat seluruh area aktif.</div>') +
+            '</div>' +
+          '</section>' +
+        '</div>';
+    } else if (workRulesUI.tab === 'policy') {
+      var pol = draft.attendancePolicy || {};
+      html +=
+        '<section class="rk-card rk-rules-card">' +
+          '<div class="rk-section-head"><div><h3>Kebijakan Presensi, Lokasi Luar Kantor &amp; Face ID</h3><p class="rk-card-sub">Perubahan pada panel ini langsung mengatur perilaku validasi form presensi &amp; verifikasi wajah karyawan.</p></div></div>' +
+          '<div class="rk-rules-policy-grid">' +
+            '<label class="rk-formula-check"><input type="checkbox" id="rkPolReqOutsideNote"' + (pol.requireOutsideNote !== false ? ' checked' : '') + disabledAttr + '> Wajibkan alasan kegiatan saat presensi di luar area kantor (Reguler &amp; Piket)</label>' +
+            '<label class="rk-formula-check"><input type="checkbox" id="rkPolStandbyOpt"' + (pol.standbyNoteOptional !== false ? ' checked' : '') + disabledAttr + '> Izinkan catatan kosong pada mode Standby (diisi otomatis marker sistem)</label>' +
+            '<label class="rk-formula-check"><input type="checkbox" id="rkPolLockClockOut"' + (pol.lockClockOutAreaToClockIn !== false ? ' checked' : '') + disabledAttr + '> Kunci Area Clock Out agar konsisten mengikuti Area Clock In (non-Standby)</label>' +
+            '<label class="rk-formula-check"><input type="checkbox" id="rkPolManualOverride"' + (pol.allowManualFaceOverride !== false ? ' checked' : '') + disabledAttr + '> Izinkan pengajuan verifikasi manual atasan ketika Face ID lokal bermasalah</label>' +
+          '</div>' +
+          '<div class="rk-incentive-grid" style="margin-top:16px">' +
+            '<label>Ambang kecocokan Face ID lokal (0.35 – 0.85)<input type="number" class="rk-in" id="rkPolFaceThr" min="0.35" max="0.85" step="0.01" value="' + escH(pol.localFaceThreshold == null ? 0.60 : pol.localFaceThreshold) + '"' + disabledAttr + '></label>' +
+            '<label>Batas waktu tangkapan kamera segar (ms, 3000 – 30000)<input type="number" class="rk-in" id="rkPolFreshMs" min="3000" max="30000" step="500" value="' + escH(pol.freshSubmitMs == null ? 8000 : pol.freshSubmitMs) + '"' + disabledAttr + '></label>' +
+          '</div>' +
+          '<div class="rk-rules-shortcuts">' +
+            '<button type="button" class="rk-btn ghost" data-rk-rules-nav="attset">Atur Jam Shift &amp; Toleransi Cabang →</button>' +
+            '<button type="button" class="rk-btn ghost" data-rk-rules-nav="calendar">Atur Kalender Kerja &amp; Libur Nasional →</button>' +
+            '<button type="button" class="rk-btn ghost" data-rk-rules-nav="loc">Atur Koordinat &amp; Radius Kantor →</button>' +
+          '</div>' +
+        '</section>';
+    } else {
+      var f = workRulesUI.formulaData || (typeof INCENTIVE_DEFAULTS !== 'undefined' ? INCENTIVE_DEFAULTS : {});
+      var elg = (f && f.eligibility) || {};
+      var lim = workRulesUI.limitsData || { entertain_limit: 1800000, transport_limit: 1200000 };
+      html +=
+        '<section class="rk-card rk-rules-card">' +
+          '<div class="rk-section-head"><div><h3>Parameter Formula Subsidi, Kelayakan &amp; Batas Reimbursement</h3><p class="rk-card-sub">Kelola nominal uang makan, transport, pulsa, kelayakan tunjangan, dan batas reimbursement langsung dari menu Settings.</p></div>' +
+          '<button type="button" class="rk-btn ghost" data-rk-rules-nav="incentive-settings">Buka Halaman Penuh Setting Insentif →</button></div>' +
+          '<div class="rk-incentive-grid">' +
+            '<label>Uang makan selain OB (Rp)<input type="number" class="rk-in" id="rkRuleFMealOther" min="0" value="' + escH(f.meal_other ?? 20000) + '"' + disabledAttr + '></label>' +
+            '<label>Uang makan OB (Rp)<input type="number" class="rk-in" id="rkRuleFMealOb" min="0" value="' + escH(f.meal_ob ?? 10000) + '"' + disabledAttr + '></label>' +
+            '<label>Transport per hari (Rp)<input type="number" class="rk-in" id="rkRuleFTransDaily" min="0" value="' + escH(f.transport_daily ?? 15385) + '"' + disabledAttr + '></label>' +
+            '<label>Batas transport bulanan (Rp)<input type="number" class="rk-in" id="rkRuleFTransCap" min="0" value="' + escH(f.transport_cap ?? 400000) + '"' + disabledAttr + '></label>' +
+            '<label>Ambang hari transport<input type="number" class="rk-in" id="rkRuleFTransThr" min="1" value="' + escH(f.transport_threshold ?? 25) + '"' + disabledAttr + '></label>' +
+            '<label>Pulsa per hari (Rp)<input type="number" class="rk-in" id="rkRuleFPhoneDaily" min="0" value="' + escH(f.phone_daily ?? 3846) + '"' + disabledAttr + '></label>' +
+            '<label>Batas pulsa bulanan (Rp)<input type="number" class="rk-in" id="rkRuleFPhoneCap" min="0" value="' + escH(f.phone_cap ?? 100000) + '"' + disabledAttr + '></label>' +
+            '<label>Batas Entertain Hybrid (Rp)<input type="number" class="rk-in" id="rkRuleFLimEnt" min="0" step="1000" value="' + escH(lim.entertain_limit ?? lim.entertain ?? 1800000) + '"' + disabledAttr + '></label>' +
+            '<label>Batas Transport Hybrid (Rp)<input type="number" class="rk-in" id="rkRuleFLimTr" min="0" step="1000" value="' + escH(lim.transport_limit ?? lim.transport ?? 1200000) + '"' + disabledAttr + '></label>' +
+          '</div>' +
+          '<div class="rk-rules-policy-grid" style="margin-top:14px">' +
+            '<label class="rk-formula-check"><input type="checkbox" id="rkRuleFElMealOnTime"' + (elg.meal_requires_on_time !== false ? ' checked' : '') + disabledAttr + '> Uang makan hanya untuk EARLY &amp; ON_TIME (LATE tidak dapat)</label>' +
+            '<label class="rk-formula-check"><input type="checkbox" id="rkRuleFElMealExOut"' + (elg.meal_exclude_outside !== false ? ' checked' : '') + disabledAttr + '> Uang makan tidak dihitung saat dinas luar</label>' +
+            '<label class="rk-formula-check"><input type="checkbox" id="rkRuleFElTrExOut"' + (elg.transport_exclude_outside !== false ? ' checked' : '') + disabledAttr + '> Transport harian tidak dihitung saat dinas luar</label>' +
+            '<label class="rk-formula-check"><input type="checkbox" id="rkRuleFElPhInOut"' + (elg.phone_include_outside !== false ? ' checked' : '') + disabledAttr + '> Subsidi pulsa tetap dihitung saat dinas luar</label>' +
+            '<label class="rk-formula-check"><input type="checkbox" id="rkRuleFElStandby"' + (elg.standby_as_outside !== false ? ' checked' : '') + disabledAttr + '> Standby hari libur dibayar tarif dinas luar</label>' +
+            '<label class="rk-formula-check"><input type="checkbox" id="rkRuleFElPiket"' + (elg.piket_paid !== false ? ' checked' : '') + disabledAttr + '> Piket hari libur masuk perhitungan insentif</label>' +
+          '</div>' +
+          '<div class="rk-toolbar" style="margin-top:14px"><span class="rk-card-sub" id="rkRuleFormulaNote">Menggunakan parameter backend terkini.</span><span style="flex:1"></span><button type="button" class="rk-btn" id="rkRuleFormulaSaveBtn"' + disabledAttr + '>Simpan Formula &amp; Batas Reimbursement</button></div>' +
+        '</section>';
+      if (!workRulesUI.formulaLoaded) {
+        workRulesUI.formulaLoaded = true;
+        Promise.all([
+          rpcOptional('hr_get_incentive_formula', {}).catch(function () { return null; }),
+          rpcOptional('hr_get_reimbursement_limits', {}).catch(function () { return null; })
+        ]).then(function (rs) {
+          if (rs[0]) workRulesUI.formulaData = rs[0].config || rs[0].formula || rs[0];
+          if (rs[1]) workRulesUI.limitsData = rs[1].limits || rs[1].data || rs[1];
+          if (cur === 'rules' && workRulesUI.tab === 'formula') paintWorkRulesPage();
+        });
+      }
+    }
+
+    if (workRulesUI.tab !== 'formula') {
+      html +=
+        '<div class="rk-rules-footer">' +
+          '<div class="rk-card-sub">' + (draft.updatedAt ? ('Pembaruan terakhir: ' + escH(draft.updatedBy || 'SUPERADMIN') + ' · ' + escH(new Date(draft.updatedAt).toLocaleString('id-ID'))) : 'Aturan siap diterapkan secara real-time ke aplikasi karyawan.') + '</div>' +
+          '<div class="rk-toolbar">' +
+            '<button type="button" class="rk-btn ghost" id="rkRulesReloadBtn">Muat Ulang dari Server</button>' +
+            '<button type="button" class="rk-btn" id="rkRulesSaveBtn"' + disabledAttr + '>' + (workRulesUI.saving ? 'Menyimpan…' : 'Simpan Semua Aturan &amp; Pembatasan Area') + '</button>' +
+          '</div>' +
+        '</div>';
+    }
+    root.innerHTML = html;
+
+    if (!root.__rhWorkRulesBound) {
+      root.__rhWorkRulesBound = true;
+      root.addEventListener('click', async function (ev) {
+        var tabBtn = ev.target.closest ? ev.target.closest('[data-rk-rules-tab]') : null;
+        if (tabBtn) {
+          workRulesUI.tab = tabBtn.getAttribute('data-rk-rules-tab') || 'areas';
+          paintWorkRulesPage();
+          return;
+        }
+        var navBtn = ev.target.closest ? ev.target.closest('[data-rk-rules-nav]') : null;
+        if (navBtn) {
+          goPage(navBtn.getAttribute('data-rk-rules-nav'));
+          return;
+        }
+        var pickEmp = ev.target.closest ? ev.target.closest('[data-rk-rule-pick-emp]') : null;
+        if (pickEmp) {
+          workRulesUI.selectedNik = pickEmp.getAttribute('data-rk-rule-pick-emp') || '';
+          paintWorkRulesPage();
+          return;
+        }
+        var delEmp = ev.target.closest ? ev.target.closest('[data-rk-rule-del-emp]') : null;
+        if (delEmp) {
+          if (!isSuperAdminRole()) { rkToast('Hanya Superadmin yang dapat mengubah pembatasan area.'); return; }
+          var nikDel = delEmp.getAttribute('data-rk-rule-del-emp') || '';
+          if (workRulesUI.draft && workRulesUI.draft.employeeAreaRules) delete workRulesUI.draft.employeeAreaRules[nikDel];
+          rkToast('Pembatasan area karyawan di-reset pada draft. Klik Simpan untuk menerapkan.');
+          paintWorkRulesPage();
+          return;
+        }
+        if (ev.target && ev.target.id === 'rkRuleEmpApply') {
+          if (!isSuperAdminRole()) { rkToast('Hanya Superadmin yang dapat mengubah aturan.'); return; }
+          var nikSel = workRulesUI.selectedNik;
+          if (!nikSel) return;
+          var modeRadio = root.querySelector('input[name="rkEmpAreaMode"]:checked');
+          var mode = modeRadio ? modeRadio.value : 'ALL';
+          if (mode !== 'RESTRICTED') {
+            delete workRulesUI.draft.employeeAreaRules[nikSel];
+          } else {
+            var checkedAreas = Array.prototype.slice.call(root.querySelectorAll('[data-rk-emp-area]:checked')).map(function (cb) {
+              return cb.getAttribute('data-rk-emp-area');
+            });
+            workRulesUI.draft.employeeAreaRules[nikSel] = { mode: 'RESTRICTED', allowedAreas: checkedAreas };
+          }
+          rkToast('Pembatasan area diterapkan ke draft. Klik Simpan Semua Aturan untuk mempublikasikan.');
+          paintWorkRulesPage();
+          return;
+        }
+        if (ev.target && ev.target.id === 'rkRuleEmpClear') {
+          if (!isSuperAdminRole()) return;
+          if (workRulesUI.selectedNik && workRulesUI.draft.employeeAreaRules) delete workRulesUI.draft.employeeAreaRules[workRulesUI.selectedNik];
+          paintWorkRulesPage();
+          return;
+        }
+        if (ev.target && ev.target.id === 'rkRulesReloadBtn') {
+          var loaded = await window.rhWorkRules.load(true);
+          workRulesUI.draft = cloneRules(loaded);
+          paintWorkRulesPage();
+          rkToast('Aturan berhasil dimuat ulang.');
+          return;
+        }
+        if (ev.target && ev.target.id === 'rkRulesSaveBtn') {
+          if (!isSuperAdminRole()) { rkToast('Hanya Superadmin yang dapat menyimpan perubahan aturan.'); return; }
+          workRulesUI.saving = true;
+          paintWorkRulesPage();
+          try {
+            var saveRes = await window.rhWorkRules.save(workRulesUI.draft);
+            workRulesUI.draft = cloneRules(saveRes.rules);
+            rkToast(saveRes.remoteSynced ? 'Aturan & pembatasan area tersimpan dan disinkronkan ke server.' : 'Aturan & pembatasan area tersimpan dan aktif pada perangkat ini.');
+          } catch (e) {
+            rkToast('Gagal menyimpan aturan: ' + (e && e.message || e));
+          } finally {
+            workRulesUI.saving = false;
+            paintWorkRulesPage();
+          }
+          return;
+        }
+        if (ev.target && ev.target.id === 'rkRuleFormulaSaveBtn') {
+          if (!isSuperAdminRole()) { rkToast('Hanya Superadmin yang dapat mengubah formula insentif.'); return; }
+          var btnF = document.getElementById('rkRuleFormulaSaveBtn');
+          if (btnF) { btnF.disabled = true; btnF.textContent = 'Menyimpan…'; }
+          try {
+            var baseCfg = Object.assign({}, typeof INCENTIVE_DEFAULTS !== 'undefined' ? INCENTIVE_DEFAULTS : {}, workRulesUI.formulaData || {});
+            baseCfg.meal_other = Number((document.getElementById('rkRuleFMealOther') || {}).value || 20000);
+            baseCfg.meal_ob = Number((document.getElementById('rkRuleFMealOb') || {}).value || 10000);
+            baseCfg.transport_daily = Number((document.getElementById('rkRuleFTransDaily') || {}).value || 15385);
+            baseCfg.transport_cap = Number((document.getElementById('rkRuleFTransCap') || {}).value || 400000);
+            baseCfg.transport_threshold = Number((document.getElementById('rkRuleFTransThr') || {}).value || 25);
+            baseCfg.phone_daily = Number((document.getElementById('rkRuleFPhoneDaily') || {}).value || 3846);
+            baseCfg.phone_cap = Number((document.getElementById('rkRuleFPhoneCap') || {}).value || 100000);
+            baseCfg.eligibility = Object.assign({}, baseCfg.eligibility || {}, {
+              meal_requires_on_time: !!(document.getElementById('rkRuleFElMealOnTime') || {}).checked,
+              meal_exclude_outside: !!(document.getElementById('rkRuleFElMealExOut') || {}).checked,
+              transport_exclude_outside: !!(document.getElementById('rkRuleFElTrExOut') || {}).checked,
+              phone_include_outside: !!(document.getElementById('rkRuleFElPhInOut') || {}).checked,
+              standby_as_outside: !!(document.getElementById('rkRuleFElStandby') || {}).checked,
+              piket_paid: !!(document.getElementById('rkRuleFElPiket') || {}).checked
+            });
+            var entLim = Number((document.getElementById('rkRuleFLimEnt') || {}).value || 1800000);
+            var trLim = Number((document.getElementById('rkRuleFLimTr') || {}).value || 1200000);
+            var resBoth = await Promise.all([
+              rpcOptional('hr_save_incentive_formula', { p_config: baseCfg }),
+              rpcOptional('hr_save_reimbursement_limits', { p_entertain_limit: entLim, p_transport_limit: trLim })
+            ]);
+            if ((!resBoth[0] || resBoth[0].ok === false) && (!resBoth[1] || resBoth[1].ok === false)) {
+              throw new Error('Backend belum mengonfirmasi penyimpanan parameter.');
+            }
+            workRulesUI.formulaData = baseCfg;
+            workRulesUI.limitsData = { entertain_limit: entLim, transport_limit: trLim };
+            rkToast('Formula subsidi & batas reimbursement berhasil disimpan.');
+          } catch (e) {
+            rkToast('Gagal menyimpan parameter insentif: ' + (e && e.message || e));
+          } finally {
+            if (btnF) { btnF.disabled = !isSuperAdminRole(); btnF.textContent = 'Simpan Formula & Batas Reimbursement'; }
+          }
+        }
+      });
+      root.addEventListener('input', function (ev) {
+        if (ev.target && ev.target.id === 'rkRuleEmpSearch') {
+          workRulesUI.empQuery = String(ev.target.value || '');
+          var curSel = document.getElementById('rkRuleEmpSelect');
+          if (curSel) {
+            var qStr = workRulesUI.empQuery.trim().toLowerCase();
+            var listAll = (Array.isArray(DATA.karList) && DATA.karList.length ? DATA.karList : (empUI.fullList || [])).filter(function (x) {
+              return x && String(x.akun || x.status_akun || 'AKTIF').toUpperCase() !== 'NONAKTIF';
+            });
+            var listMatch = qStr ? listAll.filter(function (x) {
+              return String(x.nama || '').toLowerCase().indexOf(qStr) >= 0 || String(x.nik || '').toLowerCase().indexOf(qStr) >= 0 || String(x.cabang || '').toLowerCase().indexOf(qStr) >= 0;
+            }) : listAll;
+            curSel.innerHTML = '<option value="">-- Pilih karyawan (' + listMatch.length + ') --</option>' + listMatch.map(function (x) {
+              var nik = String(x.nik || '');
+              return '<option value="' + escH(nik) + '"' + (nik === workRulesUI.selectedNik ? ' selected' : '') + '>' + escH((x.nama || nik) + ' (' + nik + ')') + '</option>';
+            }).join('');
+          }
+          return;
+        }
+        var rowTr = ev.target.closest ? ev.target.closest('[data-rk-area-row]') : null;
+        if (rowTr && ev.target.getAttribute('data-rk-area-field') === 'label') {
+          var ak = rowTr.getAttribute('data-rk-area-row');
+          if (workRulesUI.draft && workRulesUI.draft.areas && workRulesUI.draft.areas[ak]) {
+            workRulesUI.draft.areas[ak].label = ev.target.value;
+          }
+          return;
+        }
+        if (workRulesUI.draft && workRulesUI.draft.attendancePolicy) {
+          if (ev.target.id === 'rkPolFaceThr') workRulesUI.draft.attendancePolicy.localFaceThreshold = Number(ev.target.value || 0.60);
+          if (ev.target.id === 'rkPolFreshMs') workRulesUI.draft.attendancePolicy.freshSubmitMs = Number(ev.target.value || 8000);
+        }
+      });
+      root.addEventListener('change', function (ev) {
+        if (ev.target && ev.target.id === 'rkRuleEmpSelect') {
+          workRulesUI.selectedNik = String(ev.target.value || '');
+          paintWorkRulesPage();
+          return;
+        }
+        if (ev.target && ev.target.name === 'rkEmpAreaMode') {
+          var restricted = ev.target.value === 'RESTRICTED';
+          root.querySelectorAll('[data-rk-emp-area]').forEach(function (cb) {
+            cb.disabled = !restricted || !isSuperAdminRole();
+            if (!restricted) cb.checked = true;
+          });
+          return;
+        }
+        var rowTr = ev.target.closest ? ev.target.closest('[data-rk-area-row]') : null;
+        if (rowTr) {
+          var ak = rowTr.getAttribute('data-rk-area-row');
+          var fld = ev.target.getAttribute('data-rk-area-field');
+          if (fld && fld !== 'label' && workRulesUI.draft && workRulesUI.draft.areas && workRulesUI.draft.areas[ak]) {
+            workRulesUI.draft.areas[ak][fld] = !!ev.target.checked;
+          }
+          return;
+        }
+        if (workRulesUI.draft && workRulesUI.draft.attendancePolicy) {
+          var p = workRulesUI.draft.attendancePolicy;
+          if (ev.target.id === 'rkPolReqOutsideNote') p.requireOutsideNote = !!ev.target.checked;
+          if (ev.target.id === 'rkPolStandbyOpt') p.standbyNoteOptional = !!ev.target.checked;
+          if (ev.target.id === 'rkPolLockClockOut') p.lockClockOutAreaToClockIn = !!ev.target.checked;
+          if (ev.target.id === 'rkPolManualOverride') p.allowManualFaceOverride = !!ev.target.checked;
+        }
+      });
+    }
   }
 
   /* ---------------- Manajemen Data Administrasi ---------------- */
@@ -12735,8 +13753,32 @@ function showHrPlaceholder(title, group, description) {
         }
         var pick = ev.target.closest ? ev.target.closest('[data-rk-adjust-pick]') : null;
         if (pick) {
-          var form=document.getElementById('rkAttendanceAdjustForm');
-          if(form){document.getElementById('rkAdjustAction').value='UPDATE';document.getElementById('rkAdjustAttendanceId').value=pick.getAttribute('data-id')||'';document.getElementById('rkAdjustDate').value=pick.getAttribute('data-date')||'';document.getElementById('rkAdjustType').value=pick.getAttribute('data-type')||'MASUK';document.getElementById('rkAdjustTime').value=(pick.getAttribute('data-time')||'').slice(0,5);document.getElementById('rkAdjustReason').focus();form.scrollIntoView({behavior:'smooth',block:'center'});}
+          var form = document.getElementById('rkAttendanceAdjustForm');
+          var rowId = pick.getAttribute('data-id') || '';
+          var rowObj = (adminManageUI.historyRows || []).find(function (r) { return String(r.id || '') === String(rowId); }) || {};
+          var rawNote = String(rowObj.catatan || '');
+          var areaMatch = rawNote.match(/\[\[RHAREA=([^\]]+)\]\]/i);
+          var modeMatch = rawNote.match(/\[\[RHATT=([^\]]+)\]\]/i);
+          var parsedArea = rowObj.area || (areaMatch ? areaMatch[1].trim() : '');
+          var parsedMode = (rowObj.attendanceMode || rowObj.attendance_mode || (modeMatch ? modeMatch[1].trim() : '') || 'REGULER').toUpperCase();
+          if (['REGULER', 'PIKET', 'STANDBY'].indexOf(parsedMode) < 0) parsedMode = 'REGULER';
+          var parsedOutside = rowObj.diLuar != null ? !!rowObj.diLuar : (rowObj.is_outside != null ? !!rowObj.is_outside : !!parsedArea);
+          var parsedStatus = String(rowObj.statusApproval || rowObj.status_approval || '').toUpperCase();
+          var cleanNote = rawNote.replace(/\[\[RHAREA=[^\]]+\]\]/gi, '').replace(/\[\[RHATT=[^\]]+\]\]/gi, '').trim();
+          if (form) {
+            document.getElementById('rkAdjustAction').value = 'UPDATE';
+            document.getElementById('rkAdjustAttendanceId').value = rowId;
+            document.getElementById('rkAdjustDate').value = pick.getAttribute('data-date') || '';
+            document.getElementById('rkAdjustType').value = pick.getAttribute('data-type') || 'MASUK';
+            document.getElementById('rkAdjustTime').value = (pick.getAttribute('data-time') || '').slice(0, 5);
+            if (document.getElementById('rkAdjustArea')) document.getElementById('rkAdjustArea').value = parsedArea;
+            if (document.getElementById('rkAdjustOutside')) document.getElementById('rkAdjustOutside').value = parsedOutside ? 'LUAR_KANTOR' : 'DALAM_KANTOR';
+            if (document.getElementById('rkAdjustMode')) document.getElementById('rkAdjustMode').value = parsedMode;
+            if (document.getElementById('rkAdjustStatus')) document.getElementById('rkAdjustStatus').value = ['VALID', 'PENDING_ATASAN', 'PENDING_HR', 'DITOLAK'].indexOf(parsedStatus) >= 0 ? parsedStatus : '';
+            if (document.getElementById('rkAdjustNote')) document.getElementById('rkAdjustNote').value = cleanNote;
+            document.getElementById('rkAdjustReason').focus();
+            form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
           return;
         }
         var submitAdjust = ev.target.closest ? ev.target.closest('[data-rk-adjust-submit]') : null;
@@ -12807,26 +13849,60 @@ function showHrPlaceholder(title, group, description) {
         (adminManageUI.tab === 'attendance' && desktopRole() === 'SUPERADMIN' ? '<button type="button" class="rk-manage-delete" data-rk-manage-delete-today="1">Hapus Presensi Hari Ini</button>' : '') + '</div>';
       if (adminManageUI.tab === 'adjustment') {
         if (desktopRole() !== 'SUPERADMIN') { content.innerHTML='<div class="rk-empty">Penyesuaian Data hanya tersedia untuk SUPERADMIN.</div>'; return; }
-        html += '<div class="rk-adjustment-note">Gunakan fitur ini hanya untuk lupa absen atau kejadian luar biasa. Penyesuaian wajib disertai alasan dan tercatat dalam audit log.</div>' +
+        var areaOpts = '<option value="">Dalam Kantor / Tanpa Area</option>' +
+          (window.rhWorkRules && Array.isArray(window.rhWorkRules.standardAreas)
+            ? window.rhWorkRules.standardAreas.map(function (a) { return '<option value="' + escH(a.value) + '">' + escH(a.value) + '</option>'; }).join('')
+            : '<option value="Area 1">Area 1</option><option value="Area 2">Area 2</option><option value="Area 3">Area 3</option><option value="Area 4">Area 4</option><option value="Area lainnya">Area lainnya</option><option value="Area Sekitar">Area Sekitar</option>');
+        html += '<div class="rk-adjustment-note">Penyesuaian multi-faktor mencakup jam, area dinas luar, status lokasi, mode kehadiran, status validasi, dan catatan presensi. Semua perubahan tercatat pada audit log.</div>' +
           '<form id="rkAttendanceAdjustForm" class="rk-adjustment-form">' +
           '<input type="hidden" id="rkAdjustAttendanceId" value="">' +
-          '<label>Aksi<select id="rkAdjustAction" class="rk-in"><option value="INSERT">Tambah absensi historis</option><option value="UPDATE">Ubah jam absensi</option></select></label>' +
+          '<label>Aksi<select id="rkAdjustAction" class="rk-in"><option value="INSERT">Tambah absensi historis</option><option value="UPDATE">Ubah data absensi</option></select></label>' +
           '<label>Jenis<select id="rkAdjustType" class="rk-in"><option value="MASUK">Clock In</option><option value="PULANG">Clock Out</option></select></label>' +
           '<label>Tanggal<input id="rkAdjustDate" class="rk-in" type="date" required></label>' +
           '<label>Jam<input id="rkAdjustTime" class="rk-in" type="time" required></label>' +
-          '<label class="rk-adjustment-reason">Alasan penyesuaian<textarea id="rkAdjustReason" class="rk-in" rows="2" minlength="8" placeholder="Jelaskan lupa absen atau kejadian luar biasa (minimal 8 karakter)" required></textarea></label>' +
+          '<label>Area<select id="rkAdjustArea" class="rk-in">' + areaOpts + '</select></label>' +
+          '<label>Status Lokasi<select id="rkAdjustOutside" class="rk-in"><option value="AUTO">Otomatis (sesuai Area)</option><option value="DALAM_KANTOR">Dalam Kantor</option><option value="LUAR_KANTOR">Luar Kantor / Dinas Luar</option></select></label>' +
+          '<label>Mode Kehadiran<select id="rkAdjustMode" class="rk-in"><option value="REGULER">Reguler</option><option value="PIKET">Piket</option><option value="STANDBY">Standby</option></select></label>' +
+          '<label>Status Validasi<select id="rkAdjustStatus" class="rk-in"><option value="">Pertahankan / Default</option><option value="VALID">VALID</option><option value="PENDING_ATASAN">PENDING_ATASAN</option><option value="PENDING_HR">PENDING_HR</option><option value="DITOLAK">DITOLAK</option></select></label>' +
+          '<label class="rk-adjustment-reason">Catatan Presensi (opsional)<input id="rkAdjustNote" class="rk-in" type="text" placeholder="Contoh: Koreksi area dinas luar Area 2"></label>' +
+          '<label class="rk-adjustment-reason">Alasan penyesuaian (Audit Log)<textarea id="rkAdjustReason" class="rk-in" rows="2" minlength="8" placeholder="Jelaskan lupa absen, salah pilih area, atau kejadian luar biasa (minimal 8 karakter)" required></textarea></label>' +
           '<div class="rk-adjustment-actions"><button type="button" class="rk-btn ghost" data-rk-adjust-clear>Reset</button><button type="button" class="rk-btn" data-rk-adjust-submit>Simpan Penyesuaian</button></div>' +
-          '</form><div class="rk-adjustment-list-title">Pilih catatan di bawah untuk mengubah jam</div>';
+          '</form><div class="rk-adjustment-list-title">Pilih catatan di bawah untuk menyesuaikan jam, area, mode, atau status</div>';
         if (!rows.length) html += '<div class="rk-empty">Belum ada catatan presensi pada bulan ini.</div>';
         else {
-          html += '<div class="rk-manage-table-wrap"><table class="rk-manage-table"><thead><tr><th>Tanggal</th><th>Jam</th><th>Jenis</th><th>Status</th><th>Aksi</th></tr></thead><tbody>';
-          rows.forEach(function(row){var id=String(row.id||'');var d=String(row.tanggal||'').slice(0,10);var typ=String(row.tipe||'MASUK').toUpperCase();var tm=String(row.jam||'').slice(0,5);var st=row.statusApproval||row.status_approval||'—';html+='<tr><td>'+escH(manageDate(d))+'</td><td>'+escH(tm)+'</td><td>'+escH(typ==='MASUK'?'Clock In':'Clock Out')+'</td><td>'+escH(String(st).replace(/_/g,' '))+'</td><td><button type="button" class="rk-manage-pick" data-rk-adjust-pick="1" data-id="'+escH(id)+'" data-date="'+escH(d)+'" data-type="'+escH(typ)+'" data-time="'+escH(tm)+'">Pilih</button></td></tr>';});
+          html += '<div class="rk-manage-table-wrap"><table class="rk-manage-table"><thead><tr><th>Tanggal</th><th>Jam</th><th>Jenis</th><th>Area / Mode</th><th>Status</th><th>Catatan</th><th>Aksi</th></tr></thead><tbody>';
+          rows.forEach(function (row) {
+            var id = String(row.id || '');
+            var d = String(row.tanggal || '').slice(0, 10);
+            var typ = String(row.tipe || 'MASUK').toUpperCase();
+            var tm = String(row.jam || '').slice(0, 5);
+            var st = row.statusApproval || row.status_approval || '—';
+            var rawNote = String(row.catatan || '');
+            var areaM = rawNote.match(/\[\[RHAREA=([^\]]+)\]\]/i);
+            var modeM = rawNote.match(/\[\[RHATT=([^\]]+)\]\]/i);
+            var rowArea = row.area || (areaM ? areaM[1].trim() : '') || (row.diLuar ? 'Luar Kantor' : 'Dalam Kantor');
+            var rowMode = row.attendanceMode || row.attendance_mode || (modeM ? modeM[1].trim() : 'REGULER');
+            var cleanN = rawNote.replace(/\[\[RHAREA=[^\]]+\]\]/gi, '').replace(/\[\[RHATT=[^\]]+\]\]/gi, '').trim();
+            html += '<tr><td>' + escH(manageDate(d)) + '</td><td>' + escH(tm) + '</td><td>' + escH(typ === 'MASUK' ? 'Clock In' : 'Clock Out') + '</td><td>' + escH(rowArea) + '<small style="display:block;color:#6E8275">' + escH(rowMode) + '</small></td><td>' + escH(String(st).replace(/_/g, ' ')) + '</td><td>' + escH(cleanN || '—') + '</td><td><button type="button" class="rk-manage-pick" data-rk-adjust-pick="1" data-id="' + escH(id) + '" data-date="' + escH(d) + '" data-type="' + escH(typ) + '" data-time="' + escH(tm) + '">Pilih</button></td></tr>';
+          });
           html += '</tbody></table></div>';
         }
-        content.innerHTML=html;
-        var adjustForm=document.getElementById('rkAttendanceAdjustForm');
-        if(adjustForm && !adjustForm.__rhSubmitBound){adjustForm.__rhSubmitBound=true;adjustForm.addEventListener('submit',function(ev){ev.preventDefault();adminSaveAttendanceAdjustment();});}
-        var adjustClear=content.querySelector('[data-rk-adjust-clear]');if(adjustClear)adjustClear.addEventListener('click',function(){document.getElementById('rkAdjustAction').value='INSERT';document.getElementById('rkAdjustAttendanceId').value='';document.getElementById('rkAdjustDate').value='';document.getElementById('rkAdjustTime').value='';document.getElementById('rkAdjustReason').value='';});
+        content.innerHTML = html;
+        var adjustForm = document.getElementById('rkAttendanceAdjustForm');
+        if (adjustForm && !adjustForm.__rhSubmitBound) { adjustForm.__rhSubmitBound = true; adjustForm.addEventListener('submit', function (ev) { ev.preventDefault(); adminSaveAttendanceAdjustment(); }); }
+        var adjustClear = content.querySelector('[data-rk-adjust-clear]');
+        if (adjustClear) adjustClear.addEventListener('click', function () {
+          document.getElementById('rkAdjustAction').value = 'INSERT';
+          document.getElementById('rkAdjustAttendanceId').value = '';
+          document.getElementById('rkAdjustDate').value = '';
+          document.getElementById('rkAdjustTime').value = '';
+          if (document.getElementById('rkAdjustArea')) document.getElementById('rkAdjustArea').value = '';
+          if (document.getElementById('rkAdjustOutside')) document.getElementById('rkAdjustOutside').value = 'AUTO';
+          if (document.getElementById('rkAdjustMode')) document.getElementById('rkAdjustMode').value = 'REGULER';
+          if (document.getElementById('rkAdjustStatus')) document.getElementById('rkAdjustStatus').value = '';
+          if (document.getElementById('rkAdjustNote')) document.getElementById('rkAdjustNote').value = '';
+          document.getElementById('rkAdjustReason').value = '';
+        });
         return;
       }
       if (!rows.length) {
@@ -12861,25 +13937,74 @@ function showHrPlaceholder(title, group, description) {
   }
   async function adminSaveAttendanceAdjustment() {
     if (desktopRole() !== 'SUPERADMIN') { rkToast('Hanya Superadmin yang dapat menyesuaikan data absensi.'); return; }
-    var actionEl=document.getElementById('rkAdjustAction'),idEl=document.getElementById('rkAdjustAttendanceId'),dateEl=document.getElementById('rkAdjustDate'),typeEl=document.getElementById('rkAdjustType'),timeEl=document.getElementById('rkAdjustTime'),reasonEl=document.getElementById('rkAdjustReason');
-    if(!actionEl||!dateEl||!typeEl||!timeEl||!reasonEl)return;
-    var action=actionEl.value,reason=String(reasonEl.value||'').trim(),date=dateEl.value,tm=timeEl.value;
-    if(!adminManageUI.nik||!date||!tm||reason.length<8){rkToast('Lengkapi karyawan, tanggal, jam, dan alasan minimal 8 karakter.');return;}
-    if(action==='UPDATE'&&!String(idEl.value||'')){rkToast('Pilih catatan presensi yang akan diubah terlebih dahulu.');return;}
-    if(action==='INSERT'&&date>=todayISO()){rkToast('Penambahan absensi hanya untuk tanggal yang sudah berlalu.');return;}
-    var label=action==='INSERT'?'menambahkan absensi historis':'mengubah jam absensi';
-    if(!confirm('Lanjutkan '+label+' untuk '+adminManageUI.nik+' pada '+date+'?'))return;
-    var submit=document.querySelector('[data-rk-adjust-submit]');if(submit){submit.disabled=true;submit.textContent='Menyimpan…';}
-    try{
-      if(typeof window.rhRpc!=='function')throw new Error('RPC broker tidak tersedia.');
-      var result=await window.rhRpc('hr_save_attendance_adjustment',{p_action:action,p_attendance_id:idEl.value||null,p_employee_id:adminManageUI.nik,p_date:date,p_type:typeEl.value,p_time:tm,p_reason:reason},45000);
-      if(!result||result.ok===false)throw new Error(result&&result.message||'Penyesuaian tidak berhasil.');
-      rkToast(result.message||'Penyesuaian data berhasil disimpan.');
-      adminManageUI.month=date.slice(0,7);
-      var monthInput=document.getElementById('rkManageMonth');if(monthInput)monthInput.value=adminManageUI.month;
+    var actionEl = document.getElementById('rkAdjustAction'), idEl = document.getElementById('rkAdjustAttendanceId'), dateEl = document.getElementById('rkAdjustDate'), typeEl = document.getElementById('rkAdjustType'), timeEl = document.getElementById('rkAdjustTime'), reasonEl = document.getElementById('rkAdjustReason');
+    if (!actionEl || !dateEl || !typeEl || !timeEl || !reasonEl) return;
+    var action = actionEl.value, reason = String(reasonEl.value || '').trim(), date = dateEl.value, tm = timeEl.value;
+    var areaVal = String((document.getElementById('rkAdjustArea') || {}).value || '').trim();
+    var outMode = String((document.getElementById('rkAdjustOutside') || {}).value || 'AUTO');
+    var attMode = String((document.getElementById('rkAdjustMode') || {}).value || 'REGULER').toUpperCase();
+    var statusVal = String((document.getElementById('rkAdjustStatus') || {}).value || '').trim();
+    var noteRaw = String((document.getElementById('rkAdjustNote') || {}).value || '').replace(/\[\[RHAREA=[^\]]+\]\]/gi, '').replace(/\[\[RHATT=[^\]]+\]\]/gi, '').trim();
+    if (!adminManageUI.nik || !date || !tm || reason.length < 8) { rkToast('Lengkapi karyawan, tanggal, jam, dan alasan minimal 8 karakter.'); return; }
+    if (action === 'UPDATE' && !String(idEl.value || '')) { rkToast('Pilih catatan presensi yang akan diubah terlebih dahulu.'); return; }
+    if (action === 'INSERT' && date >= todayISO()) { rkToast('Penambahan absensi hanya untuk tanggal yang sudah berlalu.'); return; }
+    var isOutside = outMode === 'DALAM_KANTOR' ? false : (outMode === 'LUAR_KANTOR' ? true : !!areaVal);
+    var noteParts = [];
+    if (attMode === 'PIKET' || attMode === 'STANDBY') noteParts.push('[[RHATT=' + attMode + ']]');
+    if (areaVal) noteParts.push('[[RHAREA=' + areaVal + ']]');
+    if (noteRaw) noteParts.push(noteRaw);
+    var finalNote = noteParts.join(' ').trim();
+    var label = action === 'INSERT' ? 'menambahkan absensi historis' : 'menyesuaikan data absensi';
+    if (!confirm('Lanjutkan ' + label + ' untuk ' + adminManageUI.nik + ' pada ' + date + '?')) return;
+    var submit = document.querySelector('[data-rk-adjust-submit]'); if (submit) { submit.disabled = true; submit.textContent = 'Menyimpan…'; }
+    try {
+      if (typeof window.rhRpc !== 'function') throw new Error('RPC broker tidak tersedia.');
+      var extendedParams = {
+        p_action: action,
+        p_attendance_id: idEl.value || null,
+        p_employee_id: adminManageUI.nik,
+        p_date: date,
+        p_type: typeEl.value,
+        p_time: tm,
+        p_reason: reason,
+        p_area: areaVal || null,
+        p_is_outside: isOutside,
+        p_attendance_mode: attMode,
+        p_status_approval: statusVal || null,
+        p_catatan: finalNote || null
+      };
+      var result = null;
+      var usedFallback = false;
+      try {
+        result = await window.rhRpc('hr_save_attendance_adjustment', extendedParams, 45000);
+      } catch (errExt) {
+        var msg = String(errExt && errExt.message || errExt || '');
+        if (/PGRST202|Could not find|function .* does not exist|parameter|42883/i.test(msg)) {
+          usedFallback = true;
+          var factorTag = '[Area: ' + (areaVal || 'Dalam Kantor') + '] [Lokasi: ' + (isOutside ? 'Luar Kantor' : 'Dalam Kantor') + '] [Mode: ' + attMode + ']' +
+            (statusVal ? ' [Status: ' + statusVal + ']' : '') +
+            (noteRaw ? ' [Catatan: ' + noteRaw + ']' : '');
+          result = await window.rhRpc('hr_save_attendance_adjustment', {
+            p_action: action,
+            p_attendance_id: idEl.value || null,
+            p_employee_id: adminManageUI.nik,
+            p_date: date,
+            p_type: typeEl.value,
+            p_time: tm,
+            p_reason: (reason + ' · ' + factorTag).slice(0, 480)
+          }, 45000);
+        } else {
+          throw errExt;
+        }
+      }
+      if (!result || result.ok === false) throw new Error(result && result.message || 'Penyesuaian tidak berhasil.');
+      rkToast(usedFallback ? 'Penyesuaian jam & catatan audit multi-faktor tersimpan (mode kompatibel).' : (result.message || 'Penyesuaian multi-faktor berhasil disimpan.'));
+      adminManageUI.month = date.slice(0, 7);
+      var monthInput = document.getElementById('rkManageMonth'); if (monthInput) monthInput.value = adminManageUI.month;
+      try { if (window.rhClearReadCache) window.rhClearReadCache(); } catch (e) {}
       await loadAdminManageRecords();
-    }catch(e){rkToast('Penyesuaian data gagal: '+(e&&e.message||e));}
-    finally{if(submit){submit.disabled=false;submit.textContent='Simpan Penyesuaian';}}
+    } catch (e) { rkToast('Penyesuaian data gagal: ' + (e && e.message || e)); }
+    finally { if (submit) { submit.disabled = false; submit.textContent = 'Simpan Penyesuaian'; } }
   }
 
   async function adminManageDelete(kind, id) {
@@ -12972,10 +14097,10 @@ function showHrPlaceholder(title, group, description) {
   function renderDash() {
     var el = document.getElementById('rkp-dash');
     if (!el) return;
-    var cachedOk = dashCache.at && (Date.now() - dashCache.at) < 45000 && el.dataset.filled === '1';
+    var cachedOk = dashCache.at && (Date.now() - dashCache.at) < 300000 && el.dataset.filled === '1';
     if (cachedOk) {
       paintDash(el);
-      fillDashToday();
+      fillDashToday(false);
       loadDashboardPanels(false);
       return;
     }
@@ -12991,14 +14116,14 @@ function showHrPlaceholder(title, group, description) {
       if (dirRows) dashCache.employeeList = dirRows.map(function (x) { return empNormalize(x); });
       dashCache.at = Date.now();
       paintDash(el);
-      fillDashToday();
+      fillDashToday(false);
       loadDashboardPanels(false);
       refreshBadge({ data: dashCache.ap || {} });
     }).catch(function () {
       // Keep a useful dashboard from the current employee cache if an optional source is offline.
       dashCache.at = Date.now();
       paintDash(el);
-      fillDashToday();
+      fillDashToday(false);
       loadDashboardPanels(false);
       refreshBadge();
     });
@@ -13010,7 +14135,7 @@ function showHrPlaceholder(title, group, description) {
     catch(e){return 'Rp '+Math.round(n).toLocaleString('id-ID');}
   }
   function loadDashboardPanels(force) {
-    if (!force && dashCache.panelsAt && Date.now()-dashCache.panelsAt<45000) { paintDashboardPanels(); return Promise.resolve(dashCache.panels); }
+    if (!force && dashCache.panelsAt && Date.now()-dashCache.panelsAt<300000) { paintDashboardPanels(); return Promise.resolve(dashCache.panels); }
     return rpcOptional('hr_get_dashboard_panels', {}).then(function(r){
       if(r && r.ok!==false){dashCache.panels=r;dashCache.panelsAt=Date.now();paintDashboardPanels();}
       return r;
@@ -13020,9 +14145,13 @@ function showHrPlaceholder(title, group, description) {
     var host=document.getElementById('rkDashboardPanels'); if(!host)return;
     var d=dashCache.panels||{}, hybrid=d.hybrid_expense||{}, dl=d.outside_incentive||{}, absent=Array.isArray(d.absent_today)?d.absent_today:[];
     function absentCode(x){var c=x.time_off_code||x.kode_cuti||'';return c?(' - '+c):'';}
-    host.innerHTML='<section class="rk-card rk-dash-panel"><div class="rk-dash-panel-head"><span class="rk-dash-panel-icon">↗</span><h3>Pengeluaran Tim Hybrid</h3></div><div class="rk-dash-panel-line"><span>Transport</span><b>'+escH(dashboardMoney(hybrid.transport))+'</b></div><div class="rk-dash-panel-line"><span>Entertain</span><b>'+escH(dashboardMoney(hybrid.entertain))+'</b></div><small>Reimbursement disetujui · Periode berjalan</small></section>'+
-      '<section class="rk-card rk-dash-panel"><div class="rk-dash-panel-head"><span class="rk-dash-panel-icon">⌖</span><h3>Insentif Dinas Luar</h3></div>'+[['Area 1',dl.area_1],['Area 2',dl.area_2],['Area 3',dl.area_3],['Area 4',dl.area_4],['Area Lain',dl.area_lain]].map(function(x){return '<div class="rk-dash-panel-line"><span>'+x[0]+'</span><b>'+escH(dashboardMoney(x[1]))+'</b></div>';}).join('')+'<small>Periode insentif berjalan</small></section>'+
-      '<section class="rk-card rk-dash-panel"><div class="rk-dash-panel-head"><span class="rk-dash-panel-icon">◷</span><h3>Karyawan Absen Hari Ini</h3><span class="rk-dash-count">'+absent.length+'</span></div>'+(absent.length?'<div class="rk-dash-absent-list">'+absent.map(function(x){return '<div class="rk-dash-absent-row"><span>'+escH(x.nama||x.employee_id||'—')+'</span><b>'+escH(absentCode(x))+'</b></div>';}).join('')+'</div>':'<div class="rk-dash-absent-empty">Tidak ada karyawan yang belum Clock In.</div>')+'<small>Hari ini · '+escH(new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Jakarta',day:'2-digit',month:'short',year:'numeric'}).format(new Date()))+'</small></section>';
+    var hybridTotal = Number(hybrid.transport || 0) + Number(hybrid.entertain || 0);
+    var dlTotal = Number(dl.area_1 || 0) + Number(dl.area_2 || 0) + Number(dl.area_3 || 0) + Number(dl.area_4 || 0) + Number(dl.area_lain || 0);
+    var todayLabel = '';
+    try { todayLabel = new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Jakarta',day:'2-digit',month:'short',year:'numeric'}).format(new Date()); } catch (e) {}
+    host.innerHTML='<section class="rk-card rk-dash-panel rk-dash-panel--hybrid rk-dash-animate"><div class="rk-dash-panel-head"><span class="rk-dash-panel-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><div><h3>Pengeluaran Tim Hybrid</h3><span class="rk-dash-panel-sub">Reimbursement disetujui</span></div></div><div class="rk-dash-panel-rows"><div class="rk-dash-panel-line"><span>Transport</span><b>'+escH(dashboardMoney(hybrid.transport))+'</b></div><div class="rk-dash-panel-line"><span>Entertain</span><b>'+escH(dashboardMoney(hybrid.entertain))+'</b></div></div><div class="rk-dash-panel-total"><span>Total Periode</span><b>'+escH(dashboardMoney(hybridTotal))+'</b></div><small>Periode payroll berjalan</small></section>'+
+      '<section class="rk-card rk-dash-panel rk-dash-panel--outside rk-dash-animate"><div class="rk-dash-panel-head"><span class="rk-dash-panel-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span><div><h3>Insentif Dinas Luar</h3><span class="rk-dash-panel-sub">Distribusi per zona</span></div></div><div class="rk-dash-panel-rows">'+[['Area 1',dl.area_1],['Area 2',dl.area_2],['Area 3',dl.area_3],['Area 4',dl.area_4],['Area Lain',dl.area_lain]].map(function(x){return '<div class="rk-dash-panel-line"><span>'+x[0]+'</span><b>'+escH(dashboardMoney(x[1]))+'</b></div>';}).join('')+'</div><div class="rk-dash-panel-total"><span>Akumulasi Insentif</span><b>'+escH(dashboardMoney(dlTotal))+'</b></div><small>Periode insentif berjalan</small></section>'+
+      '<section class="rk-card rk-dash-panel rk-dash-panel--absent rk-dash-animate"><div class="rk-dash-panel-head"><span class="rk-dash-panel-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></span><div><h3>Karyawan Absen Hari Ini</h3><span class="rk-dash-panel-sub">Pemantauan harian</span></div><span class="rk-dash-count">'+absent.length+'</span></div>'+(absent.length?'<div class="rk-dash-absent-list">'+absent.map(function(x){return '<div class="rk-dash-absent-row"><span>'+escH(x.nama||x.employee_id||'—')+'</span><b>'+escH(absentCode(x) || 'Belum Absen')+'</b></div>';}).join('')+'</div>':'<div class="rk-dash-absent-empty">Seluruh karyawan terjadwal telah melakukan Clock In.</div>')+'<small>Hari ini · '+escH(todayLabel)+'</small></section>';
   }
 
   function setDashStat(id, value) {
@@ -13042,7 +14171,12 @@ function showHrPlaceholder(title, group, description) {
     return '—';
   }
 
-  function fillDashToday() {
+  function fillDashToday(force) {
+    if (!force && dashCache.todayAt && (Date.now() - dashCache.todayAt) < 120000 && dashCache.todayTotal != null && dashCache.todayHadir != null) {
+      setDashStat('rkDashStatHadir', dashCache.todayHadir);
+      setDashStat('rkDashStatTidakHadir', Math.max(dashCache.todayTotal - dashCache.todayHadir, 0));
+      return;
+    }
     rpcOptional('hr_attendance_today', { p_date: null }).then(function (r) {
       if (r && r.ok !== false && (r.total != null || Array.isArray(r.list))) {
         var total = Number(r.total != null ? r.total : (r.list || []).length);
@@ -13052,6 +14186,9 @@ function showHrPlaceholder(title, group, description) {
           setDashStat('rkDashStatTidakHadir', '—');
           return;
         }
+        dashCache.todayAt = Date.now();
+        dashCache.todayTotal = total;
+        dashCache.todayHadir = hadir;
         setDashStat('rkDashStatHadir', hadir);
         setDashStat('rkDashStatTidakHadir', Math.max(total - hadir, 0));
       } else {
@@ -13562,9 +14699,9 @@ function showHrPlaceholder(title, group, description) {
     var actionAttr = action ? ' role="button" tabindex="0" data-rk-dash-action="' + escH(action) + '" aria-label="Buka ' + escH(lbl) + ' details"' : '';
     var safeNum = (action === 'inout' && num === '—') ? '—' : String(num);
     var valueAttr = valueId ? ' id="' + escH(valueId) + '"' : '';
-    return '<div class="rk-card rk-stat rk-dash-animate' + clickable + '"' + actionAttr + '><div class="rk-stat-ic ' + cls + '">' + icons[cls] + '</div>' +
-      '<div><div class="rk-stat-num"' + valueAttr + '>' + safeNum + '</div><div class="rk-stat-lbl">' + escH(lbl) + '</div>' +
-      '<div class="rk-stat-delta" style="color:#8AA093">' + escH(sub || '') + '</div></div></div>';
+    return '<div class="rk-card rk-stat rk-dash-kpi rk-dash-kpi--' + escH(cls) + ' rk-dash-animate' + clickable + '"' + actionAttr + '><div class="rk-stat-ic ' + cls + '">' + icons[cls] + '</div>' +
+      '<div class="rk-stat-body"><div class="rk-stat-num"' + valueAttr + '>' + safeNum + '</div><div class="rk-stat-lbl">' + escH(lbl) + '</div>' +
+      '<div class="rk-stat-delta">' + escH(sub || '') + '</div></div></div>';
   }
 
   /* RPC opsional: tetap non-blocking untuk fitur tambahan, tetapi melalui broker utama. */
@@ -16051,8 +17188,11 @@ function renderMyApprovalsPage(){
     var btn = document.getElementById('rkTorSubmit');
     var code = String(sel && sel.value || '').toUpperCase();
     if (notice) notice.style.display = code && isH7Timeoff(code) ? 'block' : 'none';
-    var sickWrap=document.getElementById('rkTorSickOutsideWrap'), sickSel=document.getElementById('rkTorSickOutside'), sickArea=document.getElementById('rkTorSickAreaWrap');
+    var sickWrap=document.getElementById('rkTorSickOutsideWrap'), sickSel=document.getElementById('rkTorSickOutside'), sickArea=document.getElementById('rkTorSickAreaWrap'), sickAreaSel=document.getElementById('rkTorSickArea');
     if(sickWrap)sickWrap.style.display=code==='SDR'?'':'none'; if(sickArea)sickArea.style.display=code==='SDR'&&sickSel&&sickSel.value==='1'?'':'none';
+    if(code==='SDR' && sickAreaSel && window.rhWorkRules && typeof window.rhWorkRules.populateAreaSelect==='function'){
+      window.rhWorkRules.populateAreaSelect(sickAreaSel, window.S && S.user && S.user.nik, 'SICK', 'Pilih area');
+    }
     if (remaining) {
       remaining.style.display = code === 'CT' ? 'block' : 'none';
       if (code === 'CT') remaining.innerHTML = 'Sisa cuti tahunan Anda: <b>' + escH(S.sisaCT != null ? S.sisaCT : '—') + ' hari</b>';
@@ -17485,7 +18625,7 @@ function renderIncentiveFormulaPage(){
     loadReimbursementLimits();
     var capSave=document.getElementById('rkReimbursementLimitSave');if(capSave)capSave.addEventListener('click',saveReimbursementLimits);
     if(!isSuperAdminRole())el.insertAdjacentHTML('afterbegin','<div class="rk-note">Anda hanya dapat melihat formula. Hanya Superadmin yang dapat mengubah angka, faktor, dan menyimpan konfigurasi.</div>');
-    ['rkFormulaMealOnTime','rkFormulaMealExcludeOutside','rkFormulaTransportExcludeOutside','rkFormulaPhoneIncludeOutside','rkFormulaOutsideEitherEvent','rkFormulaOutsideIgnoreLate','rkFormulaPiketPaid'].forEach(function(id){var x=document.getElementById(id);if(x){x.checked=true;x.disabled=true;}});
+    ['rkFormulaMealOnTime','rkFormulaMealExcludeOutside','rkFormulaTransportExcludeOutside','rkFormulaPhoneIncludeOutside','rkFormulaOutsideEitherEvent','rkFormulaOutsideIgnoreLate','rkFormulaStandbyPaid','rkFormulaPiketPaid'].forEach(function(id){var x=document.getElementById(id);if(x){x.disabled=!isSuperAdminRole();}});
     Array.prototype.forEach.call(el.querySelectorAll('input'),function(inp){
       var mark=function(){incentiveUI.formulaDirty=true;var note=document.getElementById('rkFormulaNote');if(note)note.textContent='Ada perubahan yang belum disimpan. Klik Simpan Formula untuk meninjau dan mengonfirmasi.';};
       inp.addEventListener('input',mark);inp.addEventListener('change',mark);
@@ -18890,7 +20030,7 @@ function renderIncentiveFormulaPage(){
     var list = document.getElementById('rkNotifList');
     if (!list) return Promise.resolve(null);
     var userKey = String(window.S && S.user && S.user.nik || '');
-    if (!force && RH_NOTIF_STATE.desktopUser === userKey && RH_NOTIF_STATE.desktopAt && Date.now() - RH_NOTIF_STATE.desktopAt < 60000 && RH_NOTIF_STATE.desktopItems) {
+    if (!force && RH_NOTIF_STATE.desktopUser === userKey && RH_NOTIF_STATE.desktopAt && Date.now() - RH_NOTIF_STATE.desktopAt < 180000 && RH_NOTIF_STATE.desktopItems) {
       paintDeskNotifItems();
       if (activeDeskNotifTab === 'personal' && typeof window.markAllMyNotificationsReadUI === 'function') window.markAllMyNotificationsReadUI(RH_NOTIF_STATE.desktopItems.personal || [], 'desktop-cache').catch(function () {});
       return Promise.resolve(RH_NOTIF_STATE.desktopItems);
@@ -18898,7 +20038,7 @@ function renderIncentiveFormulaPage(){
     // Tampilkan cache selama memuat ulang agar panel tidak tampak "loading terus".
     if (RH_NOTIF_STATE.desktopItems) paintDeskNotifItems();
     else list.innerHTML = '<div class="rk-notif-empty">Memuat pemberitahuan…</div>';
-    var myReqFresh = !!(DATA.myReq && RH_NOTIF_STATE.myRequestsAt && Date.now() - RH_NOTIF_STATE.myRequestsAt < 20000);
+    var myReqFresh = !!(DATA.myReq && RH_NOTIF_STATE.myRequestsAt && Date.now() - RH_NOTIF_STATE.myRequestsAt < 90000);
     var requestPromise = (!force && myReqFresh)
       ? Promise.resolve(DATA.myReq)
       : ((typeof window.loadMyRequests === 'function')
@@ -19032,10 +20172,12 @@ function renderIncentiveFormulaPage(){
 
     var rf = document.getElementById('rkRefresh');
     if (rf) rf.addEventListener('click', function () {
-      dashCache.at = 0; aprCache.at = 0;
+      dashCache.at = 0; dashCache.panelsAt = 0; dashCache.todayAt = 0; aprCache.at = 0;
+      try { if (window.rhClearReadCache) window.rhClearReadCache(); } catch (e) {}
       if (cur === 'emp') { empUI.cacheAt = 0; syncEmpDirectory(true).then(function () { goPage(cur); }); }
       else if (cur === 'pfile') { empUI.cacheAt = 0; syncEmpDirectory(true).then(function () { goPage(cur); }); }
       else if (cur === 'face' || cur === 'att') { ensureKar(true).then(function () { goPage(cur); }); }
+      else if (cur === 'rules' && window.rhWorkRules) { window.rhWorkRules.load(true).then(function (r) { workRulesUI.draft = cloneRules(r); goPage(cur); }); }
       else goPage(cur);
       rkToast('Memuat ulang data...');
     });
@@ -19138,6 +20280,9 @@ function renderIncentiveFormulaPage(){
         setDeskUserMenu(false);
         if (action === 'info') openMyProfileAsEmployeeDetail();
         else if (action === 'pin') goPage('changepin');
+        else if (action === 'pwa') {
+          if (window.rhPwa && typeof window.rhPwa.promptInstall === 'function') window.rhPwa.promptInstall();
+        }
         else if (action === 'logout') {
           try { if (typeof window.doLogout === 'function') window.doLogout(); } catch (er) { rkToast('Gagal keluar dari akun. Coba lagi.'); }
         }
@@ -21259,6 +22404,611 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
   #reimbursementApp .reimbursement-balance-breakdown{border-left:0;padding-left:0;}
 }
 @media (prefers-reduced-motion:reduce){#reimbursementApp *{transition:none!important;}}
+</style>
+
+<style id="rh-v14-9-3-ui-enhancements">
+/* Offline PWA banner & mobile outside-area interaction fix */
+.rh-offline-banner {
+  position: fixed;
+  left: 50%;
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(92vw, 480px);
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: #2C2113;
+  color: #FFF9EE;
+  border: 1px solid #B77932;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.rh-offline-banner::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  flex: 0 0 9px;
+  border-radius: 50%;
+  background: #E09A48;
+}
+#ovOutside {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(0, 35, 22, 0.58) !important;
+}
+#ovOutside select,
+#ovOutside input,
+#ovOutside textarea {
+  min-height: 46px;
+  font-size: 16px;
+  touch-action: manipulation;
+}
+.rk-pwa-top-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #C8DDD0;
+  border-radius: 9px;
+  background: #F4F9F5;
+  color: #00553A;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease;
+}
+.rk-pwa-top-btn:hover,
+.rk-pwa-top-btn:focus-visible {
+  background: #E5F3EA;
+  border-color: #007850;
+  transform: translateY(-1px);
+  outline: none;
+}
+
+@media (min-width: 1024px) {
+  /* Dashboard-only Topbar & Architectural ReHolz Styling */
+  body.rh-desk-on .rk-top.is-dash-mode {
+    background: linear-gradient(95deg, #EFF7F2 0%, #FFFFFF 48%, #FAFBF8 100%);
+    border-bottom: 1px solid #D3E3D9;
+  }
+  body.rh-desk-on .rk-top-dash-decor {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-right: auto;
+    padding-right: 12px;
+  }
+  body.rh-desk-on .rk-top-dash-emblem {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #FFFFFF 0%, #E7F3EB 100%);
+    border: 1px solid #C6DFCE;
+    box-shadow: 0 3px 10px rgba(0, 76, 51, 0.08);
+  }
+  body.rh-desk-on .rk-top-dash-copy {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  body.rh-desk-on .rk-top-dash-kicker {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    color: #5C7B69;
+    text-transform: uppercase;
+  }
+  body.rh-desk-on .rk-top-dash-title {
+    font-size: 15.5px;
+    font-weight: 800;
+    color: #133E2B;
+    letter-spacing: -.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  body.rh-desk-on .rk-top-dash-date {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 9px;
+    background: linear-gradient(145deg, #FFFFFF 0%, #F5F8F5 100%);
+    border: 1px solid #D8E6DD;
+    color: #365645;
+    font-size: 11.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: inset 0 -2px 0 rgba(183, 121, 50, 0.16);
+  }
+
+  @keyframes rkDashRevealV3 {
+    from { opacity: 0; transform: translateY(10px) scale(.99); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-animate {
+    animation: rkDashRevealV3 .5s cubic-bezier(.18, .75, .24, 1) both;
+  }
+  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi {
+    position: relative;
+    overflow: hidden;
+    padding: 18px 18px 16px;
+    border: 1px solid #D7E6DC;
+    border-radius: 12px;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M110 8C84 18 68 40 60 66c26-6 48-24 50-58z' fill='%23007850' fill-opacity='0.045'/%3E%3Cpath d='M0 98c28-14 56-12 90 4' fill='none' stroke='%23B77932' stroke-opacity='0.09' stroke-width='1.5'/%3E%3C/svg%3E") right top / 110px 110px no-repeat,
+      linear-gradient(155deg, #FFFFFF 0%, #F5FAF7 66%, #ECF5EF 100%);
+    box-shadow: 0 4px 16px rgba(0, 68, 45, 0.055);
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 12px;
+    bottom: 12px;
+    width: 3.5px;
+    border-radius: 0 4px 4px 0;
+    background: #007850;
+  }
+  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi--b::before { background: #2E7D5E; }
+  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi--a::before { background: #B77932; }
+  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi--r::before { background: #A8543A; }
+  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi:hover {
+    transform: translateY(-2px);
+    border-color: #B4D4BF;
+    box-shadow: 0 10px 26px rgba(0, 72, 48, 0.11);
+  }
+  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi .rk-stat-ic {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 120, 80, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi .rk-stat-ic.a {
+    background: linear-gradient(145deg, #FDF4E6 0%, #F8E8CF 100%);
+    border-color: rgba(183, 121, 50, 0.22);
+  }
+  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi .rk-stat-num {
+    color: #123D29;
+    font-size: 27px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -.02em;
+  }
+  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi .rk-stat-lbl {
+    color: #2E4B3C;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi .rk-stat-delta {
+    color: #6B8275;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  body.rh-desk-on #rkp-dash .rk-workforce-card {
+    border: 1px solid #DAE8DF;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F9FCFA 100%);
+    box-shadow: 0 4px 16px rgba(0, 64, 42, 0.05);
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  body.rh-desk-on #rkp-dash .rk-workforce-card:hover {
+    transform: translateY(-2px);
+    border-color: #BCD6C5;
+    box-shadow: 0 10px 24px rgba(0, 64, 42, 0.09);
+  }
+
+  /* Dashboard Non-Chart Panels with Coordinated ReHolz Themes */
+  body.rh-desk-on #rkp-dash .rk-dashboard-panels {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+    align-items: stretch;
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel {
+    position: relative;
+    overflow: hidden;
+    padding: 18px;
+    border-radius: 12px;
+    border: 1px solid #D7E6DC;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 4px 16px rgba(0, 64, 42, 0.05);
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(0, 68, 45, 0.10);
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel--hybrid {
+    border-left: 4px solid #007850;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'%3E%3Cpath d='M150 6C118 20 96 46 86 80c32-10 56-34 64-74z' fill='%23007850' fill-opacity='0.055'/%3E%3C/svg%3E") right top / 150px 110px no-repeat,
+      linear-gradient(155deg, #FFFFFF 0%, #F3F9F5 58%, #E7F3EC 100%);
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel--outside {
+    border-left: 4px solid #B77932;
+    border-color: #E7DCC8;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='120' viewBox='0 0 180 120'%3E%3Cpath d='M0 24c48-12 92 10 180-8M0 54c54-14 98 14 180-10M0 84c60-14 108 14 180-12' fill='none' stroke='%23B77932' stroke-opacity='0.085' stroke-width='1.5'/%3E%3C/svg%3E") center bottom / 100% 100% no-repeat,
+      linear-gradient(155deg, #FFFFFF 0%, #FCF8F1 58%, #F6EDE0 100%);
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel--absent {
+    border-left: 4px solid #2A6E53;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='120' viewBox='0 0 140 120'%3E%3Ccircle cx='120' cy='20' r='44' fill='%23007850' fill-opacity='0.045'/%3E%3C/svg%3E") right top / 130px 110px no-repeat,
+      linear-gradient(155deg, #FFFFFF 0%, #F3F7F5 58%, #E8F0EC 100%);
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel-head h3 {
+    margin: 0;
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #163E2C;
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel-sub {
+    display: block;
+    font-size: 10.5px;
+    color: #6B7F73;
+    font-weight: 600;
+    margin-top: 1px;
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel-icon {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: #E2F1E7;
+    color: #006643;
+    border: 1px solid rgba(0, 120, 80, 0.14);
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel--outside .rk-dash-panel-icon {
+    background: #F9ECDA;
+    color: #9A6121;
+    border-color: rgba(183, 121, 50, 0.24);
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(212, 227, 217, 0.7);
+    font-size: 12px;
+    color: #465C4F;
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel--outside .rk-dash-panel-line {
+    border-color: rgba(226, 209, 180, 0.7);
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel-line b {
+    color: #143D2B;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2px;
+    padding: 8px 11px;
+    border-radius: 9px;
+    background: #007850;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel--outside .rk-dash-panel-total {
+    background: #9A6121;
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-panel-total b {
+    font-size: 13px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-count {
+    margin-left: auto;
+    min-width: 28px;
+    height: 24px;
+    padding: 0 8px;
+    border-radius: 8px;
+    background: #143D2B;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-variant-numeric: tabular-nums;
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-absent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-height: 185px;
+    overflow-y: auto;
+    padding-right: 3px;
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-absent-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 7px;
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(212, 227, 217, 0.75);
+    font-size: 11.5px;
+    color: #264234;
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-absent-row b {
+    color: #8D551A;
+    font-size: 11px;
+    font-weight: 750;
+  }
+  body.rh-desk-on #rkp-dash .rk-dash-absent-empty {
+    padding: 18px 12px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px dashed #C7DDD0;
+    text-align: center;
+    font-size: 12px;
+    color: #537160;
+    font-weight: 600;
+  }
+
+  /* Settings Hub, Breadcrumb & Flexible Work Rules */
+  body.rh-desk-on .rk-settings-backbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 14px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: #FFFFFF;
+    border: 1px solid #DCE7DF;
+  }
+  body.rh-desk-on .rk-settings-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 11px;
+    border-radius: 8px;
+    background: #EFF7F2;
+    color: #005A3B;
+    font-size: 12px;
+    font-weight: 750;
+    border: 1px solid #C8E0D1;
+    cursor: pointer;
+    transition: background .15s ease;
+  }
+  body.rh-desk-on .rk-settings-back-btn:hover { background: #E0F0E6; }
+  body.rh-desk-on .rk-settings-crumb-sep { color: #9AAFA0; font-size: 13px; }
+  body.rh-desk-on .rk-settings-crumb-cur { color: #204231; font-size: 12.5px; font-weight: 750; }
+  body.rh-desk-on .rk-settings-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #004C33 0%, #006B47 62%, #003D29 100%);
+    color: #FFFFFF;
+    border: 0;
+    border-radius: 14px;
+  }
+  body.rh-desk-on .rk-settings-eyebrow {
+    display: inline-block;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    color: #A7DFBE;
+    margin-bottom: 4px;
+  }
+  body.rh-desk-on .rk-settings-hero h2 { margin: 0 0 5px; font-size: 20px; font-weight: 800; color: #FFFFFF; }
+  body.rh-desk-on .rk-settings-hero p { margin: 0; max-width: 720px; font-size: 12.5px; line-height: 1.5; color: rgba(255, 255, 255, 0.86); }
+  body.rh-desk-on .rk-settings-hero-meta {
+    flex: 0 0 auto;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    text-align: right;
+  }
+  body.rh-desk-on .rk-settings-hero-meta span { display: block; font-size: 10px; color: #C2EAD2; }
+  body.rh-desk-on .rk-settings-hero-meta b { display: block; font-size: 13px; color: #FFFFFF; margin-top: 2px; }
+  body.rh-desk-on .rk-settings-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  body.rh-desk-on .rk-settings-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 8px;
+    padding: 20px;
+    border-radius: 13px;
+    background: #FFFFFF;
+    border: 1px solid #D9E6DD;
+    box-shadow: 0 4px 14px rgba(0, 64, 42, 0.045);
+    cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  }
+  body.rh-desk-on .rk-settings-card:hover,
+  body.rh-desk-on .rk-settings-card:focus-visible {
+    transform: translateY(-2px);
+    border-color: #007850;
+    box-shadow: 0 12px 28px rgba(0, 76, 51, 0.11);
+    outline: none;
+  }
+  body.rh-desk-on .rk-settings-card-top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  body.rh-desk-on .rk-settings-card-ic {
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    display: grid;
+    place-items: center;
+    background: #E7F4EC;
+    color: #006B47;
+  }
+  body.rh-desk-on .rk-settings-card.tone-amber .rk-settings-card-ic { background: #FAF0E1; color: #9C6220; }
+  body.rh-desk-on .rk-settings-card.tone-sage .rk-settings-card-ic { background: #ECF4EE; color: #2F6B4E; }
+  body.rh-desk-on .rk-settings-card-badge {
+    padding: 4px 9px;
+    border-radius: 8px;
+    background: #F4F8F5;
+    border: 1px solid #DCE7DF;
+    color: #466152;
+    font-size: 10.5px;
+    font-weight: 750;
+  }
+  body.rh-desk-on .rk-settings-card-kicker {
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: .1em;
+    color: #6B8275;
+  }
+  body.rh-desk-on .rk-settings-card h3 { margin: 0; font-size: 16px; font-weight: 800; color: #163E2C; }
+  body.rh-desk-on .rk-settings-card p { margin: 0; font-size: 12px; line-height: 1.5; color: #5E7065; flex: 1; }
+  body.rh-desk-on .rk-settings-card-cta {
+    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    color: #007850;
+  }
+
+  /* Rules Page */
+  body.rh-desk-on .rk-rules-hero { margin-bottom: 14px; padding: 18px 20px; }
+  body.rh-desk-on .rk-rules-hero .rk-settings-eyebrow { color: #007850; }
+  body.rh-desk-on .rk-rules-hero-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+  body.rh-desk-on .rk-rules-hero-head h2 { margin: 2px 0 4px; font-size: 18px; color: #163E2C; }
+  body.rh-desk-on .rk-rules-hero-head p { margin: 0; font-size: 12px; color: #63766A; max-width: 760px; }
+  body.rh-desk-on .rk-rules-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #E8EFEA; }
+  body.rh-desk-on .rk-rules-tabs button {
+    padding: 8px 14px;
+    border-radius: 9px;
+    border: 1px solid #D9E5DD;
+    background: #F8FBF9;
+    color: #3E5748;
+    font-size: 12px;
+    font-weight: 750;
+    cursor: pointer;
+  }
+  body.rh-desk-on .rk-rules-tabs button.on {
+    background: #007850;
+    border-color: #007850;
+    color: #FFFFFF;
+  }
+  body.rh-desk-on .rk-rules-grid { display: grid; gap: 14px; }
+  body.rh-desk-on .rk-rules-card { padding: 18px 20px; }
+  body.rh-desk-on .rk-area-label-inp { min-width: 140px; padding: 6px 9px; font-size: 12px; }
+  body.rh-desk-on .rk-area-matrix-table th,
+  body.rh-desk-on .rk-area-matrix-table td { text-align: center; vertical-align: middle; }
+  body.rh-desk-on .rk-area-matrix-table th:first-child,
+  body.rh-desk-on .rk-area-matrix-table td:first-child,
+  body.rh-desk-on .rk-area-matrix-table th:nth-child(2),
+  body.rh-desk-on .rk-area-matrix-table td:nth-child(2) { text-align: left; }
+  body.rh-desk-on .rk-rules-emp-picker { display: grid; grid-template-columns: minmax(220px, .8fr) minmax(260px, 1.2fr); gap: 12px; margin-top: 10px; }
+  body.rh-desk-on .rk-rules-emp-picker label { display: grid; gap: 5px; font-size: 11.5px; font-weight: 700; color: #3D5547; }
+  body.rh-desk-on .rk-rules-emp-editor { margin-top: 14px; padding: 14px; border-radius: 10px; background: #F5FAF6; border: 1px solid #D7E6DC; }
+  body.rh-desk-on .rk-rules-emp-mode { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 12px; font-size: 12.5px; font-weight: 700; color: #204231; }
+  body.rh-desk-on .rk-rules-emp-mode label { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; }
+  body.rh-desk-on .rk-emp-area-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  body.rh-desk-on .rk-emp-area-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 11px;
+    border-radius: 8px;
+    background: #FFFFFF;
+    border: 1px solid #D5E4DA;
+    font-size: 12px;
+    font-weight: 700;
+    color: #214533;
+    cursor: pointer;
+  }
+  body.rh-desk-on .rk-rules-emp-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  body.rh-desk-on .rk-rules-restricted-list { margin-top: 16px; padding-top: 14px; border-top: 1px solid #E6EFE9; }
+  body.rh-desk-on .rk-rules-restricted-list h4 { margin: 0 0 10px; font-size: 13px; color: #19422F; }
+  body.rh-desk-on .rk-rules-policy-grid { display: grid; gap: 10px; }
+  body.rh-desk-on .rk-rules-shortcuts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid #E8EFEA; }
+  body.rh-desk-on .rk-rules-footer {
+    margin-top: 14px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: #FFFFFF;
+    border: 1px solid #DCE7DF;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* Expanded Multi-Factor Attendance Adjustment Form */
+  body.rh-desk-on .rk-adjustment-form {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+  body.rh-desk-on .rk-adjustment-reason,
+  body.rh-desk-on .rk-adjustment-actions {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279.98px) {
+  body.rh-desk-on .rk-settings-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body.rh-desk-on #rkp-dash .rk-dashboard-panels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  body.rh-desk-on .rk-adjustment-form { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.rh-desk-on #rkp-dash .rk-dash-animate,
+  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi,
+  body.rh-desk-on #rkp-dash .rk-workforce-card,
+  body.rh-desk-on #rkp-dash .rk-dash-panel {
+    animation: none !important;
+    transition: none !important;
+  }
+}
 </style>
 
 </body></html>

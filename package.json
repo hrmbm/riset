@@ -1,0 +1,15 @@
+{
+  "name": "reholz-hris",
+  "version": "14.9.2",
+  "private": true,
+  "description": "Portal sistem terintegrasi untuk mengelola data karyawan ReHolz.",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build": "node --check server.js",
+    "lint": "node --check server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
