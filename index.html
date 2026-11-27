@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="id"><head>
-<meta name="reholz-release" content="v14.9.3-pwa-optimization">
+<meta name="reholz-release" content="v14.9.4-dashboard-settings-notif-opt">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
 <link rel="preconnect" href="https://unpkg.com" crossorigin="">
@@ -13,10 +13,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ReHolz">
-<link rel="manifest" href="/manifest.webmanifest">
-<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/assets/pwa-192x192.png">
-<meta name="app-release" content="v14.9.3-pwa-optimization">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/pwa-192x192.png">
+<meta name="app-release" content="v14.9.4-dashboard-settings-notif-opt">
 <title>ReHolz HRIS</title>
 <meta name="description" content="Portal sistem terintegrasi untuk mengelola data karyawan ReHolz.">
 <meta property="og:title" content="ReHolz HRIS">
@@ -2291,31 +2291,23 @@ input, select, textarea {
   color: #3E5A48;
 }
 .menu-ic.re-3d {
-  width: 58px;
-  height: 58px;
-  border-radius: 18px;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 8px;
-  background: linear-gradient(150deg, #FFFFFF 0%, #EDF6F0 50%, #DCEDE2 100%);
-  border: 1.5px solid rgba(0, 120, 80, 0.26);
-  box-shadow: 
-    0 6px 14px -3px rgba(0, 64, 42, 0.16),
-    0 2px 4px rgba(0, 64, 42, 0.08),
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.95),
-    inset 0 -2px 3px rgba(0, 80, 52, 0.1);
+  background: #F4F9F5;
+  border: 1px solid #D7E5DC;
+  box-shadow: none;
   position: relative;
-  transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: background 0.16s ease, border-color 0.16s ease;
   overflow: visible;
 }
 .menu-ic.re-3d:hover {
-  transform: translateY(-2px) scale(1.04);
-  box-shadow: 
-    0 10px 20px -4px rgba(0, 64, 42, 0.22),
-    inset 0 1.5px 2px #ffffff,
-    inset 0 -2px 3px rgba(0, 80, 52, 0.12);
-  border-color: rgba(0, 120, 80, 0.4);
+  background: #E9F4ED;
+  border-color: rgba(0, 120, 80, 0.35);
 }
 
 .reholz-logo-att {
@@ -2341,23 +2333,18 @@ input, select, textarea {
   margin: 0 auto 8px;
   display: block;
 }
-.menu-ic.re-3d {
-  background: linear-gradient(145deg, #F4FAF6 0%, #E4F1E8 100%);
-  border: 1.5px solid rgba(0, 120, 80, 0.22);
-  box-shadow: 0 4px 10px -2px rgba(0,64,42,0.12), inset 0 1px 1px rgba(255,255,255,0.8), inset 0 -1.5px 2px rgba(0,80,52,0.08);
-}
-
 
 /* ReHolz refinement v13.1: icon-to-frame ratio and Talenta-inspired desktop shell */
 @media (max-width: 1023px) {
   .menu-ic.re-3d {
     width: 36px !important;
     height: 36px !important;
-    border-radius: 13px !important;
-    border-width: 1px !important;
-    box-shadow: 0 2px 5px rgba(0,64,42,.09), inset 0 1px 1px rgba(255,255,255,.75) !important;
+    border-radius: 10px !important;
+    border: 1px solid #DCE7DF !important;
+    background: #F5FAF6 !important;
+    box-shadow: none !important;
   }
-  .menu-ic.re-3d svg { width: 32px !important; height: 32px !important; }
+  .menu-ic.re-3d svg { width: 28px !important; height: 28px !important; }
   .tic, .d-icon {
     width: 26px;
     height: 26px;
@@ -4313,7 +4300,7 @@ window.__APP_PREPARING_ASSETS = true;
         <span class="arr"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#8FA79A" stroke-width="2.2" stroke-linecap="round"><path d="M9 18l6-6-6-6"></path></svg></span>
       </button>
     </div>
-    <div class="hint" id="verTxt">Versi 14.9.3</div>
+    <div class="hint" id="verTxt">Versi 14.9.4</div>
   </div>
 </section>
 
@@ -4462,7 +4449,7 @@ window.__APP_PREPARING_ASSETS = true;
     <div class="grab"></div>
     <button type="button" class="rh-sheet-x" onclick="window.rhPwa && window.rhPwa.closeGuide()" aria-label="Tutup">&#10005;</button>
     <div style="display:flex;align-items:center;gap:12px;margin:4px 0 12px">
-      <img src="/assets/pwa-192x192.png" alt="ReHolz HRIS" style="width:48px;height:48px;border-radius:12px;box-shadow:0 4px 12px rgba(0,76,51,0.18)">
+      <img src="assets/pwa-192x192.png" alt="ReHolz HRIS" style="width:48px;height:48px;border-radius:12px;box-shadow:0 4px 12px rgba(0,76,51,0.18)">
       <div>
         <h3 style="margin:0;justify-content:flex-start" id="rhPwaGuideTitle">Pasang ReHolz HRIS</h3>
         <p style="margin:2px 0 0;font-size:12px;color:var(--txt-muted)">Jalankan seperti aplikasi native di perangkat Anda</p>
@@ -4470,6 +4457,26 @@ window.__APP_PREPARING_ASSETS = true;
     </div>
     <div id="rhPwaGuideSteps" style="background:#F4F8F5;border:1px solid #DCE7DE;border-radius:14px;padding:14px;font-size:13.5px;line-height:1.55;color:#1E2B23;margin-bottom:14px"></div>
     <button type="button" class="btn btn-blue" onclick="window.rhPwa && window.rhPwa.closeGuide()">Mengerti</button>
+  </div>
+</div>
+
+<!-- Employee Deactivation Reason Modal (Mobile & Desktop) -->
+<div class="rh-deactivate-overlay" id="ovDeactivateModal" role="dialog" aria-modal="true" aria-labelledby="rhDeactivateTitle" style="display:none">
+  <div class="rh-deactivate-card">
+    <div class="rh-deactivate-head">
+      <h3 id="rhDeactivateTitle">Nonaktifkan Akun Karyawan</h3>
+      <button type="button" class="rh-deactivate-close" id="rhDeactivateCloseBtn" aria-label="Tutup">&#10005;</button>
+    </div>
+    <div class="rh-deactivate-target" id="rhDeactivateTarget">—</div>
+    <div class="rh-deactivate-field">
+      <label for="rhDeactivateReason">Alasan Penonaktifan *</label>
+      <textarea id="rhDeactivateReason" rows="3" maxlength="300" placeholder="Tuliskan alasan penonaktifan akun karyawan ini (wajib diisi)..."></textarea>
+      <div class="rh-deactivate-err" id="rhDeactivateErr" style="display:none"></div>
+    </div>
+    <div class="rh-deactivate-actions">
+      <button type="button" class="rk-btn ghost" id="rhDeactivateCancelBtn">Batal</button>
+      <button type="button" class="rk-btn rh-btn-danger" id="rhDeactivateConfirmBtn">Konfirmasi Nonaktifkan</button>
+    </div>
   </div>
 </div>
 
@@ -4598,8 +4605,8 @@ window.__APP_PREPARING_ASSETS = true;
 var SUPABASE_URL = 'https://qfnlnaaamgbdfpapalvc.supabase.co';
 var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmbmxuYWFhbWdiZGZwYXBhbHZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1NTA4NjQsImV4cCI6MjExMTEyNjg2NH0.Lv1G6JWnllMwKNoSeBXP9wToU_fkdt4Q-WKnOet0_Mc';
 var APP_VERSION = '6.9-REHOLZ-REIMBURSEMENT-REALIZATION-APPROVAL-SDR'; // Kept in sync with existing app-version RPC to avoid forced reload loops.
-var RH_HTML_RELEASE = 'v14.9.3-pwa-optimization';
-var RH_DISPLAY_VERSION = 'v14.9.3';
+var RH_HTML_RELEASE = 'v14.9.4-dashboard-settings-notif-opt';
+var RH_DISPLAY_VERSION = 'v14.9.4';
 var RH_RELEASE_STORAGE_KEY = 'reh_html_release_seen';
 var RH_RELEASE_UPGRADE_ACTIVE = false;
 var MODEL_URL = 'https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/model/';
@@ -4995,6 +5002,55 @@ async function rhSaveWorkRules(nextRules) {
   return { ok: true, rules: normalized, remoteSynced: remoteSynced, remoteMessage: remoteMessage };
 }
 
+function rhShouldShowRemainingLeave(sisaCT) {
+  if (sisaCT === null || sisaCT === undefined || sisaCT === '') return false;
+  var n = Number(sisaCT);
+  return Number.isFinite(n) && n === 0;
+}
+
+function rhNormalizeDeactivateReason(reason) {
+  var clean = String(reason == null ? '' : reason).replace(/\s+/g, ' ').trim();
+  if (clean.length < 3) return { ok: false, reason: clean, message: 'Alasan penonaktifan wajib diisi minimal 3 karakter.' };
+  return { ok: true, reason: clean, message: '' };
+}
+
+function rhApplyWorkRuleRowMutation(employeeAreaRules, nik, areaValue, checked, isAllToggle, standardAreaValues) {
+  var next = Object.assign({}, employeeAreaRules && typeof employeeAreaRules === 'object' ? employeeAreaRules : {});
+  var key = String(nik || '').trim();
+  if (!key) return next;
+  var allValues = Array.isArray(standardAreaValues) && standardAreaValues.length
+    ? standardAreaValues.slice()
+    : RH_STANDARD_AREAS.map(function (a) { return a.value; });
+  if (isAllToggle) {
+    if (checked) {
+      delete next[key];
+    } else {
+      next[key] = { mode: 'RESTRICTED', allowedAreas: [] };
+    }
+    return next;
+  }
+  var current = next[key];
+  var curSet = (current && current.mode === 'RESTRICTED' && Array.isArray(current.allowedAreas))
+    ? current.allowedAreas.slice()
+    : allValues.slice();
+  if (checked) {
+    if (curSet.indexOf(areaValue) < 0) curSet.push(areaValue);
+  } else {
+    curSet = curSet.filter(function (v) { return v !== areaValue; });
+  }
+  var allChecked = allValues.every(function (v) { return curSet.indexOf(v) >= 0; });
+  if (allChecked) {
+    delete next[key];
+  } else {
+    next[key] = { mode: 'RESTRICTED', allowedAreas: allValues.filter(function (v) { return curSet.indexOf(v) >= 0; }) };
+  }
+  return next;
+}
+
+window.rhShouldShowRemainingLeave = rhShouldShowRemainingLeave;
+window.rhNormalizeDeactivateReason = rhNormalizeDeactivateReason;
+window.rhApplyWorkRuleRowMutation = rhApplyWorkRuleRowMutation;
+
 window.rhWorkRules = {
   standardAreas: RH_STANDARD_AREAS,
   get: function () { return RH_WORK_RULES; },
@@ -5003,7 +5059,8 @@ window.rhWorkRules = {
   load: rhLoadWorkRules,
   save: rhSaveWorkRules,
   getAllowedAreasForUser: rhGetAllowedAreasForUser,
-  populateAreaSelect: rhPopulateAreaSelect
+  populateAreaSelect: rhPopulateAreaSelect,
+  applyRowMutation: rhApplyWorkRuleRowMutation
 };
 
 /* Log error lokal: hanya tersimpan di browser/perangkat ini, maksimal 100 entri. */
@@ -5133,11 +5190,14 @@ function rhReadTtlForFn(fnName) {
   if (/^(get_master_cuti|get_delegate_options|get_lokasi_kantor|hr_get_attendance_schedule|hr_get_working_calendar|hr_get_incentive_formula|hr_get_reimbursement_limits|hr_get_incentive_signatories|hr_get_incentive_exclusions|hr_get_app_rules|get_org_chart)$/.test(name)) {
     return 300000; // 5 menit untuk data master & konfigurasi semi-statis
   }
-  if (/^(hr_get_employee_directory_summary|hr_get_employee_directory|get_karyawan_summary|get_face_photos)$/.test(name)) {
-    return 90000; // 90 detik untuk direktori & foto referensi
+  if (/^(hr_get_employee_directory_summary|hr_get_employee_directory|get_karyawan_summary|get_face_photos|get_my_notifications|hr_get_my_reimbursement_requests)$/.test(name)) {
+    return 90000; // 90 detik untuk direktori, foto referensi, & riwayat notifikasi personal
   }
-  if (/^(hr_get_dashboard_panels|hr_attendance_today|hr_leave_yearly_stats|hr_get_leave_list_v2|hr_get_my_attendance_dayoff_context|hr_attendance_summary)$/.test(name)) {
-    return 45000; // 45 detik untuk ringkasan dashboard & laporan
+  if (/^(get_my_pending_requests|hr_get_pending_approval_tracking)$/.test(name)) {
+    return 60000; // 60 detik untuk status pengajuan pribadi & tracking persetujuan
+  }
+  if (/^(hr_get_dashboard_panels|hr_attendance_today|hr_leave_yearly_stats|hr_get_leave_list_v2|hr_get_my_attendance_dayoff_context|hr_attendance_summary|get_pending_approvals|hr_get_pending_reimbursement_approvals)$/.test(name)) {
+    return 45000; // 45 detik untuk ringkasan dashboard, laporan, & antrean persetujuan
   }
   return RH_READ_DEDUPE_TTL;
 }
@@ -6548,7 +6608,16 @@ async function api(fn, args, timeoutMs) {
       p_status_kerja: d3.statusKerja, p_atasan_id: d3.atasanId || null, p_join_date: d3.joinDate, p_role: d3.role
     });
   }
-  if (fn === 'hrDeactivate') return rpc('hr_deactivate_karyawan', { p_token: getToken(), p_nik: args[0] });
+  if (fn === 'hrDeactivate') {
+    var deactReason = args[1] != null ? String(args[1]).trim() : '';
+    return rpc('hr_deactivate_karyawan', deactReason ? { p_token: getToken(), p_nik: args[0], p_reason: deactReason } : { p_token: getToken(), p_nik: args[0] }).catch(function(err) {
+      var em = String(err && err.message || '');
+      if (deactReason && /PGRST202|Could not find|function .* does not exist|parameter|42883/i.test(em)) {
+        return rpc('hr_deactivate_karyawan', { p_token: getToken(), p_nik: args[0] });
+      }
+      throw err;
+    });
+  }
   if (fn === 'hrReactivate') return rpc('hr_reactivate_karyawan', { p_token: getToken(), p_nik: args[0] });
   if (fn === 'hrResetPin') return rpc('hr_reset_pin', { p_token: getToken(), p_nik: args[0] });
   if (fn === 'saveEvidencePath') return rpc('save_evidence_path', { p_token: getToken(), p_absensi_id: args[0], p_storage_path: args[1], p_public_url: args[2] });
@@ -9208,13 +9277,14 @@ function onCutiKode() {
   if (sickAreaSel && sel.value === 'SDR') {
     rhPopulateAreaSelect(sickAreaSel, S && S.user && S.user.nik, 'SICK', 'Pilih area');
   }
-  // Lampiran selalu tersedia dan opsional untuk semua kategori Time Off.
+  // Sisa cuti hanya ditampilkan ketika saldo tepat 0.
   $('ctDocWrap').style.display = 'block';
-  if (sel.value === 'CT') {
+  if (sel.value && rhShouldShowRemainingLeave(S.sisaCT)) {
     $('ctSisa').style.display = 'block';
-    $('ctSisa').innerHTML = '📊 Sisa cuti tahunan Anda: <b>' + (S.sisaCT != null ? S.sisaCT : '-') + ' hari</b>';
+    $('ctSisa').innerHTML = 'Sisa cuti tahunan Anda: <b>0 hari</b>';
   } else {
     $('ctSisa').style.display = 'none';
+    $('ctSisa').innerHTML = '';
   }
 }
 
@@ -10184,11 +10254,82 @@ function karSave(mode) {
   }).catch(function(e) { if (e && e.message === 'STALE') return; toast('❌ ' + e.message); });
 }
 
-function karDeactivate(nik) {
-  try { ensureAdminWriteAllowed('nonaktifkan karyawan'); } catch (e) { toast(e.message); return; }
-  if (!confirm('Nonaktifkan karyawan ' + nik + '?')) return;
-  api('hrDeactivate', [nik]).then(function(r) { toast(r.message); loadKaryawanMgr(true); }).catch(function(e) { if (e && e.message === 'STALE') return; toast('❌ ' + e.message); });
+var RH_DEACTIVATE_CTX = null;
+function closeDeactivateModal() {
+  var ov = document.getElementById('ovDeactivateModal');
+  if (ov) { ov.style.display = 'none'; ov.classList.remove('on'); }
+  var err = document.getElementById('rhDeactivateErr');
+  if (err) { err.style.display = 'none'; err.textContent = ''; }
+  var btn = document.getElementById('rhDeactivateConfirmBtn');
+  if (btn) { btn.disabled = false; btn.textContent = 'Konfirmasi Nonaktifkan'; }
+  RH_DEACTIVATE_CTX = null;
 }
+function bindDeactivateModalEvents() {
+  var ov = document.getElementById('ovDeactivateModal');
+  if (!ov || ov.__rhBound) return;
+  ov.__rhBound = true;
+  var closeBtn = document.getElementById('rhDeactivateCloseBtn');
+  var cancelBtn = document.getElementById('rhDeactivateCancelBtn');
+  var confirmBtn = document.getElementById('rhDeactivateConfirmBtn');
+  var reasonEl = document.getElementById('rhDeactivateReason');
+  if (closeBtn) closeBtn.addEventListener('click', closeDeactivateModal);
+  if (cancelBtn) cancelBtn.addEventListener('click', closeDeactivateModal);
+  ov.addEventListener('click', function (ev) { if (ev.target === ov) closeDeactivateModal(); });
+  if (reasonEl) reasonEl.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape') closeDeactivateModal();
+    if (ev.key === 'Enter' && (ev.ctrlKey || ev.metaKey)) { ev.preventDefault(); if (confirmBtn) confirmBtn.click(); }
+  });
+  if (confirmBtn) confirmBtn.addEventListener('click', function () {
+    if (!RH_DEACTIVATE_CTX) return;
+    var ctx = RH_DEACTIVATE_CTX;
+    var val = rhNormalizeDeactivateReason(reasonEl ? reasonEl.value : '');
+    var err = document.getElementById('rhDeactivateErr');
+    if (!val.ok) {
+      if (err) { err.textContent = val.message; err.style.display = 'block'; }
+      if (reasonEl) reasonEl.focus();
+      return;
+    }
+    if (err) { err.style.display = 'none'; err.textContent = ''; }
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Memproses...';
+    api('hrDeactivate', [ctx.nik, val.reason]).then(function (r) {
+      try { rhLogActivity('DEACTIVATE', 'EMPLOYEE', ctx.nik, 'Nonaktifkan akun: ' + val.reason, 'OK'); } catch (e) {}
+      var cb = ctx.onSuccess;
+      closeDeactivateModal();
+      var okMsg = (r && r.message) ? r.message : ('Karyawan ' + ctx.nik + ' dinonaktifkan.');
+      if (document.body.classList.contains('rh-desk-on') && window.RHDeskApi && typeof toast === 'function') toast(okMsg);
+      else toast(okMsg);
+      try { if (typeof loadKaryawanMgr === 'function') loadKaryawanMgr(true); } catch (e) {}
+      if (typeof cb === 'function') { try { cb(val.reason, r); } catch (e) {} }
+    }).catch(function (e) {
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = 'Konfirmasi Nonaktifkan';
+      if (e && e.message === 'STALE') { closeDeactivateModal(); return; }
+      if (err) { err.textContent = (e && e.message) || 'Gagal menonaktifkan karyawan.'; err.style.display = 'block'; }
+      toast('❌ ' + ((e && e.message) || 'Gagal menonaktifkan karyawan.'));
+    });
+  });
+}
+function karDeactivate(nik, onSuccess) {
+  try { ensureAdminWriteAllowed('nonaktifkan karyawan'); } catch (e) { toast(e.message); return; }
+  var ov = document.getElementById('ovDeactivateModal');
+  if (!ov) return;
+  bindDeactivateModalEvents();
+  var emp = (DATA.karList || []).find(function (x) { return String(x.nik || x.employee_id || '') === String(nik); });
+  var targetText = emp && emp.nama ? (emp.nama + ' (' + nik + ')') : ('NIK / ID: ' + nik);
+  var targetEl = document.getElementById('rhDeactivateTarget');
+  var reasonEl = document.getElementById('rhDeactivateReason');
+  var err = document.getElementById('rhDeactivateErr');
+  if (targetEl) targetEl.textContent = targetText;
+  if (reasonEl) reasonEl.value = '';
+  if (err) { err.style.display = 'none'; err.textContent = ''; }
+  RH_DEACTIVATE_CTX = { nik: String(nik || ''), onSuccess: typeof onSuccess === 'function' ? onSuccess : null };
+  ov.style.display = 'flex';
+  ov.classList.add('on');
+  setTimeout(function () { if (reasonEl) reasonEl.focus(); }, 40);
+}
+window.karDeactivate = karDeactivate;
+window.closeDeactivateModal = closeDeactivateModal;
 
 function karReactivate(nik) {
   try { ensureAdminWriteAllowed('aktifkan kembali karyawan'); } catch (e) { toast(e.message); return; }
@@ -10252,25 +10393,22 @@ window.completeMyNotificationTitle = completeMyNotificationTitle;
 
 function renderNotifs(force) {
   var userKey = String(S.user && S.user.nik || '');
-  if (!force && RH_NOTIF_STATE.mobileUser === userKey && RH_NOTIF_STATE.mobileAt && Date.now() - RH_NOTIF_STATE.mobileAt < 60000 && RH_NOTIF_STATE.mobileHtml) {
+  if (!force && RH_NOTIF_STATE.mobileUser === userKey && RH_NOTIF_STATE.mobileAt && Date.now() - RH_NOTIF_STATE.mobileAt < 180000 && RH_NOTIF_STATE.mobileHtml) {
     $('paneNotif').innerHTML = RH_NOTIF_STATE.mobileHtml;
     S.unreadNotificationTotal = RH_NOTIF_STATE.unreadCount || 0;
     updateBadges();
-    // The mobile inbox defaults to 'Untuk Anda': opening it marks personal outcomes read in bulk.
     markAllMyNotificationsReadUi(RH_NOTIF_STATE.mobileItems || [], 'mobile-cache').catch(function () {});
-    // Setelah 8 detik, segarkan diam-diam di latar: isi tidak pernah diganti teks "Memuat..." lagi.
-    if (Date.now() - RH_NOTIF_STATE.mobileAt > 8000) setTimeout(function() { renderNotifs(true); }, 60);
     return Promise.resolve(RH_NOTIF_STATE.mobileItems);
   }
-  // Stale-while-revalidate: tampilkan cache lama selagi memuat, bukan layar "Memuat..." kosong.
   if (RH_NOTIF_STATE.mobileHtml && RH_NOTIF_STATE.mobileUser === userKey) $('paneNotif').innerHTML = RH_NOTIF_STATE.mobileHtml;
   else $('paneNotif').innerHTML = '<div class="empty">Memuat pemberitahuan...</div>';
-  var myReqFresh = !!(DATA.myReq && RH_NOTIF_STATE.myRequestsAt && Date.now() - RH_NOTIF_STATE.myRequestsAt < 20000);
+  var myReqFresh = !!(DATA.myReq && RH_NOTIF_STATE.myRequestsAt && Date.now() - RH_NOTIF_STATE.myRequestsAt < 90000);
   var myRequestsPromise = (!force && myReqFresh) ? Promise.resolve(DATA.myReq) : loadMyRequests();
+  var reimPromise = (typeof rhIsHybridUser === 'function' && rhIsHybridUser()) ? loadMyReimbursementRequests() : Promise.resolve([]);
   return Promise.all([
     myRequestsPromise,
     api('getMyNotifications', [], 20000).catch(function() { return { list: [], unreadCount: null, _failed: true }; }),
-    loadMyReimbursementRequests()
+    reimPromise
   ]).then(function(results) {
     var r = results[0] || { absensi: [], cuti: [] };
     var notifResult = results[1] || {};
@@ -10368,8 +10506,9 @@ async function markMyNotificationReadUi(notificationId, wasRead) {
       var mark = el.querySelector('.notif-unread-mark, .rk-notif-unread-dot'); if (mark) mark.remove();
     });
     var mr = $('paneNotif'); if (mr) RH_NOTIF_STATE.mobileHtml = mr.innerHTML;
-    // Invalidate both caches after a read so the next device/panel entry reconciles exact server state.
-    RH_NOTIF_STATE.mobileAt = 0; RH_NOTIF_STATE.desktopAt = 0;
+    // Pertahankan stempel cache yang masih berlaku agar klik notifikasi berikutnya tidak memicu ulang RPC.
+    if (RH_NOTIF_STATE.mobileAt) RH_NOTIF_STATE.mobileAt = Date.now();
+    if (RH_NOTIF_STATE.desktopAt) RH_NOTIF_STATE.desktopAt = Date.now();
     updateBadges();
     var deskPersonalCount = document.getElementById('rkNotifPersonalCount');
     if (deskPersonalCount) deskPersonalCount.textContent = String(S.unreadNotificationTotal || 0);
@@ -12211,8 +12350,9 @@ function showHrPlaceholder(title, group, description) {
     min-width: 0;
     min-height: 274px;
     padding: 16px 16px 14px;
-    border-radius: 5px;
-    box-shadow: 0 2px 8px rgba(0, 64, 42, 0.07);
+    border-radius: 10px;
+    border: 1px solid #DCE7DF;
+    box-shadow: none;
     overflow: hidden;
   }
   body.rh-desk-on .rk-workforce-head {
@@ -12276,9 +12416,7 @@ function showHrPlaceholder(title, group, description) {
     transition: width .35s ease;
   }
   body.rh-desk-on .rk-workforce-seg-wood {
-    background-color: #B77932;
-    background-image: repeating-linear-gradient(112deg, rgba(255,245,222,.23) 0, rgba(255,245,222,.23) 2px, transparent 2px, transparent 7px), linear-gradient(90deg, #9D6328, #C28A43 52%, #A66D30);
-    background-blend-mode: soft-light, normal;
+    background: #B77932;
   }
   body.rh-desk-on .rk-workforce-seg-empty { background: #E7EEE9; }
   body.rh-desk-on .rk-workforce-scale {
@@ -12324,8 +12462,7 @@ function showHrPlaceholder(title, group, description) {
     background: var(--rk-dot, #007850);
   }
   body.rh-desk-on .rk-workforce-dot.rk-wood-dot {
-    background-color: #B77932;
-    background-image: repeating-linear-gradient(120deg, rgba(255,255,255,.35) 0, rgba(255,255,255,.35) 1px, transparent 1px, transparent 3px);
+    background: #B77932;
   }
   body.rh-desk-on .rk-workforce-legend-label {
     overflow: hidden;
@@ -12795,7 +12932,6 @@ function showHrPlaceholder(title, group, description) {
         </svg>
       </div>
       <div class="rk-top-dash-copy">
-        <div class="rk-top-dash-kicker">REHOLZ WORKFORCE OVERVIEW</div>
         <div class="rk-top-dash-title" id="rkTopDashGreeting">Dashboard Operasional HR</div>
       </div>
       <div class="rk-top-dash-date" id="rkTopDashDate"></div>
@@ -12943,19 +13079,19 @@ function showHrPlaceholder(title, group, description) {
     att: ['Rekap Absensi', 'Rekapitulasi Kehadiran Karyawan'],
     attmap: ['Persebaran Karyawan', ''],
     rekap: ['Laporan Absensi', 'Rekapitulasi kehadiran per karyawan dan rentang tanggal'],
-    attset: ['Aturan Kehadiran', 'Atur jadwal cabang dan toleransi keterlambatan'],
-    calendar: ['Kalender Kerja', 'Kelola hari libur nasional, hari kerja, dan hari libur'],
-    settings: ['Settings', 'Pusat konfigurasi sistem, aturan kerja, kalender, user, dan laporan HR'],
-    rules: ['Aturan Pekerjaan & Area', 'Kebijakan fleksibel presensi, pembatasan area karyawan, dan parameter operasional'],
+    attset: ['Aturan Kehadiran', ''],
+    calendar: ['Kalender Kerja', ''],
+    settings: ['Settings', ''],
+    rules: ['Aturan Pekerjaan & Area', ''],
     cuti: ['Rekap Time Off', 'Rekapitulasi Ketidak Hadiran Karyawan'],
     timeoffRequest: ['Cuti Karyawan', 'Daftar pengajuan cuti karyawan'],
     reimbursementRequest: ['Pengajuan Reimbursement', 'Pengajuan dan riwayat reimbursement khusus karyawan Hybrid'],
     'my-approvals': ['Menunggu Persetujuan', 'Tugas yang membutuhkan tindakan dan pemantauan seluruh pengajuan'],
     loc: ['Lokasi Kantor', 'Lokasi presensi dan radius area per cabang'],
-    lap: ['Laporan HR', 'Laporan bulanan HR untuk dicetak dan diekspor'],
-    users: ['Manajemen User', 'Role, status akun, dan keamanan akses'],
+    lap: ['Laporan HR', ''],
+    users: ['Manajemen User', ''],
     log: ['Log Aktivitas', 'Riwayat aktivitas pengguna sistem'],
-    manage: ['Manajemen Data', 'Kelola penghapusan data Presensi, Time Off, dan Reimbursement'],
+    manage: ['Manajemen Data', ''],
     myprofile: ['Info Saya', 'Informasi akun pribadi'],
     changepin: ['Ubah PIN', 'Perbarui PIN akun'],
     'incentive-settings': ['Setting Insentif', ''],
@@ -13028,15 +13164,8 @@ function showHrPlaceholder(title, group, description) {
     adminNotice.style.display=(window.S&&S.user&&String(S.user.role||'').toUpperCase()==='ADMIN')?'block':'none';
     goPage(cur);
     if (window.rhPwa && typeof window.rhPwa.syncUi === 'function') window.rhPwa.syncUi();
-    if(!isDesktopLimited()||isDesktopApprover()){
+    if (!isDesktopLimited() || isDesktopApprover()) {
       refreshBadge();
-      // Prime the notification badge/panel immediately; do not wait for the bell to be clicked.
-      renderDeskNotifications();
-    }
-    if ((!isDesktopLimited()||isDesktopApprover()) && !window.__rhDeskNotifPollTimer) {
-      window.__rhDeskNotifPollTimer = window.setInterval(function () {
-        if (!document.hidden && document.body.classList.contains('rh-desk-on')) renderDeskNotifications();
-      }, 240000);
     }
   }
   function deactivate() {
@@ -13148,13 +13277,13 @@ function showHrPlaceholder(title, group, description) {
       rekap: ['Laporan Absensi', ''],
       'incentive-settings': ['Setting Insentif', ''],
       'incentive-employee': ['Rekap Insentif', 'Rincian nominal, perhitungan harian, dan persetujuan'],
-      settings: ['Settings', 'Pusat konfigurasi sistem, aturan kerja, jadwal, user, dan laporan HR'],
-      rules: ['Aturan Pekerjaan & Area', 'Kebijakan fleksibel presensi, pembatasan area karyawan, dan formula'],
-      attset: ['Aturan Kehadiran', 'Jadwal shift cabang dan toleransi keterlambatan'],
-      calendar: ['Kalender Kerja', 'Hari kerja, libur nasional, dan cuti bersama'],
-      users: ['Manajemen User', 'Peran akses, status akun, dan keamanan PIN'],
-      lap: ['Laporan HR', 'Laporan bulanan HR untuk dicetak dan diekspor'],
-      manage: ['Manajemen Data', 'Kelola penghapusan dan penyesuaian multi-faktor absensi'],
+      settings: ['Settings', ''],
+      rules: ['Aturan Pekerjaan & Area', ''],
+      attset: ['Aturan Kehadiran', ''],
+      calendar: ['Kalender Kerja', ''],
+      users: ['Manajemen User', ''],
+      lap: ['Laporan HR', ''],
+      manage: ['Manajemen Data', ''],
       reimbursementRequest: ['Pengajuan Reimbursement', 'Ajukan dan pantau reimbursement karyawan Hybrid'],
     };
     var heading = headerTitles[p] || null;
@@ -13210,68 +13339,48 @@ function showHrPlaceholder(title, group, description) {
     var cards = [
       {
         p: 'rules',
-        kicker: 'KEBIJAKAN FLEKSIBEL',
         title: 'Aturan Pekerjaan & Area',
-        desc: 'Atur area dinas luar per karyawan, pembatasan tampilan dropdown frontend, kebijakan GPS/Face ID, serta parameter insentif & subsidi.',
-        badge: restrictedCount ? (restrictedCount + ' karyawan dibatasi') : 'Semua area aktif',
+        badge: restrictedCount ? (restrictedCount + ' dibatasi') : 'Semua aktif',
         tone: 'emerald',
-        icon: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>'
+        icon: '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>'
       },
       {
         p: 'attset',
-        kicker: 'SHIFT & TOLERANSI',
         title: 'Aturan Kehadiran',
-        desc: 'Kelola jam masuk, jam pulang, nama shift, batas lebih awal, dan toleransi keterlambatan per cabang.',
         badge: 'Jadwal Cabang',
         tone: 'sage',
-        icon: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01"/></svg>'
+        icon: '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01"/></svg>'
       },
       {
         p: 'calendar',
-        kicker: 'KALENDER PERUSAHAAN',
         title: 'Kalender Kerja',
-        desc: 'Atur hari kerja, hari libur nasional, cuti bersama, serta penyesuaian hari per cabang.',
-        badge: 'Tahunan & Override',
+        badge: 'Tahunan & Hari Libur',
         tone: 'amber',
-        icon: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="12" cy="16" r="2"/></svg>'
+        icon: '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><circle cx="12" cy="16" r="2"/></svg>'
       },
       {
         p: 'manage',
-        kicker: 'KOREKSI & AUDIT',
         title: 'Manajemen Data',
-        desc: 'Sesuaikan seluruh faktor absensi (jam, area, status lokasi, mode, status validasi) dan kelola penghapusan data.',
-        badge: desktopRole() === 'SUPERADMIN' ? 'Penyesuaian Multi-Faktor' : 'Mode Lihat',
+        badge: desktopRole() === 'SUPERADMIN' ? 'Penyesuaian & Hapus' : 'Mode Lihat',
         tone: 'amber',
-        icon: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>'
+        icon: '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>'
       },
       {
         p: 'users',
-        kicker: 'AKSES & KEAMANAN',
         title: 'Manajemen User',
-        desc: 'Kelola peran pengguna (Karyawan, Admin, Superadmin), aktivasi akun, serta pengaturan ulang PIN.',
         badge: 'Role & PIN',
         tone: 'emerald',
-        icon: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>'
+        icon: '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>'
       },
       {
         p: 'lap',
-        kicker: 'PELAPORAN BULANAN',
         title: 'Laporan HR',
-        desc: 'Susun, pratinjau cetak, dan ekspor laporan ringkasan absensi serta ketidakhadiran bulanan HR.',
         badge: 'Cetak & Excel',
         tone: 'sage',
-        icon: '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>'
+        icon: '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>'
       }
     ];
     root.innerHTML =
-      '<section class="rk-card rk-settings-hero">' +
-        '<div class="rk-settings-hero-copy">' +
-          '<span class="rk-settings-eyebrow">SISTEM &amp; LAPORAN REHOLZ</span>' +
-          '<h2>Pusat Pengaturan &amp; Kontrol Kebijakan</h2>' +
-          '<p>Semua pengaturan aturan pekerjaan, pembatasan area karyawan, jadwal kehadiran, kalender kerja, manajemen data, user, dan laporan HR terkumpul dalam satu ruang terstruktur.</p>' +
-        '</div>' +
-        '<div class="rk-settings-hero-meta"><span>Peran aktif</span><b>' + escH(desktopRole() || 'ADMIN') + '</b></div>' +
-      '</section>' +
       '<div class="rk-settings-grid">' +
       cards.map(function (c) {
         return '<button type="button" class="rk-settings-card tone-' + escH(c.tone) + '" data-rk-settings-go="' + escH(c.p) + '">' +
@@ -13279,10 +13388,8 @@ function showHrPlaceholder(title, group, description) {
             '<span class="rk-settings-card-ic">' + c.icon + '</span>' +
             '<span class="rk-settings-card-badge">' + escH(c.badge) + '</span>' +
           '</div>' +
-          '<span class="rk-settings-card-kicker">' + escH(c.kicker) + '</span>' +
           '<h3>' + escH(c.title) + '</h3>' +
-          '<p>' + escH(c.desc) + '</p>' +
-          '<span class="rk-settings-card-cta">Buka Pengaturan <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>' +
+          '<span class="rk-settings-card-cta">Buka <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>' +
         '</button>';
       }).join('') +
       '</div>';
@@ -13297,10 +13404,52 @@ function showHrPlaceholder(title, group, description) {
   }
 
   /* ---------------- Aturan Pekerjaan Fleksibel & Pembatasan Area Karyawan ---------------- */
-  var workRulesUI = { tab: 'areas', draft: null, selectedNik: '', empQuery: '', saving: false, formulaLoaded: false, formulaData: null, limitsData: null };
+  var workRulesUI = { tab: 'areas', draft: null, empQuery: '', saving: false };
   function cloneRules(obj) {
     try { return JSON.parse(JSON.stringify(obj)); }
     catch (e) { return window.rhWorkRules ? window.rhWorkRules.defaultRules() : {}; }
+  }
+  function getActiveWorkRulesEmployees() {
+    var list = (Array.isArray(DATA.karList) && DATA.karList.length ? DATA.karList : (empUI.fullList || [])).filter(function (x) {
+      return x && String(x.akun || x.status_akun || 'AKTIF').toUpperCase() !== 'NONAKTIF';
+    });
+    return list.slice().sort(function (a, b) {
+      return String(a.nama || a.nik || '').localeCompare(String(b.nama || b.nik || ''));
+    });
+  }
+  function renderWorkRulesEmpMatrixRows(draft, people, query) {
+    var wr = window.rhWorkRules;
+    if (!wr) return '';
+    var canWrite = isSuperAdminRole();
+    var disabledAttr = canWrite ? '' : ' disabled';
+    var q = String(query || '').trim().toLowerCase();
+    var filtered = q ? people.filter(function (x) {
+      return String(x.nama || '').toLowerCase().indexOf(q) >= 0 ||
+        String(x.nik || '').toLowerCase().indexOf(q) >= 0 ||
+        String(x.cabang || x.branch || '').toLowerCase().indexOf(q) >= 0;
+    }) : people;
+    if (!filtered.length) {
+      return '<tr><td colspan="9"><div class="rk-empty">Tidak ada karyawan yang cocok.</div></td></tr>';
+    }
+    var rulesMap = (draft && draft.employeeAreaRules) || {};
+    return filtered.map(function (emp) {
+      var nik = String(emp.nik || '').trim();
+      var rule = rulesMap[nik];
+      var isRestricted = !!(rule && rule.mode === 'RESTRICTED');
+      var allowed = isRestricted && Array.isArray(rule.allowedAreas)
+        ? rule.allowedAreas
+        : wr.standardAreas.map(function (a) { return a.value; });
+      var allAllowed = !isRestricted || wr.standardAreas.every(function (a) { return allowed.indexOf(a.value) >= 0; });
+      return '<tr data-rk-emp-matrix-row="' + escH(nik) + '">' +
+        '<td><code>' + escH(nik) + '</code></td>' +
+        '<td><b>' + escH(emp.nama || nik) + '</b></td>' +
+        wr.standardAreas.map(function (a) {
+          var checked = !isRestricted || allowed.indexOf(a.value) >= 0;
+          return '<td class="rk-rules-matrix-chk"><input type="checkbox" aria-label="' + escH((emp.nama || nik) + ' - ' + a.defaultLabel) + '" data-rk-emp-matrix-nik="' + escH(nik) + '" data-rk-emp-matrix-area="' + escH(a.value) + '"' + (checked ? ' checked' : '') + disabledAttr + '></td>';
+        }).join('') +
+        '<td class="rk-rules-matrix-chk"><input type="checkbox" aria-label="' + escH((emp.nama || nik) + ' - Izinkan Semua') + '" data-rk-emp-matrix-nik="' + escH(nik) + '" data-rk-emp-matrix-all="1"' + (allAllowed ? ' checked' : '') + disabledAttr + '></td>' +
+      '</tr>';
+    }).join('');
   }
   function renderWorkRulesPage() {
     var root = document.getElementById('rkp-rules');
@@ -13330,42 +13479,23 @@ function showHrPlaceholder(title, group, description) {
     var wr = window.rhWorkRules;
     var draft = workRulesUI.draft || cloneRules(wr.get());
     workRulesUI.draft = draft;
+    if (workRulesUI.tab !== 'areas' && workRulesUI.tab !== 'policy') workRulesUI.tab = 'areas';
     var canWrite = isSuperAdminRole();
     var disabledAttr = canWrite ? '' : ' disabled';
-    var people = (Array.isArray(DATA.karList) && DATA.karList.length ? DATA.karList : (empUI.fullList || [])).filter(function (x) {
-      return x && String(x.akun || x.status_akun || 'AKTIF').toUpperCase() !== 'NONAKTIF';
-    });
-    people = people.slice().sort(function (a, b) { return String(a.nama || a.nik || '').localeCompare(String(b.nama || b.nik || '')); });
-    var q = String(workRulesUI.empQuery || '').trim().toLowerCase();
-    var filteredPeople = q ? people.filter(function (x) {
-      return String(x.nama || '').toLowerCase().indexOf(q) >= 0 ||
-        String(x.nik || '').toLowerCase().indexOf(q) >= 0 ||
-        String(x.cabang || x.branch || '').toLowerCase().indexOf(q) >= 0;
-    }) : people;
-    if (workRulesUI.selectedNik && !people.some(function (x) { return String(x.nik) === String(workRulesUI.selectedNik); })) {
-      workRulesUI.selectedNik = '';
-    }
-    var restrictedEntries = Object.keys(draft.employeeAreaRules || {}).filter(function (nik) {
+    var people = getActiveWorkRulesEmployees();
+    var restrictedCount = Object.keys(draft.employeeAreaRules || {}).filter(function (nik) {
       return draft.employeeAreaRules[nik] && draft.employeeAreaRules[nik].mode === 'RESTRICTED';
-    });
-    var selectedEmpRule = workRulesUI.selectedNik && draft.employeeAreaRules && draft.employeeAreaRules[workRulesUI.selectedNik]
-      ? draft.employeeAreaRules[workRulesUI.selectedNik]
-      : { mode: 'ALL', allowedAreas: wr.standardAreas.map(function (a) { return a.value; }) };
+    }).length;
 
     var html =
       '<section class="rk-card rk-rules-hero">' +
         '<div class="rk-rules-hero-head">' +
-          '<div>' +
-            '<span class="rk-settings-eyebrow">KONFIGURASI OPERASIONAL FLEKSIBEL</span>' +
-            '<h2>Aturan Pekerjaan, Kebijakan Area &amp; Pembatasan Karyawan</h2>' +
-            '<p>Kelola area dinas luar yang boleh muncul di aplikasi karyawan, kebijakan absensi &amp; Face ID, serta parameter subsidi dan insentif dari satu panel.</p>' +
-          '</div>' +
-          '<span class="rk-formula-role-pill">' + (canWrite ? 'MODE UBAH · SUPERADMIN' : 'MODE LIHAT · ' + escH(desktopRole())) + '</span>' +
+          '<h2>Aturan Pekerjaan &amp; Pembatasan Area</h2>' +
+          '<span class="rk-formula-role-pill">' + (canWrite ? 'SUPERADMIN' : escH(desktopRole())) + '</span>' +
         '</div>' +
         '<div class="rk-rules-tabs" role="tablist">' +
           '<button type="button" class="' + (workRulesUI.tab === 'areas' ? 'on' : '') + '" data-rk-rules-tab="areas">1. Pembatasan Area &amp; Global</button>' +
           '<button type="button" class="' + (workRulesUI.tab === 'policy' ? 'on' : '') + '" data-rk-rules-tab="policy">2. Kebijakan Presensi &amp; Face ID</button>' +
-          '<button type="button" class="' + (workRulesUI.tab === 'formula' ? 'on' : '') + '" data-rk-rules-tab="formula">3. Formula Insentif &amp; Reimbursement</button>' +
         '</div>' +
       '</section>';
 
@@ -13373,74 +13503,37 @@ function showHrPlaceholder(title, group, description) {
       html +=
         '<div class="rk-rules-grid">' +
           '<section class="rk-card rk-rules-card">' +
-            '<div class="rk-section-head"><div><h3>Matriks Area Dinas Luar Global</h3><p class="rk-card-sub">Nonaktifkan atau sesuaikan ketersediaan area pada seluruh formulir frontend karyawan.</p></div></div>' +
+            '<div class="rk-section-head"><h3>Matriks Area Dinas Luar Global</h3></div>' +
             '<div class="rk-table-wrap"><table class="rk-table rk-area-matrix-table"><thead><tr><th>Area Sistem</th><th>Label Tampil</th><th>Aktif</th><th>Reguler</th><th>Piket</th><th>Standby</th><th>Sakit DL</th></tr></thead><tbody>' +
             wr.standardAreas.map(function (a) {
               var cfg = (draft.areas && draft.areas[a.value]) || {};
               return '<tr data-rk-area-row="' + escH(a.value) + '">' +
-                '<td><b>' + escH(a.value) + '</b><small style="display:block;color:#6E8275">' + escH(a.code) + '</small></td>' +
+                '<td><b>' + escH(a.defaultLabel) + '</b><small style="display:block;color:#6E8275">' + escH(a.code) + '</small></td>' +
                 '<td><input type="text" class="rk-in rk-area-label-inp" data-rk-area-field="label" value="' + escH(cfg.label || a.defaultLabel) + '"' + disabledAttr + '></td>' +
                 '<td><input type="checkbox" data-rk-area-field="enabled"' + (cfg.enabled !== false ? ' checked' : '') + disabledAttr + '></td>' +
                 '<td><input type="checkbox" data-rk-area-field="allowRegular"' + (cfg.allowRegular !== false ? ' checked' : '') + disabledAttr + '></td>' +
                 '<td><input type="checkbox" data-rk-area-field="allowPiket"' + (cfg.allowPiket !== false ? ' checked' : '') + disabledAttr + '></td>' +
-                '<td><input type="checkbox" data-rk-area-field="allowStandby"' + (a.standbyOk ? (cfg.allowStandby !== false ? ' checked' : '') : '') + (!a.standbyOk ? ' disabled title="Area Sekitar tidak berlaku untuk Standby"' : disabledAttr) + '></td>' +
-                '<td><input type="checkbox" data-rk-area-field="allowSickOutside"' + (a.sickOk ? (cfg.allowSickOutside !== false ? ' checked' : '') : '') + (!a.sickOk ? ' disabled title="Area Sekitar tidak berlaku untuk Sakit DL"' : disabledAttr) + '></td>' +
+                '<td><input type="checkbox" data-rk-area-field="allowStandby"' + (a.standbyOk ? (cfg.allowStandby !== false ? ' checked' : '') : '') + (!a.standbyOk ? ' disabled' : disabledAttr) + '></td>' +
+                '<td><input type="checkbox" data-rk-area-field="allowSickOutside"' + (a.sickOk ? (cfg.allowSickOutside !== false ? ' checked' : '') : '') + (!a.sickOk ? ' disabled' : disabledAttr) + '></td>' +
               '</tr>';
             }).join('') +
             '</tbody></table></div>' +
           '</section>' +
           '<section class="rk-card rk-rules-card">' +
-            '<div class="rk-section-head"><div><h3>Pembatasan Area Per Karyawan</h3><p class="rk-card-sub">Batasi area tertentu per orang agar opsi area yang tidak diizinkan tidak tampil pada frontend karyawan tersebut.</p></div></div>' +
-            '<div class="rk-rules-emp-picker">' +
-              '<label><span>Cari Karyawan</span><input type="search" id="rkRuleEmpSearch" class="rk-in" placeholder="Cari nama, NIK, atau cabang…" value="' + escH(workRulesUI.empQuery) + '"></label>' +
-              '<label><span>Pilih Karyawan</span><select id="rkRuleEmpSelect" class="rk-in"><option value="">-- Pilih karyawan --</option>' +
-                filteredPeople.map(function (x) {
-                  var nik = String(x.nik || '');
-                  var hasRes = draft.employeeAreaRules && draft.employeeAreaRules[nik] && draft.employeeAreaRules[nik].mode === 'RESTRICTED';
-                  return '<option value="' + escH(nik) + '"' + (nik === workRulesUI.selectedNik ? ' selected' : '') + '>' + escH((x.nama || nik) + ' (' + nik + ')' + (x.cabang ? ' · ' + x.cabang : '') + (hasRes ? ' [Dibatasi]' : '')) + '</option>';
-                }).join('') +
-              '</select></label>' +
+            '<div class="rk-section-head"><h3>Pembatasan Area Per Karyawan</h3><span class="rk-pill" id="rkRuleRestrictedCount">' + (restrictedCount ? (restrictedCount + ' dibatasi') : 'Semua diizinkan') + '</span></div>' +
+            '<div class="rk-rules-matrix-toolbar">' +
+              '<input type="search" id="rkRuleEmpSearch" class="rk-in" placeholder="Cari NIK, nama karyawan, atau cabang…" value="' + escH(workRulesUI.empQuery) + '">' +
             '</div>' +
-            (workRulesUI.selectedNik ? (
-              '<div class="rk-rules-emp-editor" id="rkRulesEmpEditor">' +
-                '<div class="rk-rules-emp-mode">' +
-                  '<label><input type="radio" name="rkEmpAreaMode" value="ALL"' + (selectedEmpRule.mode !== 'RESTRICTED' ? ' checked' : '') + disabledAttr + '> Izinkan semua area global yang aktif</label>' +
-                  '<label><input type="radio" name="rkEmpAreaMode" value="RESTRICTED"' + (selectedEmpRule.mode === 'RESTRICTED' ? ' checked' : '') + disabledAttr + '> Batasi hanya area yang dicentang di bawah</label>' +
-                '</div>' +
-                '<div class="rk-emp-area-chips" id="rkEmpAreaChips">' +
-                  wr.standardAreas.map(function (a) {
-                    var allowed = selectedEmpRule.mode !== 'RESTRICTED' || (Array.isArray(selectedEmpRule.allowedAreas) && selectedEmpRule.allowedAreas.indexOf(a.value) >= 0);
-                    var cfg = (draft.areas && draft.areas[a.value]) || {};
-                    return '<label class="rk-emp-area-chip"><input type="checkbox" data-rk-emp-area="' + escH(a.value) + '"' + (allowed ? ' checked' : '') + (selectedEmpRule.mode !== 'RESTRICTED' || !canWrite ? ' disabled' : '') + '> <span>' + escH(cfg.label || a.defaultLabel) + '</span></label>';
-                  }).join('') +
-                '</div>' +
-                '<div class="rk-rules-emp-actions">' +
-                  '<button type="button" class="rk-btn" id="rkRuleEmpApply"' + disabledAttr + '>Terapkan ke Draft</button>' +
-                  '<button type="button" class="rk-btn ghost" id="rkRuleEmpClear"' + disabledAttr + '>Hapus Pembatasan Orang Ini</button>' +
-                '</div>' +
-              '</div>'
-            ) : '<div class="rk-note" style="margin-top:12px">Pilih karyawan di atas untuk mengatur pembatasan area khusus.</div>') +
-            '<div class="rk-rules-restricted-list">' +
-              '<h4>Daftar Karyawan dengan Pembatasan Area (' + restrictedEntries.length + ')</h4>' +
-              (restrictedEntries.length ? '<div class="rk-table-wrap"><table class="rk-table"><thead><tr><th>Karyawan</th><th>Area Diizinkan</th><th>Aksi</th></tr></thead><tbody>' +
-                restrictedEntries.map(function (nik) {
-                  var emp = people.find(function (p) { return String(p.nik) === String(nik); });
-                  var r = draft.employeeAreaRules[nik] || {};
-                  var list = Array.isArray(r.allowedAreas) ? r.allowedAreas : [];
-                  return '<tr><td><b>' + escH(emp ? emp.nama : nik) + '</b><small style="display:block;color:#6E8275">' + escH(nik) + '</small></td>' +
-                    '<td>' + (list.length ? list.map(function (v) { return '<span class="rk-pill ok" style="margin:2px">' + escH(v) + '</span>'; }).join(' ') : '<span class="rk-pill no">Tidak ada area diizinkan</span>') + '</td>' +
-                    '<td style="white-space:nowrap"><button type="button" class="rk-mini" data-rk-rule-pick-emp="' + escH(nik) + '">Ubah</button> ' +
-                    (canWrite ? '<button type="button" class="rk-mini" data-rk-rule-del-emp="' + escH(nik) + '">Reset</button>' : '') + '</td></tr>';
-                }).join('') +
-              '</tbody></table></div>' : '<div class="rk-empty" style="padding:14px">Belum ada karyawan yang dibatasi areanya. Semua karyawan melihat seluruh area aktif.</div>') +
-            '</div>' +
+            '<div class="rk-table-wrap rk-rules-matrix-wrap"><table class="rk-table rk-rules-matrix-table"><thead><tr><th>NIK</th><th>Nama Karyawan</th><th>Area 1</th><th>Area 2</th><th>Area 3</th><th>Area 4</th><th>Area Lain</th><th>Area Sekitar</th><th>Izinkan Semua</th></tr></thead><tbody id="rkRuleEmpMatrixBody">' +
+              renderWorkRulesEmpMatrixRows(draft, people, workRulesUI.empQuery) +
+            '</tbody></table></div>' +
           '</section>' +
         '</div>';
-    } else if (workRulesUI.tab === 'policy') {
+    } else {
       var pol = draft.attendancePolicy || {};
       html +=
         '<section class="rk-card rk-rules-card">' +
-          '<div class="rk-section-head"><div><h3>Kebijakan Presensi, Lokasi Luar Kantor &amp; Face ID</h3><p class="rk-card-sub">Perubahan pada panel ini langsung mengatur perilaku validasi form presensi &amp; verifikasi wajah karyawan.</p></div></div>' +
+          '<div class="rk-section-head"><h3>Kebijakan Presensi &amp; Face ID</h3></div>' +
           '<div class="rk-rules-policy-grid">' +
             '<label class="rk-formula-check"><input type="checkbox" id="rkPolReqOutsideNote"' + (pol.requireOutsideNote !== false ? ' checked' : '') + disabledAttr + '> Wajibkan alasan kegiatan saat presensi di luar area kantor (Reguler &amp; Piket)</label>' +
             '<label class="rk-formula-check"><input type="checkbox" id="rkPolStandbyOpt"' + (pol.standbyNoteOptional !== false ? ' checked' : '') + disabledAttr + '> Izinkan catatan kosong pada mode Standby (diisi otomatis marker sistem)</label>' +
@@ -13452,63 +13545,21 @@ function showHrPlaceholder(title, group, description) {
             '<label>Batas waktu tangkapan kamera segar (ms, 3000 – 30000)<input type="number" class="rk-in" id="rkPolFreshMs" min="3000" max="30000" step="500" value="' + escH(pol.freshSubmitMs == null ? 8000 : pol.freshSubmitMs) + '"' + disabledAttr + '></label>' +
           '</div>' +
           '<div class="rk-rules-shortcuts">' +
-            '<button type="button" class="rk-btn ghost" data-rk-rules-nav="attset">Atur Jam Shift &amp; Toleransi Cabang →</button>' +
-            '<button type="button" class="rk-btn ghost" data-rk-rules-nav="calendar">Atur Kalender Kerja &amp; Libur Nasional →</button>' +
-            '<button type="button" class="rk-btn ghost" data-rk-rules-nav="loc">Atur Koordinat &amp; Radius Kantor →</button>' +
+            '<button type="button" class="rk-btn ghost" data-rk-rules-nav="attset">Aturan Kehadiran →</button>' +
+            '<button type="button" class="rk-btn ghost" data-rk-rules-nav="calendar">Kalender Kerja →</button>' +
+            '<button type="button" class="rk-btn ghost" data-rk-rules-nav="loc">Lokasi Kantor →</button>' +
           '</div>' +
         '</section>';
-    } else {
-      var f = workRulesUI.formulaData || (typeof INCENTIVE_DEFAULTS !== 'undefined' ? INCENTIVE_DEFAULTS : {});
-      var elg = (f && f.eligibility) || {};
-      var lim = workRulesUI.limitsData || { entertain_limit: 1800000, transport_limit: 1200000 };
-      html +=
-        '<section class="rk-card rk-rules-card">' +
-          '<div class="rk-section-head"><div><h3>Parameter Formula Subsidi, Kelayakan &amp; Batas Reimbursement</h3><p class="rk-card-sub">Kelola nominal uang makan, transport, pulsa, kelayakan tunjangan, dan batas reimbursement langsung dari menu Settings.</p></div>' +
-          '<button type="button" class="rk-btn ghost" data-rk-rules-nav="incentive-settings">Buka Halaman Penuh Setting Insentif →</button></div>' +
-          '<div class="rk-incentive-grid">' +
-            '<label>Uang makan selain OB (Rp)<input type="number" class="rk-in" id="rkRuleFMealOther" min="0" value="' + escH(f.meal_other ?? 20000) + '"' + disabledAttr + '></label>' +
-            '<label>Uang makan OB (Rp)<input type="number" class="rk-in" id="rkRuleFMealOb" min="0" value="' + escH(f.meal_ob ?? 10000) + '"' + disabledAttr + '></label>' +
-            '<label>Transport per hari (Rp)<input type="number" class="rk-in" id="rkRuleFTransDaily" min="0" value="' + escH(f.transport_daily ?? 15385) + '"' + disabledAttr + '></label>' +
-            '<label>Batas transport bulanan (Rp)<input type="number" class="rk-in" id="rkRuleFTransCap" min="0" value="' + escH(f.transport_cap ?? 400000) + '"' + disabledAttr + '></label>' +
-            '<label>Ambang hari transport<input type="number" class="rk-in" id="rkRuleFTransThr" min="1" value="' + escH(f.transport_threshold ?? 25) + '"' + disabledAttr + '></label>' +
-            '<label>Pulsa per hari (Rp)<input type="number" class="rk-in" id="rkRuleFPhoneDaily" min="0" value="' + escH(f.phone_daily ?? 3846) + '"' + disabledAttr + '></label>' +
-            '<label>Batas pulsa bulanan (Rp)<input type="number" class="rk-in" id="rkRuleFPhoneCap" min="0" value="' + escH(f.phone_cap ?? 100000) + '"' + disabledAttr + '></label>' +
-            '<label>Batas Entertain Hybrid (Rp)<input type="number" class="rk-in" id="rkRuleFLimEnt" min="0" step="1000" value="' + escH(lim.entertain_limit ?? lim.entertain ?? 1800000) + '"' + disabledAttr + '></label>' +
-            '<label>Batas Transport Hybrid (Rp)<input type="number" class="rk-in" id="rkRuleFLimTr" min="0" step="1000" value="' + escH(lim.transport_limit ?? lim.transport ?? 1200000) + '"' + disabledAttr + '></label>' +
-          '</div>' +
-          '<div class="rk-rules-policy-grid" style="margin-top:14px">' +
-            '<label class="rk-formula-check"><input type="checkbox" id="rkRuleFElMealOnTime"' + (elg.meal_requires_on_time !== false ? ' checked' : '') + disabledAttr + '> Uang makan hanya untuk EARLY &amp; ON_TIME (LATE tidak dapat)</label>' +
-            '<label class="rk-formula-check"><input type="checkbox" id="rkRuleFElMealExOut"' + (elg.meal_exclude_outside !== false ? ' checked' : '') + disabledAttr + '> Uang makan tidak dihitung saat dinas luar</label>' +
-            '<label class="rk-formula-check"><input type="checkbox" id="rkRuleFElTrExOut"' + (elg.transport_exclude_outside !== false ? ' checked' : '') + disabledAttr + '> Transport harian tidak dihitung saat dinas luar</label>' +
-            '<label class="rk-formula-check"><input type="checkbox" id="rkRuleFElPhInOut"' + (elg.phone_include_outside !== false ? ' checked' : '') + disabledAttr + '> Subsidi pulsa tetap dihitung saat dinas luar</label>' +
-            '<label class="rk-formula-check"><input type="checkbox" id="rkRuleFElStandby"' + (elg.standby_as_outside !== false ? ' checked' : '') + disabledAttr + '> Standby hari libur dibayar tarif dinas luar</label>' +
-            '<label class="rk-formula-check"><input type="checkbox" id="rkRuleFElPiket"' + (elg.piket_paid !== false ? ' checked' : '') + disabledAttr + '> Piket hari libur masuk perhitungan insentif</label>' +
-          '</div>' +
-          '<div class="rk-toolbar" style="margin-top:14px"><span class="rk-card-sub" id="rkRuleFormulaNote">Menggunakan parameter backend terkini.</span><span style="flex:1"></span><button type="button" class="rk-btn" id="rkRuleFormulaSaveBtn"' + disabledAttr + '>Simpan Formula &amp; Batas Reimbursement</button></div>' +
-        '</section>';
-      if (!workRulesUI.formulaLoaded) {
-        workRulesUI.formulaLoaded = true;
-        Promise.all([
-          rpcOptional('hr_get_incentive_formula', {}).catch(function () { return null; }),
-          rpcOptional('hr_get_reimbursement_limits', {}).catch(function () { return null; })
-        ]).then(function (rs) {
-          if (rs[0]) workRulesUI.formulaData = rs[0].config || rs[0].formula || rs[0];
-          if (rs[1]) workRulesUI.limitsData = rs[1].limits || rs[1].data || rs[1];
-          if (cur === 'rules' && workRulesUI.tab === 'formula') paintWorkRulesPage();
-        });
-      }
     }
 
-    if (workRulesUI.tab !== 'formula') {
-      html +=
-        '<div class="rk-rules-footer">' +
-          '<div class="rk-card-sub">' + (draft.updatedAt ? ('Pembaruan terakhir: ' + escH(draft.updatedBy || 'SUPERADMIN') + ' · ' + escH(new Date(draft.updatedAt).toLocaleString('id-ID'))) : 'Aturan siap diterapkan secara real-time ke aplikasi karyawan.') + '</div>' +
-          '<div class="rk-toolbar">' +
-            '<button type="button" class="rk-btn ghost" id="rkRulesReloadBtn">Muat Ulang dari Server</button>' +
-            '<button type="button" class="rk-btn" id="rkRulesSaveBtn"' + disabledAttr + '>' + (workRulesUI.saving ? 'Menyimpan…' : 'Simpan Semua Aturan &amp; Pembatasan Area') + '</button>' +
-          '</div>' +
-        '</div>';
-    }
+    html +=
+      '<div class="rk-rules-footer">' +
+        '<div class="rk-card-sub">' + (draft.updatedAt ? ('Diperbarui: ' + escH(draft.updatedBy || 'SUPERADMIN') + ' · ' + escH(new Date(draft.updatedAt).toLocaleString('id-ID'))) : '') + '</div>' +
+        '<div class="rk-toolbar">' +
+          '<button type="button" class="rk-btn ghost" id="rkRulesReloadBtn">Muat Ulang</button>' +
+          '<button type="button" class="rk-btn" id="rkRulesSaveBtn"' + disabledAttr + '>' + (workRulesUI.saving ? 'Menyimpan…' : 'Simpan Semua Aturan &amp; Pembatasan Area') + '</button>' +
+        '</div>' +
+      '</div>';
     root.innerHTML = html;
 
     if (!root.__rhWorkRulesBound) {
@@ -13525,45 +13576,6 @@ function showHrPlaceholder(title, group, description) {
           goPage(navBtn.getAttribute('data-rk-rules-nav'));
           return;
         }
-        var pickEmp = ev.target.closest ? ev.target.closest('[data-rk-rule-pick-emp]') : null;
-        if (pickEmp) {
-          workRulesUI.selectedNik = pickEmp.getAttribute('data-rk-rule-pick-emp') || '';
-          paintWorkRulesPage();
-          return;
-        }
-        var delEmp = ev.target.closest ? ev.target.closest('[data-rk-rule-del-emp]') : null;
-        if (delEmp) {
-          if (!isSuperAdminRole()) { rkToast('Hanya Superadmin yang dapat mengubah pembatasan area.'); return; }
-          var nikDel = delEmp.getAttribute('data-rk-rule-del-emp') || '';
-          if (workRulesUI.draft && workRulesUI.draft.employeeAreaRules) delete workRulesUI.draft.employeeAreaRules[nikDel];
-          rkToast('Pembatasan area karyawan di-reset pada draft. Klik Simpan untuk menerapkan.');
-          paintWorkRulesPage();
-          return;
-        }
-        if (ev.target && ev.target.id === 'rkRuleEmpApply') {
-          if (!isSuperAdminRole()) { rkToast('Hanya Superadmin yang dapat mengubah aturan.'); return; }
-          var nikSel = workRulesUI.selectedNik;
-          if (!nikSel) return;
-          var modeRadio = root.querySelector('input[name="rkEmpAreaMode"]:checked');
-          var mode = modeRadio ? modeRadio.value : 'ALL';
-          if (mode !== 'RESTRICTED') {
-            delete workRulesUI.draft.employeeAreaRules[nikSel];
-          } else {
-            var checkedAreas = Array.prototype.slice.call(root.querySelectorAll('[data-rk-emp-area]:checked')).map(function (cb) {
-              return cb.getAttribute('data-rk-emp-area');
-            });
-            workRulesUI.draft.employeeAreaRules[nikSel] = { mode: 'RESTRICTED', allowedAreas: checkedAreas };
-          }
-          rkToast('Pembatasan area diterapkan ke draft. Klik Simpan Semua Aturan untuk mempublikasikan.');
-          paintWorkRulesPage();
-          return;
-        }
-        if (ev.target && ev.target.id === 'rkRuleEmpClear') {
-          if (!isSuperAdminRole()) return;
-          if (workRulesUI.selectedNik && workRulesUI.draft.employeeAreaRules) delete workRulesUI.draft.employeeAreaRules[workRulesUI.selectedNik];
-          paintWorkRulesPage();
-          return;
-        }
         if (ev.target && ev.target.id === 'rkRulesReloadBtn') {
           var loaded = await window.rhWorkRules.load(true);
           workRulesUI.draft = cloneRules(loaded);
@@ -13578,71 +13590,21 @@ function showHrPlaceholder(title, group, description) {
           try {
             var saveRes = await window.rhWorkRules.save(workRulesUI.draft);
             workRulesUI.draft = cloneRules(saveRes.rules);
-            rkToast(saveRes.remoteSynced ? 'Aturan & pembatasan area tersimpan dan disinkronkan ke server.' : 'Aturan & pembatasan area tersimpan dan aktif pada perangkat ini.');
+            rkToast(saveRes.remoteSynced ? 'Aturan & pembatasan area tersimpan ke server.' : 'Aturan & pembatasan area tersimpan pada perangkat ini.');
           } catch (e) {
             rkToast('Gagal menyimpan aturan: ' + (e && e.message || e));
           } finally {
             workRulesUI.saving = false;
             paintWorkRulesPage();
           }
-          return;
-        }
-        if (ev.target && ev.target.id === 'rkRuleFormulaSaveBtn') {
-          if (!isSuperAdminRole()) { rkToast('Hanya Superadmin yang dapat mengubah formula insentif.'); return; }
-          var btnF = document.getElementById('rkRuleFormulaSaveBtn');
-          if (btnF) { btnF.disabled = true; btnF.textContent = 'Menyimpan…'; }
-          try {
-            var baseCfg = Object.assign({}, typeof INCENTIVE_DEFAULTS !== 'undefined' ? INCENTIVE_DEFAULTS : {}, workRulesUI.formulaData || {});
-            baseCfg.meal_other = Number((document.getElementById('rkRuleFMealOther') || {}).value || 20000);
-            baseCfg.meal_ob = Number((document.getElementById('rkRuleFMealOb') || {}).value || 10000);
-            baseCfg.transport_daily = Number((document.getElementById('rkRuleFTransDaily') || {}).value || 15385);
-            baseCfg.transport_cap = Number((document.getElementById('rkRuleFTransCap') || {}).value || 400000);
-            baseCfg.transport_threshold = Number((document.getElementById('rkRuleFTransThr') || {}).value || 25);
-            baseCfg.phone_daily = Number((document.getElementById('rkRuleFPhoneDaily') || {}).value || 3846);
-            baseCfg.phone_cap = Number((document.getElementById('rkRuleFPhoneCap') || {}).value || 100000);
-            baseCfg.eligibility = Object.assign({}, baseCfg.eligibility || {}, {
-              meal_requires_on_time: !!(document.getElementById('rkRuleFElMealOnTime') || {}).checked,
-              meal_exclude_outside: !!(document.getElementById('rkRuleFElMealExOut') || {}).checked,
-              transport_exclude_outside: !!(document.getElementById('rkRuleFElTrExOut') || {}).checked,
-              phone_include_outside: !!(document.getElementById('rkRuleFElPhInOut') || {}).checked,
-              standby_as_outside: !!(document.getElementById('rkRuleFElStandby') || {}).checked,
-              piket_paid: !!(document.getElementById('rkRuleFElPiket') || {}).checked
-            });
-            var entLim = Number((document.getElementById('rkRuleFLimEnt') || {}).value || 1800000);
-            var trLim = Number((document.getElementById('rkRuleFLimTr') || {}).value || 1200000);
-            var resBoth = await Promise.all([
-              rpcOptional('hr_save_incentive_formula', { p_config: baseCfg }),
-              rpcOptional('hr_save_reimbursement_limits', { p_entertain_limit: entLim, p_transport_limit: trLim })
-            ]);
-            if ((!resBoth[0] || resBoth[0].ok === false) && (!resBoth[1] || resBoth[1].ok === false)) {
-              throw new Error('Backend belum mengonfirmasi penyimpanan parameter.');
-            }
-            workRulesUI.formulaData = baseCfg;
-            workRulesUI.limitsData = { entertain_limit: entLim, transport_limit: trLim };
-            rkToast('Formula subsidi & batas reimbursement berhasil disimpan.');
-          } catch (e) {
-            rkToast('Gagal menyimpan parameter insentif: ' + (e && e.message || e));
-          } finally {
-            if (btnF) { btnF.disabled = !isSuperAdminRole(); btnF.textContent = 'Simpan Formula & Batas Reimbursement'; }
-          }
         }
       });
       root.addEventListener('input', function (ev) {
         if (ev.target && ev.target.id === 'rkRuleEmpSearch') {
           workRulesUI.empQuery = String(ev.target.value || '');
-          var curSel = document.getElementById('rkRuleEmpSelect');
-          if (curSel) {
-            var qStr = workRulesUI.empQuery.trim().toLowerCase();
-            var listAll = (Array.isArray(DATA.karList) && DATA.karList.length ? DATA.karList : (empUI.fullList || [])).filter(function (x) {
-              return x && String(x.akun || x.status_akun || 'AKTIF').toUpperCase() !== 'NONAKTIF';
-            });
-            var listMatch = qStr ? listAll.filter(function (x) {
-              return String(x.nama || '').toLowerCase().indexOf(qStr) >= 0 || String(x.nik || '').toLowerCase().indexOf(qStr) >= 0 || String(x.cabang || '').toLowerCase().indexOf(qStr) >= 0;
-            }) : listAll;
-            curSel.innerHTML = '<option value="">-- Pilih karyawan (' + listMatch.length + ') --</option>' + listMatch.map(function (x) {
-              var nik = String(x.nik || '');
-              return '<option value="' + escH(nik) + '"' + (nik === workRulesUI.selectedNik ? ' selected' : '') + '>' + escH((x.nama || nik) + ' (' + nik + ')') + '</option>';
-            }).join('');
+          var tbody = document.getElementById('rkRuleEmpMatrixBody');
+          if (tbody) {
+            tbody.innerHTML = renderWorkRulesEmpMatrixRows(workRulesUI.draft, getActiveWorkRulesEmployees(), workRulesUI.empQuery);
           }
           return;
         }
@@ -13660,17 +13622,39 @@ function showHrPlaceholder(title, group, description) {
         }
       });
       root.addEventListener('change', function (ev) {
-        if (ev.target && ev.target.id === 'rkRuleEmpSelect') {
-          workRulesUI.selectedNik = String(ev.target.value || '');
-          paintWorkRulesPage();
-          return;
-        }
-        if (ev.target && ev.target.name === 'rkEmpAreaMode') {
-          var restricted = ev.target.value === 'RESTRICTED';
-          root.querySelectorAll('[data-rk-emp-area]').forEach(function (cb) {
-            cb.disabled = !restricted || !isSuperAdminRole();
-            if (!restricted) cb.checked = true;
-          });
+        var matrixCb = ev.target && ev.target.getAttribute ? ev.target : null;
+        if (matrixCb && matrixCb.hasAttribute('data-rk-emp-matrix-nik')) {
+          if (!isSuperAdminRole()) { ev.target.checked = !ev.target.checked; rkToast('Hanya Superadmin yang dapat mengubah pembatasan area.'); return; }
+          var nikKey = matrixCb.getAttribute('data-rk-emp-matrix-nik');
+          var isAll = matrixCb.getAttribute('data-rk-emp-matrix-all') === '1';
+          var areaVal = matrixCb.getAttribute('data-rk-emp-matrix-area') || '';
+          var stdVals = window.rhWorkRules.standardAreas.map(function (a) { return a.value; });
+          workRulesUI.draft.employeeAreaRules = rhApplyWorkRuleRowMutation(
+            workRulesUI.draft.employeeAreaRules,
+            nikKey,
+            areaVal,
+            !!matrixCb.checked,
+            isAll,
+            stdVals
+          );
+          var rowEl = matrixCb.closest ? matrixCb.closest('tr[data-rk-emp-matrix-row]') : null;
+          if (rowEl) {
+            var nextRule = workRulesUI.draft.employeeAreaRules[nikKey];
+            var nextRestricted = !!(nextRule && nextRule.mode === 'RESTRICTED');
+            var nextAllowed = nextRestricted && Array.isArray(nextRule.allowedAreas) ? nextRule.allowedAreas : stdVals;
+            rowEl.querySelectorAll('[data-rk-emp-matrix-area]').forEach(function (cb) {
+              cb.checked = !nextRestricted || nextAllowed.indexOf(cb.getAttribute('data-rk-emp-matrix-area')) >= 0;
+            });
+            var allCb = rowEl.querySelector('[data-rk-emp-matrix-all]');
+            if (allCb) allCb.checked = !nextRestricted || stdVals.every(function (v) { return nextAllowed.indexOf(v) >= 0; });
+          }
+          var cntBadge = document.getElementById('rkRuleRestrictedCount');
+          if (cntBadge) {
+            var nRes = Object.keys(workRulesUI.draft.employeeAreaRules || {}).filter(function (k) {
+              return workRulesUI.draft.employeeAreaRules[k] && workRulesUI.draft.employeeAreaRules[k].mode === 'RESTRICTED';
+            }).length;
+            cntBadge.textContent = nRes ? (nRes + ' dibatasi') : 'Semua diizinkan';
+          }
           return;
         }
         var rowTr = ev.target.closest ? ev.target.closest('[data-rk-area-row]') : null;
@@ -13718,7 +13702,7 @@ function showHrPlaceholder(title, group, description) {
       return;
     }
     root.innerHTML = '<section class="rk-card rk-admin-manage-card">' +
-      '<div class="rk-section-head"><div><h2>Manajemen Data</h2><p class="rk-card-sub">Pilih karyawan untuk meninjau data dan menghapus transaksi yang tidak diperlukan.</p></div><span class="rk-manage-role">' + (desktopRole() === 'SUPERADMIN' ? 'SUPERADMIN · Akses hapus' : desktopRole() + ' · Hanya lihat') + '</span></div>' +
+      '<div class="rk-section-head"><div><h2>Manajemen Data</h2></div><span class="rk-manage-role">' + (desktopRole() === 'SUPERADMIN' ? 'SUPERADMIN · Akses hapus' : desktopRole() + ' · Hanya lihat') + '</span></div>' +
       '<div class="rk-manage-toolbar"><label><span>Karyawan</span><select id="rkManageEmployee" class="rk-in"><option value="">Memuat daftar karyawan…</option></select></label><label id="rkManageMonthWrap"><span>Periode Presensi</span><input id="rkManageMonth" class="rk-in" type="month" value="' + escH(adminManageUI.month) + '"></label></div>' +
       '<div class="rk-manage-tabs" role="tablist" aria-label="Jenis data yang dikelola">' +
       '<button type="button" data-rk-manage-tab="attendance" class="' + (adminManageUI.tab === 'attendance' ? 'on' : '') + '">Presensi</button>' +
@@ -13727,7 +13711,6 @@ function showHrPlaceholder(title, group, description) {
       (desktopRole() === 'SUPERADMIN' ? '<button type="button" data-rk-manage-tab="adjustment" class="' + (adminManageUI.tab === 'adjustment' ? 'on' : '') + '">Penyesuaian Data</button>' : '') +
       '</div>' +
       '<div id="rkManageContent" class="rk-manage-content"><div class="rk-empty">Memuat data…</div></div>' +
-      (desktopRole() !== 'SUPERADMIN' ? '<p class="rk-manage-readonly">Akses lihat saja; tindakan penghapusan hanya tersedia untuk SUPERADMIN.</p>' : '') +
       '</section>';
     if (!root.__rhManageBound) {
       root.__rhManageBound = true;
@@ -13853,8 +13836,7 @@ function showHrPlaceholder(title, group, description) {
           (window.rhWorkRules && Array.isArray(window.rhWorkRules.standardAreas)
             ? window.rhWorkRules.standardAreas.map(function (a) { return '<option value="' + escH(a.value) + '">' + escH(a.value) + '</option>'; }).join('')
             : '<option value="Area 1">Area 1</option><option value="Area 2">Area 2</option><option value="Area 3">Area 3</option><option value="Area 4">Area 4</option><option value="Area lainnya">Area lainnya</option><option value="Area Sekitar">Area Sekitar</option>');
-        html += '<div class="rk-adjustment-note">Penyesuaian multi-faktor mencakup jam, area dinas luar, status lokasi, mode kehadiran, status validasi, dan catatan presensi. Semua perubahan tercatat pada audit log.</div>' +
-          '<form id="rkAttendanceAdjustForm" class="rk-adjustment-form">' +
+        html += '<form id="rkAttendanceAdjustForm" class="rk-adjustment-form">' +
           '<input type="hidden" id="rkAdjustAttendanceId" value="">' +
           '<label>Aksi<select id="rkAdjustAction" class="rk-in"><option value="INSERT">Tambah absensi historis</option><option value="UPDATE">Ubah data absensi</option></select></label>' +
           '<label>Jenis<select id="rkAdjustType" class="rk-in"><option value="MASUK">Clock In</option><option value="PULANG">Clock Out</option></select></label>' +
@@ -13865,9 +13847,9 @@ function showHrPlaceholder(title, group, description) {
           '<label>Mode Kehadiran<select id="rkAdjustMode" class="rk-in"><option value="REGULER">Reguler</option><option value="PIKET">Piket</option><option value="STANDBY">Standby</option></select></label>' +
           '<label>Status Validasi<select id="rkAdjustStatus" class="rk-in"><option value="">Pertahankan / Default</option><option value="VALID">VALID</option><option value="PENDING_ATASAN">PENDING_ATASAN</option><option value="PENDING_HR">PENDING_HR</option><option value="DITOLAK">DITOLAK</option></select></label>' +
           '<label class="rk-adjustment-reason">Catatan Presensi (opsional)<input id="rkAdjustNote" class="rk-in" type="text" placeholder="Contoh: Koreksi area dinas luar Area 2"></label>' +
-          '<label class="rk-adjustment-reason">Alasan penyesuaian (Audit Log)<textarea id="rkAdjustReason" class="rk-in" rows="2" minlength="8" placeholder="Jelaskan lupa absen, salah pilih area, atau kejadian luar biasa (minimal 8 karakter)" required></textarea></label>' +
+          '<label class="rk-adjustment-reason">Alasan penyesuaian (Audit Log)<textarea id="rkAdjustReason" class="rk-in" rows="2" minlength="8" placeholder="Alasan penyesuaian (minimal 8 karakter)" required></textarea></label>' +
           '<div class="rk-adjustment-actions"><button type="button" class="rk-btn ghost" data-rk-adjust-clear>Reset</button><button type="button" class="rk-btn" data-rk-adjust-submit>Simpan Penyesuaian</button></div>' +
-          '</form><div class="rk-adjustment-list-title">Pilih catatan di bawah untuk menyesuaikan jam, area, mode, atau status</div>';
+          '</form>';
         if (!rows.length) html += '<div class="rk-empty">Belum ada catatan presensi pada bulan ini.</div>';
         else {
           html += '<div class="rk-manage-table-wrap"><table class="rk-manage-table"><thead><tr><th>Tanggal</th><th>Jam</th><th>Jenis</th><th>Area / Mode</th><th>Status</th><th>Catatan</th><th>Aksi</th></tr></thead><tbody>';
@@ -14049,6 +14031,13 @@ function showHrPlaceholder(title, group, description) {
       var data=result&&result.data||{}, n=Number(data.total||0);
       var b=document.getElementById('rkAprBadge');
       if(b){b.style.display=n>0?'':'none';b.textContent=n;}
+      try {
+        var seededApprovals = typeof deskBuildApprovalItems === 'function' ? deskBuildApprovalItems(data) : [];
+        if (!RH_NOTIF_STATE.desktopItems) RH_NOTIF_STATE.desktopItems = { approvals: [], personal: [] };
+        RH_NOTIF_STATE.desktopItems.approvals = seededApprovals;
+        RH_NOTIF_STATE.desktopUser = String(window.S && S.user && S.user.nik || '');
+        if (typeof paintDeskNotifItems === 'function') paintDeskNotifItems();
+      } catch (e) {}
     }).catch(function () {
       var b = document.getElementById('rkAprBadge'); if (b) b.style.display = 'none';
     }),
@@ -14465,14 +14454,12 @@ function showHrPlaceholder(title, group, description) {
     var ring = '';
     if (hasAny && total > 0 && rows.length) {
       var size = 138, thick = 19, radius = (size - thick) / 2, circumference = 2 * Math.PI * radius, offset = 0;
-      var circles = '<defs><pattern id="rkGenderWoodPattern" width="7" height="7" patternUnits="userSpaceOnUse"><rect width="7" height="7" fill="#B77932"/><path d="M-1 2 C1 1 3 3 8 1 M-1 6 C2 4 5 7 8 5" fill="none" stroke="#E5BD82" stroke-width=".7"/></pattern></defs>';
-      circles += '<circle cx="69" cy="69" r="' + radius + '" pathLength="100" fill="none" stroke="#E7EEE9" stroke-width="' + thick + '"/>';
+      var circles = '<circle cx="69" cy="69" r="' + radius + '" pathLength="100" fill="none" stroke="#E7EEE9" stroke-width="' + thick + '"/>';
       rows.forEach(function (item, i) {
         var percent = item.v / total * 100;
         var color = workforceColor(item.l, i, 'gender');
-        var stroke = item.l === 'Perempuan' ? 'url(#rkGenderWoodPattern)' : color;
         var dashOffset = -(offset / circumference * 100);
-        circles += '<circle class="rk-gender-arc" pathLength="100" data-rk-chart-tip="1" data-rk-tip-title="' + escH(item.l) + '" data-rk-tip-value="' + item.v + '" data-rk-tip-detail="' + percent.toFixed(1) + '%" style="--rk-gender-len:' + percent.toFixed(4) + ';--rk-gender-offset:' + dashOffset.toFixed(4) + ';--rk-gender-delay:' + (i * 0.16) + 's" cx="69" cy="69" r="' + radius + '" fill="none" stroke="' + stroke + '" stroke-width="' + thick + '" stroke-dasharray="0 100" stroke-dashoffset="' + dashOffset.toFixed(4) + '" transform="rotate(-90 69 69)"/>';
+        circles += '<circle class="rk-gender-arc" pathLength="100" data-rk-chart-tip="1" data-rk-tip-title="' + escH(item.l) + '" data-rk-tip-value="' + item.v + '" data-rk-tip-detail="' + percent.toFixed(1) + '%" style="--rk-gender-len:' + percent.toFixed(4) + ';--rk-gender-offset:' + dashOffset.toFixed(4) + ';--rk-gender-delay:' + (i * 0.16) + 's" cx="69" cy="69" r="' + radius + '" fill="none" stroke="' + color + '" stroke-width="' + thick + '" stroke-dasharray="0 100" stroke-dashoffset="' + dashOffset.toFixed(4) + '" transform="rotate(-90 69 69)"/>';
         offset += item.v / total * circumference;
       });
       ring = '<div class="rk-gender-visual"><div class="rk-gender-ring"><svg class="rk-gender-svg" viewBox="0 0 138 138" width="138" height="138" aria-label="Gender">' + circles + '</svg>' +
@@ -14875,7 +14862,7 @@ function showHrPlaceholder(title, group, description) {
           if (a === 'detail') empOpenDetails(id);
           else if (a === 'edit') empOpenEditor(id);
           else if (a === 'reset-pin') { try { karResetPin(id); setTimeout(function(){ syncEmpDirectory(true); }, 1500); } catch (e) { rkToast(e.message); } }
-          else if (a === 'deactivate') { try { karDeactivate(id); setTimeout(function(){ syncEmpDirectory(true); }, 1500); } catch (e) { rkToast(e.message); } }
+          else if (a === 'deactivate') { try { karDeactivate(id, function () { if (cur === 'emp') syncEmpDirectory(true); }); } catch (e) { rkToast(e.message); } }
           else if (a === 'activate') { try { karReactivate(id); setTimeout(function(){ syncEmpDirectory(true); }, 1500); } catch (e) { rkToast(e.message); } }
           return;
         }
@@ -16904,7 +16891,7 @@ function renderMyApprovalsPage(){
   function renderAttendanceRulesPage() {
     var el=document.getElementById('rkp-attset');if(!el)return;
     el.innerHTML=
-      '<div class="rk-card"><h3>Aturan Presensi &amp; Shift</h3><div class="rk-card-sub">Jadwal presensi mengikuti cabang pada profil karyawan.</div>'+
+      '<div class="rk-card"><h3>Aturan Presensi &amp; Shift</h3>'+
       (!isSuperAdminRole()?'<div class="rk-note"></div>':'')+
       '<div class="rk-attset-form">'+
       '<label>Cabang<select class="rk-in" id="rkRuleBranch">'+profileBranchOptions(attendanceRulesUi.branch,false)+'</select></label>'+
@@ -16944,10 +16931,10 @@ function renderMyApprovalsPage(){
   function renderWorkingCalendarPage(){
     var el=document.getElementById('rkp-calendar');if(!el)return;
     var today=attMonLocalISO(new Date()), year=today.slice(0,4), start=year+'-01-01', end=year+'-12-31';
-    el.innerHTML='<div class="rk-card"><h3>Kalender Kerja</h3><div class="rk-card-sub"></div>'+
+    el.innerHTML='<div class="rk-card"><h3>Kalender Kerja</h3>'+
       '<div class="rk-attset-form"><label>Tanggal mulai<input class="rk-in" id="rkCalFrom" type="date" value="'+start+'"></label><label>Tanggal selesai<input class="rk-in" id="rkCalTo" type="date" value="'+end+'"></label><label>Cakupan cabang<select class="rk-in" id="rkCalBranch">'+profileBranchOptions('*',true)+'</select></label><div class="rk-attset-actions"><button class="rk-btn" id="rkCalLoad" type="button">Muat Kalender</button><button class="rk-btn ghost" id="rkCalImport" type="button" '+(isSuperAdminRole()?'':'disabled')+'>Impor Hari Libur Nasional</button></div></div>'+
-      '<div id="rkCalSyncNote" class="rk-card-sub" style="margin-top:12px">Kalender belum dimuat.</div></div>'+
-      '<div class="rk-card"><h3>Pengaturan Hari</h3><div class="rk-card-sub">Perubahan berlaku mulai tanggal yang dipilih. Riwayat presensi sebelumnya tidak berubah. Alasan wajib diisi.</div>'+
+      '<div id="rkCalSyncNote" class="rk-card-sub" style="margin-top:10px"></div></div>'+
+      '<div class="rk-card"><h3>Pengaturan Hari</h3>'+
       '<div class="rk-attset-form"><label>Tanggal<input class="rk-in" id="rkCalOverrideDate" type="date" value="'+today+'"></label><label>Cakupan<select class="rk-in" id="rkCalOverrideBranch">'+profileBranchOptions('*',true)+'</select></label><label>Jenis hari<select class="rk-in" id="rkCalOverrideType"><option value="WORKING_DAY">Hari Kerja</option><option value="DAY_OFF">Hari Libur</option><option value="NATIONAL_HOLIDAY">Hari Libur Nasional</option><option value="JOINT_LEAVE">Cuti Bersama</option></select></label><label>Nama hari<input class="rk-in" id="rkCalOverrideLabel" placeholder="Contoh: Libur perusahaan"></label><label class="rk-attset-wide">Alasan<input class="rk-in" id="rkCalOverrideReason" placeholder="Alasan / keputusan manajemen"></label><div class="rk-attset-actions"><button class="rk-btn" id="rkCalSaveOverride" type="button" '+(isSuperAdminRole()?'':'disabled')+'>Simpan Perubahan Hari</button></div></div></div>'+
       '<div class="rk-card"><h3>Kalender Berlaku</h3><div class="rk-table-wrap"><table class="rk-table"><thead><tr><th>Tanggal</th><th>Hari</th><th>Jenis Hari</th><th>Label</th><th>Cakupan</th><th>Perubahan Manual</th><th>Alasan</th></tr></thead><tbody id="rkCalBody"><tr><td colspan="7"><div class="rk-loading">Muat kalender untuk memulai.</div></td></tr></tbody></table></div></div>';
     document.getElementById('rkCalBranch').addEventListener('change',function(){workingCalendarUi.branch=this.value;});
@@ -17194,8 +17181,9 @@ function renderMyApprovalsPage(){
       window.rhWorkRules.populateAreaSelect(sickAreaSel, window.S && S.user && S.user.nik, 'SICK', 'Pilih area');
     }
     if (remaining) {
-      remaining.style.display = code === 'CT' ? 'block' : 'none';
-      if (code === 'CT') remaining.innerHTML = 'Sisa cuti tahunan Anda: <b>' + escH(S.sisaCT != null ? S.sisaCT : '—') + ' hari</b>';
+      var showRemainingLeave = typeof window.rhShouldShowRemainingLeave === 'function' ? window.rhShouldShowRemainingLeave(S.sisaCT) : (Number(S.sisaCT) === 0);
+      remaining.style.display = (code && showRemainingLeave) ? 'block' : 'none';
+      if (code && showRemainingLeave) remaining.innerHTML = 'Sisa cuti tahunan Anda: <b>0 hari</b>';
     }
     if (btn) btn.textContent = timeOffRequestGroup === 'cuti' ? 'Ajukan Time Off' : 'Ajukan Izin';
   }
@@ -18077,7 +18065,6 @@ function renderMyApprovalsPage(){
           '<button class="rk-btn ghost" id="rkUsersReload">↻ Muat Ulang</button>' +
         '</div>' +
         '<div class="rk-card"><h3>Akun Pengguna</h3>' +
-        '<div class="rk-card-sub">Kelola peran akses (Karyawan / Approver / Administrator / Superadmin), status akun, dan PIN. Approver ditentukan otomatis jika ada bawahan langsung aktif yang menunjuk karyawan tersebut sebagai Atasan Langsung.</div>' +
         '<div class="rk-table-wrap"><table class="rk-table"><thead><tr>' +
           '<th>Karyawan</th><th>ID Karyawan</th><th>Peran</th><th>PIN</th><th>Status Akun</th><th>Face ID</th><th style="width:280px">Aksi</th>' +
         '</tr></thead><tbody id="rkUsersBody"><tr><td colspan="7"><div class="rk-loading">Memuat...</div></td></tr></tbody></table></div></div>';
@@ -19975,9 +19962,59 @@ function renderIncentiveFormulaPage(){
     if (a) { a.classList.toggle('on', activeDeskNotifTab === 'approvals'); a.setAttribute('aria-selected', activeDeskNotifTab === 'approvals' ? 'true' : 'false'); }
     if (p) { p.classList.toggle('on', activeDeskNotifTab === 'personal'); p.setAttribute('aria-selected', activeDeskNotifTab === 'personal' ? 'true' : 'false'); }
     paintDeskNotifItems();
-    if (activeDeskNotifTab === 'personal' && typeof window.markAllMyNotificationsReadUI === 'function') window.markAllMyNotificationsReadUI((RH_NOTIF_STATE.desktopItems && RH_NOTIF_STATE.desktopItems.personal) || [], 'desktop-tab-open').catch(function () {});
+    if (activeDeskNotifTab === 'personal') {
+      var userKey = String(window.S && S.user && S.user.nik || '');
+      var personalFresh = RH_NOTIF_STATE.desktopUser === userKey && RH_NOTIF_STATE.desktopAt && (Date.now() - RH_NOTIF_STATE.desktopAt < 180000);
+      if (!personalFresh) renderDeskNotifications(false);
+      else if (typeof window.markAllMyNotificationsReadUI === 'function') window.markAllMyNotificationsReadUI((RH_NOTIF_STATE.desktopItems && RH_NOTIF_STATE.desktopItems.personal) || [], 'desktop-tab-open').catch(function () {});
+    }
   }
   var activeDeskNotifTab = 'approvals';
+  function deskBuildApprovalItems(approvals) {
+    approvals = approvals || {};
+    var reimApprovalRows = Array.isArray(approvals.reimbursement) ? approvals.reimbursement : [];
+    deskNotifApprovalReimbursementRows = Object.create(null);
+    aprCache.absensi = Array.isArray(approvals.absensi) ? approvals.absensi.slice() : [];
+    aprCache.cuti = Array.isArray(approvals.cuti) ? approvals.cuti.slice() : [];
+    myApprovalUI.rows = (myApprovalUI.rows || []).filter(function (x) { return x.kind !== 'reimbursement'; }).concat(reimApprovalRows.map(function (x) {
+      var id = reimbursementRequestId(x);
+      if (id) deskNotifApprovalReimbursementRows[id] = x;
+      return { kind: 'reimbursement', id: id, row: x };
+    }).filter(function (x) { return !!x.id; }));
+    aprCache.at = Date.now();
+    var approvalItems = [];
+    (approvals.absensi || []).forEach(function (a) {
+      var id = String(a.id || a.absensiId || a.requestId || '');
+      if (id) deskNotifAttendanceRows[id] = a;
+      if (!desktopCanActApprovalRow('absen', a)) return;
+      approvalItems.push({
+        icon: '◷', tone: 'blue', title: 'Persetujuan absensi menunggu',
+        detail: (a.nama || a.employeeName || a.nik || 'Karyawan') + ' · ' + [a.tanggal, a.tipe === 'MASUK' ? 'Masuk' : (a.tipe === 'PULANG' ? 'Pulang' : a.tipe), a.jam].filter(Boolean).join(' · '),
+        page: 'apr', kind: 'absen', requestId: id, isRead: true
+      });
+    });
+    (approvals.cuti || []).forEach(function (x) {
+      var id = String(x.id || x.cutiId || x.requestId || x.request_id || '');
+      if (id) deskNotifTimeOffRows[id] = x;
+      if (!desktopCanActApprovalRow('cuti', x)) return;
+      approvalItems.push({
+        icon: '▦', tone: 'amber', title: 'Persetujuan Time Off menunggu',
+        detail: (x.nama || x.employeeName || x.nik || 'Karyawan') + ' · ' + [x.tanggalMulai || x.tanggal_mulai || x.mulai, x.tanggalSelesai || x.tanggal_selesai || x.selesai, x.kode || x.kode_cuti].filter(Boolean).join(' · '),
+        page: 'timeoff-detail', kind: 'cuti', requestId: id, isRead: true
+      });
+    });
+    reimApprovalRows.forEach(function (x) {
+      var id = reimbursementRequestId(x);
+      if (!id) return;
+      var stage = String(x.status || '').toUpperCase() === 'PENDING_HR' || String(x.pending_stage || '').toUpperCase() === 'HR' ? 'Menunggu Superadmin' : 'Menunggu atasan langsung';
+      approvalItems.push({
+        icon: '◈', tone: 'amber', title: 'Persetujuan Reimbursement menunggu',
+        detail: (x.employee_name || x.nama || x.employee_id || 'Karyawan') + ' · ' + (x.request_date || '') + ' · ' + incentiveMoney(x.amount || 0) + ' · ' + stage,
+        page: 'apr', kind: 'reimbursement', requestId: id, isRead: true
+      });
+    });
+    return approvalItems;
+  }
   function paintDeskNotifItems() {
     var list = document.getElementById('rkNotifList');
     var badge = document.getElementById('rkNotifBadge');
@@ -19988,7 +20025,6 @@ function renderIncentiveFormulaPage(){
     var shown = activeDeskNotifTab === 'approvals' ? approvals : personal;
     var approvalCount = approvals.length;
     var visiblePersonalUnread = personal.filter(function (n) { return n.outcome && !n.isRead; }).length;
-    // The server counter is authoritative and may include notifications older than the rendered list limit.
     var personalUnread = RH_NOTIF_STATE.unreadCountAuthoritative
       ? Math.max(0, Number(RH_NOTIF_STATE.unreadCount || 0))
       : Math.max(visiblePersonalUnread, Math.max(0, Number(RH_NOTIF_STATE.unreadCount || 0)));
@@ -20023,57 +20059,83 @@ function renderIncentiveFormulaPage(){
         (n.outcome && !read ? '<span class="rk-notif-unread-dot" aria-label="Belum dibaca"></span>' : '') + '</button>';
     }).join('');
   }
-  // Expose this painter only as a bridge for the main module's notification-read updates.
   window.paintDeskNotifItems = paintDeskNotifItems;
 
   function renderDeskNotifications(force) {
     var list = document.getElementById('rkNotifList');
     if (!list) return Promise.resolve(null);
     var userKey = String(window.S && S.user && S.user.nik || '');
-    if (!force && RH_NOTIF_STATE.desktopUser === userKey && RH_NOTIF_STATE.desktopAt && Date.now() - RH_NOTIF_STATE.desktopAt < 180000 && RH_NOTIF_STATE.desktopItems) {
+    if (!RH_NOTIF_STATE.desktopItems) RH_NOTIF_STATE.desktopItems = { approvals: [], personal: [] };
+    if (RH_NOTIF_STATE.desktopUser !== userKey) {
+      RH_NOTIF_STATE.desktopItems = { approvals: [], personal: [] };
+      RH_NOTIF_STATE.desktopAt = 0;
+      RH_NOTIF_STATE.desktopUser = userKey;
+    }
+    // Render cached/live approval items synchronously immediately on bell open.
+    if (window.DATA && DATA.appr) {
+      RH_NOTIF_STATE.desktopItems.approvals = deskBuildApprovalItems(DATA.appr);
       paintDeskNotifItems();
-      if (activeDeskNotifTab === 'personal' && typeof window.markAllMyNotificationsReadUI === 'function') window.markAllMyNotificationsReadUI(RH_NOTIF_STATE.desktopItems.personal || [], 'desktop-cache').catch(function () {});
+    } else if (RH_NOTIF_STATE.desktopItems.approvals.length || (activeDeskNotifTab === 'personal' && RH_NOTIF_STATE.desktopAt)) {
+      paintDeskNotifItems();
+    } else if (activeDeskNotifTab === 'personal') {
+      list.innerHTML = '<div class="rk-notif-empty">Memuat pemberitahuan…</div>';
+    } else {
+      paintDeskNotifItems();
+    }
+
+    var needPersonal = !!force || activeDeskNotifTab === 'personal';
+    var personalFresh = RH_NOTIF_STATE.desktopUser === userKey && RH_NOTIF_STATE.desktopAt && Date.now() - RH_NOTIF_STATE.desktopAt < 180000;
+    var approvalFresh = !!(window.DATA && DATA.appr && aprCache.at && Date.now() - aprCache.at < 120000);
+
+    if (!force && activeDeskNotifTab === 'approvals' && approvalFresh) {
       return Promise.resolve(RH_NOTIF_STATE.desktopItems);
     }
-    // Tampilkan cache selama memuat ulang agar panel tidak tampak "loading terus".
-    if (RH_NOTIF_STATE.desktopItems) paintDeskNotifItems();
-    else list.innerHTML = '<div class="rk-notif-empty">Memuat pemberitahuan…</div>';
+    if (!force && activeDeskNotifTab === 'personal' && personalFresh && approvalFresh) {
+      if (typeof window.markAllMyNotificationsReadUI === 'function') window.markAllMyNotificationsReadUI(RH_NOTIF_STATE.desktopItems.personal || [], 'desktop-cache').catch(function () {});
+      return Promise.resolve(RH_NOTIF_STATE.desktopItems);
+    }
+
+    var approvalPromise = (S.approver && (force || !approvalFresh))
+      ? window.loadApprovalQueueCanonical().then(function (result) { return result && result.data || DATA.appr || {}; }).catch(function () { return DATA.appr || {}; })
+      : Promise.resolve(DATA.appr || {});
+
+    if (!needPersonal) {
+      return approvalPromise.then(function (approvals) {
+        RH_NOTIF_STATE.desktopItems.approvals = deskBuildApprovalItems(approvals);
+        paintDeskNotifItems();
+        return RH_NOTIF_STATE.desktopItems;
+      });
+    }
+
     var myReqFresh = !!(DATA.myReq && RH_NOTIF_STATE.myRequestsAt && Date.now() - RH_NOTIF_STATE.myRequestsAt < 90000);
     var requestPromise = (!force && myReqFresh)
       ? Promise.resolve(DATA.myReq)
       : ((typeof window.loadMyRequests === 'function')
           ? window.loadMyRequests().catch(function () { return DATA.myReq || { absensi: [], cuti: [] }; })
           : Promise.resolve(DATA.myReq || { absensi: [], cuti: [] }));
-    // S.approver includes KARYAWAN users with subordinates, ADMIN and SUPERADMIN; ordinary employees avoid this extra request.
-    var approvalPromise = S.approver
-      ? window.loadApprovalQueueCanonical().then(function(result){return result&&result.data||DATA.appr||{};}).catch(function(){return DATA.appr||{};})
-      : Promise.resolve({});
     var outcomePromise = api('getMyNotifications', [], 20000).catch(function () { return { list: [], unreadCount: null, _failed: true }; });
-    var reimbursementHistoryPromise=loadMyReimbursementRequests();
+    var reimbursementHistoryPromise = isDesktopHybrid() ? loadMyReimbursementRequests() : Promise.resolve([]);
+
     return Promise.all([requestPromise, approvalPromise, outcomePromise, reimbursementHistoryPromise]).then(function (results) {
       var requests = results[0] || DATA.myReq || {};
       var approvals = results[1] || {};
-      var reimApprovalRows=Array.isArray(approvals.reimbursement)?approvals.reimbursement:[];
-      var reimbursementRows=Array.isArray(results[3])?results[3]:[];
+      var reimbursementRows = Array.isArray(results[3]) ? results[3] : [];
       var outcomeResult = results[2] || {};
       var outcomes = Array.isArray(outcomeResult) ? outcomeResult : (outcomeResult.list || outcomeResult.notifications || []);
       deskNotifTimeOffRows = Object.create(null); deskNotifAttendanceRows = Object.create(null);
-      deskNotifReimbursementRows=Object.create(null);deskNotifApprovalReimbursementRows=Object.create(null);
-      aprCache.absensi = Array.isArray(approvals.absensi) ? approvals.absensi.slice() : [];
-      aprCache.cuti = Array.isArray(approvals.cuti) ? approvals.cuti.slice() : [];
-      myApprovalUI.rows=(myApprovalUI.rows||[]).filter(function(x){return x.kind!=='reimbursement';}).concat(reimApprovalRows.map(function(x){var id=reimbursementRequestId(x);if(id)deskNotifApprovalReimbursementRows[id]=x;return {kind:'reimbursement',id:id,row:x};}).filter(function(x){return !!x.id;}));
-      aprCache.at = Date.now();
-      var personal = [], approvalItems = [];
+      deskNotifReimbursementRows = Object.create(null);
+      var approvalItems = deskBuildApprovalItems(approvals);
+      var personal = [];
       outcomes.forEach(function (n) {
         var title = (typeof window.completeMyNotificationTitle === 'function' ? window.completeMyNotificationTitle(n) : String(n.title || 'Hasil persetujuan'));
         var detail = String(n.detail || '');
         if (n.actorName || n.actor_name) detail += (detail ? ' · ' : '') + 'Diproses oleh: ' + String(n.actorName || n.actor_name);
         if (/ditolak|rejected/i.test(title) && n.reason) detail += (detail ? ' · ' : '') + 'Alasan: ' + String(n.reason);
         if (n.createdAt) detail += (detail ? ' · ' : '') + String(n.createdAt);
-        var outcomeKind=String(n.kind||'').toLowerCase();
+        var outcomeKind = String(n.kind || '').toLowerCase();
         personal.push({ id: String(n.id || ''), requestId: String(n.requestId || n.request_id || ''), kind: outcomeKind,
           icon: /ditolak|rejected/i.test(title) ? '×' : '✓', tone: /ditolak|rejected/i.test(title) ? 'amber' : '', title: title, detail: detail,
-          page: /reimburse/.test(outcomeKind)?'reimbursement':(outcomeKind === 'absen' ? 'att' : 'cuti'), outcome: true, isRead: n.isRead === true || n.is_read === true });
+          page: /reimburse/.test(outcomeKind) ? 'reimbursement' : (outcomeKind === 'absen' ? 'att' : 'cuti'), outcome: true, isRead: n.isRead === true || n.is_read === true });
       });
       (requests.absensi || []).forEach(function (a) {
         var id = String(a.id || a.absensiId || a.requestId || ''); if (id) deskNotifAttendanceRows[id] = a;
@@ -20085,11 +20147,11 @@ function renderIncentiveFormulaPage(){
         personal.push({ icon: '▦', tone: 'amber', title: 'Pengajuan Time Off Anda', detail: (x.keterangan || x.kode || 'Time Off') + ' · ' + (x.tanggalMulai || x.tanggal_mulai || '') + (x.totalHari != null ? ' · ' + x.totalHari + ' hari' : '') + ' · Menunggu keputusan',
           page: 'timeoff-detail', kind: 'cuti', requestId: id, outcome: false, isRead: true });
       });
-      reimbursementRows.filter(reimbursementRequestIsPending).forEach(function(x){
-        var id=reimbursementRequestId(x);if(!id)return;deskNotifReimbursementRows[id]=x;
-        var cat=String(x.category||'').toUpperCase()==='ENTERTAIN'?'Entertain':'Transport';
-        var stage=String(x.status||'').toUpperCase()==='PENDING_HR'||String(x.pending_stage||'').toUpperCase()==='HR'?'Menunggu Superadmin':'Menunggu atasan';
-        personal.push({icon:'◈',tone:'amber',title:'Pengajuan Reimbursement Anda',detail:cat+' · '+(x.request_date||x.tanggal||'')+' · '+incentiveMoney(x.amount||x.nominal||0)+' · '+stage,page:'reimbursement',kind:'reimbursement',requestId:id,outcome:false,isRead:true});
+      reimbursementRows.filter(reimbursementRequestIsPending).forEach(function (x) {
+        var id = reimbursementRequestId(x); if (!id) return; deskNotifReimbursementRows[id] = x;
+        var cat = String(x.category || '').toUpperCase() === 'ENTERTAIN' ? 'Entertain' : 'Transport';
+        var stage = String(x.status || '').toUpperCase() === 'PENDING_HR' || String(x.pending_stage || '').toUpperCase() === 'HR' ? 'Menunggu Superadmin' : 'Menunggu atasan';
+        personal.push({ icon: '◈', tone: 'amber', title: 'Pengajuan Reimbursement Anda', detail: cat + ' · ' + (x.request_date || x.tanggal || '') + ' · ' + incentiveMoney(x.amount || x.nominal || 0) + ' · ' + stage, page: 'reimbursement', kind: 'reimbursement', requestId: id, outcome: false, isRead: true });
       });
       var status = window.S && S.status ? S.status : {};
       if (status.masuk) personal.push({ icon: '✓', tone: '', title: 'Presensi masuk tercatat', detail: 'Status presensi diperbarui' + (status.jamMasuk ? ' · ' + String(status.jamMasuk).slice(0, 5) : ''), page: 'att', isRead: true });
@@ -20097,39 +20159,20 @@ function renderIncentiveFormulaPage(){
       if (typeof localNotifs === 'function') localNotifs().forEach(function (n) {
         personal.push({ icon: '•', tone: '', title: String(n.txt || 'Pemberitahuan aplikasi'), detail: n.t ? new Date(n.t).toLocaleString('id-ID') : '', page: 'log', isRead: true });
       });
-      (approvals.absensi || []).forEach(function (a) {
-        var id = String(a.id || a.absensiId || a.requestId || ''); if (id) deskNotifAttendanceRows[id] = a;
-        // Only rows assigned to this user belong to the actionable count. Admin remains view-only.
-        if (!desktopCanActApprovalRow('absen', a)) return;
-        approvalItems.push({ icon: '◷', tone: 'blue', title: 'Persetujuan absensi menunggu',
-          detail: (a.nama || a.employeeName || a.nik || 'Karyawan') + ' · ' + [a.tanggal, a.tipe === 'MASUK' ? 'Masuk' : (a.tipe === 'PULANG' ? 'Pulang' : a.tipe), a.jam].filter(Boolean).join(' · '),
-          page: 'apr', kind: 'absen', requestId: id, isRead: true });
-      });
-      (approvals.cuti || []).forEach(function (x) {
-        var id = String(x.id || x.cutiId || x.requestId || x.request_id || ''); if (id) deskNotifTimeOffRows[id] = x;
-        if (!desktopCanActApprovalRow('cuti', x)) return;
-        approvalItems.push({ icon: '▦', tone: 'amber', title: 'Persetujuan Time Off menunggu',
-          detail: (x.nama || x.employeeName || x.nik || 'Karyawan') + ' · ' + [x.tanggalMulai || x.tanggal_mulai || x.mulai, x.tanggalSelesai || x.tanggal_selesai || x.selesai, x.kode || x.kode_cuti].filter(Boolean).join(' · '),
-          page: 'timeoff-detail', kind: 'cuti', requestId: id, isRead: true });
-      });
-      reimApprovalRows.forEach(function(x){
-        var id=reimbursementRequestId(x);if(!id)return;
-        var stage=String(x.status||'').toUpperCase()==='PENDING_HR'||String(x.pending_stage||'').toUpperCase()==='HR'?'Menunggu Superadmin':'Menunggu atasan langsung';
-        approvalItems.push({icon:'◈',tone:'amber',title:'Persetujuan Reimbursement menunggu',detail:(x.employee_name||x.nama||x.employee_id||'Karyawan')+' · '+(x.request_date||'')+' · '+incentiveMoney(x.amount||0)+' · '+stage,page:'apr',kind:'reimbursement',requestId:id,isRead:true});
-      });
       var serverUnread = (outcomeResult && outcomeResult.unreadCount != null && Number.isFinite(Number(outcomeResult.unreadCount)))
         ? Math.max(0, Number(outcomeResult.unreadCount))
         : (outcomeResult && outcomeResult._failed
             ? Math.max(0, Number(RH_NOTIF_STATE.unreadCount || S.unreadNotificationTotal || 0))
-            : outcomes.filter(function(n){return !(n.isRead===true||n.is_read===true);}).length);
+            : outcomes.filter(function (n) { return !(n.isRead === true || n.is_read === true); }).length);
       RH_NOTIF_STATE.desktopItems = { approvals: approvalItems, personal: personal };
-      RH_NOTIF_STATE.desktopUser = userKey; RH_NOTIF_STATE.desktopAt = (outcomeResult && outcomeResult._failed) ? 0 : Date.now();
+      RH_NOTIF_STATE.desktopUser = userKey;
+      RH_NOTIF_STATE.desktopAt = (outcomeResult && outcomeResult._failed) ? RH_NOTIF_STATE.desktopAt : Date.now();
       S.unreadNotificationTotal = serverUnread;
-      var roleForNotifCount=String(S.user&&S.user.role||'').toUpperCase();
-      S.pendingTotal = roleForNotifCount==='ADMIN'?0:approvalItems.length;
+      var roleForNotifCount = String(S.user && S.user.role || '').toUpperCase();
+      S.pendingTotal = roleForNotifCount === 'ADMIN' ? 0 : approvalItems.length;
       RH_NOTIF_STATE.unreadCount = serverUnread;
       RH_NOTIF_STATE.unreadCountAuthoritative = !!(outcomeResult && !outcomeResult._failed && outcomeResult.unreadCount != null && Number.isFinite(Number(outcomeResult.unreadCount)));
-      RH_NOTIF_STATE.pendingCount = roleForNotifCount==='ADMIN'?0:approvalItems.length;
+      RH_NOTIF_STATE.pendingCount = roleForNotifCount === 'ADMIN' ? 0 : approvalItems.length;
       paintDeskNotifItems();
       if (activeDeskNotifTab === 'personal' && typeof window.markAllMyNotificationsReadUI === 'function') window.markAllMyNotificationsReadUI(RH_NOTIF_STATE.desktopItems.personal || [], 'desktop-open').catch(function () {});
       return RH_NOTIF_STATE.desktopItems;
@@ -20299,7 +20342,7 @@ function renderIncentiveFormulaPage(){
     empPageTo: function () { /* Directory intentionally uses continuous rows; no pagination. */ },
     empDetail: function (nik) { try { empOpenDetails(nik); } catch (e) { rkToast(e.message); } },
     empEdit: function (nik) { try { empOpenEditor(nik); } catch (e) { rkToast(e.message); } },
-    empDeactivate: function (nik) { try { karDeactivate(nik); } catch (e) { rkToast(e.message); } setTimeout(function () { if (cur === 'emp') syncEmpDirectory(true); }, 1200); },
+    empDeactivate: function (nik) { try { karDeactivate(nik, function () { if (cur === 'emp') syncEmpDirectory(true); }); } catch (e) { rkToast(e.message); } },
     empReactivate: function (nik) { try { karReactivate(nik); } catch (e) { rkToast(e.message); } setTimeout(function () { if (cur === 'emp') syncEmpDirectory(true); }, 1200); },
     empResetPin: function (nik) { try { karResetPin(nik); } catch (e) { rkToast(e.message); } setTimeout(function () { if (cur === 'emp') syncEmpDirectory(true); }, 1200); },
     refreshEmployeePhoto: function () {
@@ -20462,7 +20505,7 @@ function renderIncentiveFormulaPage(){
 
 <style id="rh-dashboard-records-cache-refinement-v2">
 @media (min-width: 1024px) {
-  @keyframes rkDashRevealV2 { from { opacity: 0; transform: translateY(10px) scale(.994); filter: blur(1px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+  @keyframes rkDashRevealV2 { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes rkDashValueV2 { from { opacity: .2; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes rkDashBarV2 { from { transform: scaleY(.03); opacity: .45; } to { transform: scaleY(1); opacity: 1; } }
   body.rh-desk-on .rk-dash-animate { animation: rkDashRevealV2 .55s cubic-bezier(.2,.75,.25,1) both; }
@@ -20671,8 +20714,8 @@ function renderIncentiveFormulaPage(){
 <style id="rh-desktop-dashboard-timeoff-interactions-v7">
 @media (min-width:1024px) {
   body.rh-desk-on .rk-g5 { grid-template-columns:repeat(5,minmax(0,1fr)); }
-  body.rh-desk-on .rk-stat-clickable { cursor:pointer; transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease; }
-  body.rh-desk-on .rk-stat-clickable:hover, body.rh-desk-on .rk-stat-clickable:focus-visible { transform:translateY(-2px); border-color:#8ABCA0; box-shadow:0 9px 24px rgba(0,76,51,.12); outline:none; }
+  body.rh-desk-on .rk-stat-clickable { cursor:pointer; transition:border-color .15s ease, background-color .15s ease; }
+  body.rh-desk-on .rk-stat-clickable:hover, body.rh-desk-on .rk-stat-clickable:focus-visible { border-color:#8ABCA0; outline:none; }
   body.rh-desk-on .rk-inout-stat-in { color:#007850; font-weight:800; }
   body.rh-desk-on .rk-inout-stat-out { color:#B77932; font-weight:800; }
   body.rh-desk-on .rk-inout-stat-sep { display:inline-block; color:#CEDBD2; margin:0 7px; font-weight:400; }
@@ -20771,10 +20814,10 @@ function renderIncentiveFormulaPage(){
   body.rh-desk-on [data-rk-dash-action="inout"],
   body.rh-desk-on [data-rk-dash-action="attention"] {
     position:relative; cursor:pointer; padding-bottom:29px!important;
-    border:1px solid #A8CEB5!important;
-    background:linear-gradient(145deg,#FFFFFF 0%,#F0F8F2 100%)!important;
-    box-shadow:0 4px 14px rgba(0,76,51,.07);
-    transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease;
+    border:1px solid #C8DDD0!important;
+    background:#FFFFFF!important;
+    box-shadow:none;
+    transition:border-color .15s ease,background-color .15s ease;
   }
   body.rh-desk-on [data-rk-dash-action="inout"]:after,
   body.rh-desk-on [data-rk-dash-action="attention"]:after {
@@ -20782,17 +20825,17 @@ function renderIncentiveFormulaPage(){
     color:#007850; font-size:10px; line-height:1; font-weight:800; letter-spacing:.02em;
   }
   body.rh-desk-on [data-rk-dash-action="attention"] {
-    border-color:#E7C69A!important; background:linear-gradient(145deg,#FFFFFF 0%,#FFFAF2 100%)!important;
+    border-color:#E3CCA8!important; background:#FFFCF7!important;
   }
   body.rh-desk-on [data-rk-dash-action="attention"]:after { color:#9A6328; }
   body.rh-desk-on [data-rk-dash-action="inout"]:hover,
-  body.rh-desk-on [data-rk-dash-action="attention"]:hover,
-  body.rh-desk-on [data-rk-dash-action="inout"]:focus-visible,
-  body.rh-desk-on [data-rk-dash-action="attention"]:focus-visible {
-    transform:translateY(-3px); box-shadow:0 10px 24px rgba(0,76,51,.15); outline:none;
+  body.rh-desk-on [data-rk-dash-action="inout"]:focus-visible {
+    background:#F6FAF7!important; border-color:#007850!important; outline:none;
   }
   body.rh-desk-on [data-rk-dash-action="attention"]:hover,
-  body.rh-desk-on [data-rk-dash-action="attention"]:focus-visible { box-shadow:0 10px 24px rgba(154,99,40,.14); }
+  body.rh-desk-on [data-rk-dash-action="attention"]:focus-visible {
+    background:#FDF6EC!important; border-color:#B77932!important; outline:none;
+  }
   body.rh-desk-on .rk-timeoff-table td.rk-timeoff-request-id { font-weight:400!important; }
   body.rh-desk-on .rk-att-monitor-toolbar { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-end; gap:14px; margin-bottom:14px; }
   body.rh-desk-on .rk-att-monitor-dates { display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px; }
@@ -22472,11 +22515,140 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
   outline: none;
 }
 
+/* Deactivation Reason Modal (Desktop & Mobile) */
+.rh-deactivate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 960;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow-y: auto;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(16, 40, 29, 0.56) !important;
+}
+.rh-deactivate-overlay.on {
+  display: flex;
+}
+.rh-deactivate-card {
+  position: relative;
+  width: min(460px, calc(100vw - 28px));
+  background: #FFFFFF;
+  border: 1px solid #DCE7DF;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 18px 44px rgba(0, 48, 30, 0.22);
+}
+.rh-deactivate-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.rh-deactivate-head h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #163E2C;
+}
+.rh-deactivate-close {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: #F4F8F5;
+  color: #3E5748;
+  font-size: 18px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  border: 1px solid #DCE7DF;
+  cursor: pointer;
+}
+.rh-deactivate-target {
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: #F4F8F5;
+  border: 1px solid #DCE7DF;
+  color: #1C422E;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.rh-deactivate-field {
+  display: grid;
+  gap: 6px;
+}
+.rh-deactivate-field label,
+.rh-deactivate-field span {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #2B4938;
+}
+.rh-deactivate-field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 9px;
+  border: 1px solid #C8DDD0;
+  background: #FFFFFF;
+  color: #1E2B23;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 82px;
+}
+.rh-deactivate-field textarea:focus {
+  outline: none;
+  border-color: #007850;
+}
+.rh-deactivate-err {
+  margin-top: 4px;
+  color: #A8402C;
+  font-size: 12px;
+  font-weight: 700;
+}
+.rh-deactivate-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+}
+.rh-deactivate-actions .rk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  border: 1.5px solid #DCE7DF;
+  background: #FFFFFF;
+  color: #33503F;
+  box-shadow: none;
+}
+.rh-deactivate-actions .rk-btn.ghost:hover {
+  border-color: #007850;
+  color: #007850;
+}
+.rh-btn-danger {
+  background: #A8402C !important;
+  color: #FFFFFF !important;
+  border-color: #A8402C !important;
+}
+.rh-btn-danger:hover {
+  background: #8B3120 !important;
+}
+
 @media (min-width: 1024px) {
-  /* Dashboard-only Topbar & Architectural ReHolz Styling */
+  /* Flat Minimalist ReHolz Dashboard & Topbar */
   body.rh-desk-on .rk-top.is-dash-mode {
-    background: linear-gradient(95deg, #EFF7F2 0%, #FFFFFF 48%, #FAFBF8 100%);
-    border-bottom: 1px solid #D3E3D9;
+    background: #FFFFFF;
+    border-bottom: 1px solid #DCE7DF;
   }
   body.rh-desk-on .rk-top-dash-decor {
     display: flex;
@@ -22488,28 +22660,21 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
     padding-right: 12px;
   }
   body.rh-desk-on .rk-top-dash-emblem {
-    width: 38px;
-    height: 38px;
-    flex: 0 0 38px;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
     display: grid;
     place-items: center;
-    border-radius: 10px;
-    background: linear-gradient(145deg, #FFFFFF 0%, #E7F3EB 100%);
-    border: 1px solid #C6DFCE;
-    box-shadow: 0 3px 10px rgba(0, 76, 51, 0.08);
+    border-radius: 9px;
+    background: #EEF6F1;
+    border: 1px solid #D3E4D9;
+    box-shadow: none;
   }
   body.rh-desk-on .rk-top-dash-copy {
     min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 1px;
-  }
-  body.rh-desk-on .rk-top-dash-kicker {
-    font-size: 9.5px;
-    font-weight: 800;
-    letter-spacing: .12em;
-    color: #5C7B69;
-    text-transform: uppercase;
   }
   body.rh-desk-on .rk-top-dash-title {
     font-size: 15.5px;
@@ -22523,69 +22688,54 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
   body.rh-desk-on .rk-top-dash-date {
     display: inline-flex;
     align-items: center;
-    padding: 6px 12px;
-    border-radius: 9px;
-    background: linear-gradient(145deg, #FFFFFF 0%, #F5F8F5 100%);
-    border: 1px solid #D8E6DD;
+    padding: 5px 11px;
+    border-radius: 8px;
+    background: #F4F8F5;
+    border: 1px solid #DCE7DF;
     color: #365645;
     font-size: 11.5px;
     font-weight: 700;
     white-space: nowrap;
-    box-shadow: inset 0 -2px 0 rgba(183, 121, 50, 0.16);
+    box-shadow: none;
   }
 
   @keyframes rkDashRevealV3 {
-    from { opacity: 0; transform: translateY(10px) scale(.99); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   body.rh-desk-on #rkp-dash .rk-dash-animate {
-    animation: rkDashRevealV3 .5s cubic-bezier(.18, .75, .24, 1) both;
+    animation: rkDashRevealV3 .35s cubic-bezier(.18, .75, .24, 1) both;
   }
   body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi {
     position: relative;
     overflow: hidden;
-    padding: 18px 18px 16px;
-    border: 1px solid #D7E6DC;
-    border-radius: 12px;
-    background:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cpath d='M110 8C84 18 68 40 60 66c26-6 48-24 50-58z' fill='%23007850' fill-opacity='0.045'/%3E%3Cpath d='M0 98c28-14 56-12 90 4' fill='none' stroke='%23B77932' stroke-opacity='0.09' stroke-width='1.5'/%3E%3C/svg%3E") right top / 110px 110px no-repeat,
-      linear-gradient(155deg, #FFFFFF 0%, #F5FAF7 66%, #ECF5EF 100%);
-    box-shadow: 0 4px 16px rgba(0, 68, 45, 0.055);
-    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    padding: 16px 18px;
+    border: 1px solid #DCE7DF;
+    border-radius: 10px;
+    background: #FFFFFF;
+    box-shadow: none;
+    transition: border-color .15s ease, background-color .15s ease;
   }
-  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 12px;
-    bottom: 12px;
-    width: 3.5px;
-    border-radius: 0 4px 4px 0;
-    background: #007850;
-  }
-  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi--b::before { background: #2E7D5E; }
-  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi--a::before { background: #B77932; }
-  body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi--r::before { background: #A8543A; }
   body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi:hover {
-    transform: translateY(-2px);
-    border-color: #B4D4BF;
-    box-shadow: 0 10px 26px rgba(0, 72, 48, 0.11);
+    border-color: #9CC7AE;
+    background: #FAFDFB;
   }
   body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi .rk-stat-ic {
-    width: 48px;
-    height: 48px;
-    flex: 0 0 48px;
-    border-radius: 12px;
-    border: 1px solid rgba(0, 120, 80, 0.12);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    border-radius: 10px;
+    border: 1px solid #DCE7DF;
+    background: #EEF6F1;
+    box-shadow: none;
   }
   body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi .rk-stat-ic.a {
-    background: linear-gradient(145deg, #FDF4E6 0%, #F8E8CF 100%);
-    border-color: rgba(183, 121, 50, 0.22);
+    background: #FBF3E7;
+    border-color: #EAD8BB;
   }
   body.rh-desk-on #rkp-dash .rk-stat.rk-dash-kpi .rk-stat-num {
     color: #123D29;
-    font-size: 27px;
+    font-size: 26px;
     font-variant-numeric: tabular-nums;
     letter-spacing: -.02em;
   }
@@ -22600,19 +22750,17 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
     font-weight: 600;
   }
   body.rh-desk-on #rkp-dash .rk-workforce-card {
-    border: 1px solid #DAE8DF;
-    border-radius: 12px;
-    background: linear-gradient(180deg, #FFFFFF 0%, #F9FCFA 100%);
-    box-shadow: 0 4px 16px rgba(0, 64, 42, 0.05);
-    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    border: 1px solid #DCE7DF;
+    border-radius: 10px;
+    background: #FFFFFF;
+    box-shadow: none;
+    transition: border-color .15s ease;
   }
   body.rh-desk-on #rkp-dash .rk-workforce-card:hover {
-    transform: translateY(-2px);
-    border-color: #BCD6C5;
-    box-shadow: 0 10px 24px rgba(0, 64, 42, 0.09);
+    border-color: #B4D2C0;
   }
 
-  /* Dashboard Non-Chart Panels with Coordinated ReHolz Themes */
+  /* Flat Dashboard Non-Chart Panels */
   body.rh-desk-on #rkp-dash .rk-dashboard-panels {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -22623,37 +22771,28 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
   body.rh-desk-on #rkp-dash .rk-dash-panel {
     position: relative;
     overflow: hidden;
-    padding: 18px;
-    border-radius: 12px;
-    border: 1px solid #D7E6DC;
+    padding: 16px 18px;
+    border-radius: 10px;
+    border: 1px solid #DCE7DF;
+    background: #FFFFFF;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    box-shadow: 0 4px 16px rgba(0, 64, 42, 0.05);
-    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    box-shadow: none;
+    transition: border-color .15s ease;
   }
   body.rh-desk-on #rkp-dash .rk-dash-panel:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 26px rgba(0, 68, 45, 0.10);
+    border-color: #B4D2C0;
   }
   body.rh-desk-on #rkp-dash .rk-dash-panel--hybrid {
-    border-left: 4px solid #007850;
-    background:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='120' viewBox='0 0 160 120'%3E%3Cpath d='M150 6C118 20 96 46 86 80c32-10 56-34 64-74z' fill='%23007850' fill-opacity='0.055'/%3E%3C/svg%3E") right top / 150px 110px no-repeat,
-      linear-gradient(155deg, #FFFFFF 0%, #F3F9F5 58%, #E7F3EC 100%);
+    background: #FFFFFF;
   }
   body.rh-desk-on #rkp-dash .rk-dash-panel--outside {
-    border-left: 4px solid #B77932;
-    border-color: #E7DCC8;
-    background:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='120' viewBox='0 0 180 120'%3E%3Cpath d='M0 24c48-12 92 10 180-8M0 54c54-14 98 14 180-10M0 84c60-14 108 14 180-12' fill='none' stroke='%23B77932' stroke-opacity='0.085' stroke-width='1.5'/%3E%3C/svg%3E") center bottom / 100% 100% no-repeat,
-      linear-gradient(155deg, #FFFFFF 0%, #FCF8F1 58%, #F6EDE0 100%);
+    background: #FFFCF7;
+    border-color: #E7D9C2;
   }
   body.rh-desk-on #rkp-dash .rk-dash-panel--absent {
-    border-left: 4px solid #2A6E53;
-    background:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='120' viewBox='0 0 140 120'%3E%3Ccircle cx='120' cy='20' r='44' fill='%23007850' fill-opacity='0.045'/%3E%3C/svg%3E") right top / 130px 110px no-repeat,
-      linear-gradient(155deg, #FFFFFF 0%, #F3F7F5 58%, #E8F0EC 100%);
+    background: #FAFDFB;
   }
   body.rh-desk-on #rkp-dash .rk-dash-panel-head {
     display: flex;
@@ -22677,17 +22816,17 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
     width: 34px;
     height: 34px;
     flex: 0 0 34px;
-    border-radius: 10px;
+    border-radius: 9px;
     display: grid;
     place-items: center;
-    background: #E2F1E7;
+    background: #EAF4EE;
     color: #006643;
-    border: 1px solid rgba(0, 120, 80, 0.14);
+    border: 1px solid #D3E4D9;
   }
   body.rh-desk-on #rkp-dash .rk-dash-panel--outside .rk-dash-panel-icon {
-    background: #F9ECDA;
+    background: #FBF1E1;
     color: #9A6121;
-    border-color: rgba(183, 121, 50, 0.24);
+    border-color: #E9D6B7;
   }
   body.rh-desk-on #rkp-dash .rk-dash-panel-rows {
     display: flex;
@@ -22700,13 +22839,14 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
     align-items: center;
     padding: 6px 10px;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(212, 227, 217, 0.7);
+    background: #F6FAF7;
+    border: 1px solid #E2ECE5;
     font-size: 12px;
     color: #465C4F;
   }
   body.rh-desk-on #rkp-dash .rk-dash-panel--outside .rk-dash-panel-line {
-    border-color: rgba(226, 209, 180, 0.7);
+    background: #FCF7EE;
+    border-color: #EBDFCA;
   }
   body.rh-desk-on #rkp-dash .rk-dash-panel-line b {
     color: #143D2B;
@@ -22719,7 +22859,7 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
     align-items: center;
     margin-top: 2px;
     padding: 8px 11px;
-    border-radius: 9px;
+    border-radius: 8px;
     background: #007850;
     color: #FFFFFF;
     font-size: 12px;
@@ -22738,7 +22878,7 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
     min-width: 28px;
     height: 24px;
     padding: 0 8px;
-    border-radius: 8px;
+    border-radius: 7px;
     background: #143D2B;
     color: #FFFFFF;
     font-size: 12px;
@@ -22763,8 +22903,8 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
     gap: 8px;
     padding: 6px 10px;
     border-radius: 7px;
-    background: rgba(255, 255, 255, 0.78);
-    border: 1px solid rgba(212, 227, 217, 0.75);
+    background: #FFFFFF;
+    border: 1px solid #E1EBE4;
     font-size: 11.5px;
     color: #264234;
   }
@@ -22775,8 +22915,8 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
   }
   body.rh-desk-on #rkp-dash .rk-dash-absent-empty {
     padding: 18px 12px;
-    border-radius: 9px;
-    background: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    background: #FFFFFF;
     border: 1px dashed #C7DDD0;
     text-align: center;
     font-size: 12px;
@@ -22784,7 +22924,7 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
     font-weight: 600;
   }
 
-  /* Settings Hub, Breadcrumb & Flexible Work Rules */
+  /* Settings Hub Box Cards & Breadcrumb */
   body.rh-desk-on .rk-settings-backbar {
     display: flex;
     align-items: center;
@@ -22812,38 +22952,6 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
   body.rh-desk-on .rk-settings-back-btn:hover { background: #E0F0E6; }
   body.rh-desk-on .rk-settings-crumb-sep { color: #9AAFA0; font-size: 13px; }
   body.rh-desk-on .rk-settings-crumb-cur { color: #204231; font-size: 12.5px; font-weight: 750; }
-  body.rh-desk-on .rk-settings-hero {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    padding: 20px 22px;
-    margin-bottom: 16px;
-    background: linear-gradient(135deg, #004C33 0%, #006B47 62%, #003D29 100%);
-    color: #FFFFFF;
-    border: 0;
-    border-radius: 14px;
-  }
-  body.rh-desk-on .rk-settings-eyebrow {
-    display: inline-block;
-    font-size: 9.5px;
-    font-weight: 800;
-    letter-spacing: .12em;
-    color: #A7DFBE;
-    margin-bottom: 4px;
-  }
-  body.rh-desk-on .rk-settings-hero h2 { margin: 0 0 5px; font-size: 20px; font-weight: 800; color: #FFFFFF; }
-  body.rh-desk-on .rk-settings-hero p { margin: 0; max-width: 720px; font-size: 12.5px; line-height: 1.5; color: rgba(255, 255, 255, 0.86); }
-  body.rh-desk-on .rk-settings-hero-meta {
-    flex: 0 0 auto;
-    padding: 10px 14px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    text-align: right;
-  }
-  body.rh-desk-on .rk-settings-hero-meta span { display: block; font-size: 10px; color: #C2EAD2; }
-  body.rh-desk-on .rk-settings-hero-meta b { display: block; font-size: 13px; color: #FFFFFF; margin-top: 2px; }
   body.rh-desk-on .rk-settings-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -22854,20 +22962,19 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
-    gap: 8px;
-    padding: 20px;
-    border-radius: 13px;
+    gap: 10px;
+    padding: 18px 20px;
+    border-radius: 10px;
     background: #FFFFFF;
-    border: 1px solid #D9E6DD;
-    box-shadow: 0 4px 14px rgba(0, 64, 42, 0.045);
+    border: 1px solid #DCE7DF;
+    box-shadow: none;
     cursor: pointer;
-    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    transition: border-color .15s ease, background-color .15s ease;
   }
   body.rh-desk-on .rk-settings-card:hover,
   body.rh-desk-on .rk-settings-card:focus-visible {
-    transform: translateY(-2px);
     border-color: #007850;
-    box-shadow: 0 12px 28px rgba(0, 76, 51, 0.11);
+    background: #FAFDFB;
     outline: none;
   }
   body.rh-desk-on .rk-settings-card-top {
@@ -22876,12 +22983,11 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    margin-bottom: 4px;
   }
   body.rh-desk-on .rk-settings-card-ic {
-    width: 44px;
-    height: 44px;
-    border-radius: 11px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
     display: grid;
     place-items: center;
     background: #E7F4EC;
@@ -22891,23 +22997,17 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
   body.rh-desk-on .rk-settings-card.tone-sage .rk-settings-card-ic { background: #ECF4EE; color: #2F6B4E; }
   body.rh-desk-on .rk-settings-card-badge {
     padding: 4px 9px;
-    border-radius: 8px;
+    border-radius: 7px;
     background: #F4F8F5;
     border: 1px solid #DCE7DF;
     color: #466152;
     font-size: 10.5px;
     font-weight: 750;
   }
-  body.rh-desk-on .rk-settings-card-kicker {
-    font-size: 9.5px;
-    font-weight: 800;
-    letter-spacing: .1em;
-    color: #6B8275;
-  }
-  body.rh-desk-on .rk-settings-card h3 { margin: 0; font-size: 16px; font-weight: 800; color: #163E2C; }
-  body.rh-desk-on .rk-settings-card p { margin: 0; font-size: 12px; line-height: 1.5; color: #5E7065; flex: 1; }
+  body.rh-desk-on .rk-settings-card h3 { margin: 2px 0 0; font-size: 15.5px; font-weight: 800; color: #163E2C; }
   body.rh-desk-on .rk-settings-card-cta {
-    margin-top: 8px;
+    margin-top: auto;
+    padding-top: 4px;
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -22916,16 +23016,14 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
     color: #007850;
   }
 
-  /* Rules Page */
-  body.rh-desk-on .rk-rules-hero { margin-bottom: 14px; padding: 18px 20px; }
-  body.rh-desk-on .rk-rules-hero .rk-settings-eyebrow { color: #007850; }
-  body.rh-desk-on .rk-rules-hero-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
-  body.rh-desk-on .rk-rules-hero-head h2 { margin: 2px 0 4px; font-size: 18px; color: #163E2C; }
-  body.rh-desk-on .rk-rules-hero-head p { margin: 0; font-size: 12px; color: #63766A; max-width: 760px; }
-  body.rh-desk-on .rk-rules-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #E8EFEA; }
+  /* Rules Page & 9-Column Employee Matrix */
+  body.rh-desk-on .rk-rules-hero { margin-bottom: 14px; padding: 16px 20px; }
+  body.rh-desk-on .rk-rules-hero-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+  body.rh-desk-on .rk-rules-hero-head h2 { margin: 0; font-size: 17px; color: #163E2C; }
+  body.rh-desk-on .rk-rules-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #E8EFEA; }
   body.rh-desk-on .rk-rules-tabs button {
     padding: 8px 14px;
-    border-radius: 9px;
+    border-radius: 8px;
     border: 1px solid #D9E5DD;
     background: #F8FBF9;
     color: #3E5748;
@@ -22940,41 +23038,102 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
   }
   body.rh-desk-on .rk-rules-grid { display: grid; gap: 14px; }
   body.rh-desk-on .rk-rules-card { padding: 18px 20px; }
-  body.rh-desk-on .rk-area-label-inp { min-width: 140px; padding: 6px 9px; font-size: 12px; }
+  body.rh-desk-on .rk-rules-card .rk-section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  body.rh-desk-on .rk-rules-card .rk-section-head h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--rk-ink);
+  }
+  body.rh-desk-on .rk-rules-card .rk-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    background: #ECF5EF;
+    color: #00553A;
+    border: 1px solid #D5E7DA;
+  }
+  body.rh-desk-on .rk-area-label-inp {
+    min-width: 150px;
+    padding: 7px 10px;
+    font-size: 12.5px;
+    border: 1.5px solid var(--rk-line);
+    border-radius: 8px;
+    background: #FFFFFF;
+    color: var(--rk-ink);
+    font-family: inherit;
+  }
+  body.rh-desk-on .rk-area-label-inp:focus {
+    outline: none;
+    border-color: var(--rk-green);
+  }
   body.rh-desk-on .rk-area-matrix-table th,
   body.rh-desk-on .rk-area-matrix-table td { text-align: center; vertical-align: middle; }
   body.rh-desk-on .rk-area-matrix-table th:first-child,
   body.rh-desk-on .rk-area-matrix-table td:first-child,
   body.rh-desk-on .rk-area-matrix-table th:nth-child(2),
   body.rh-desk-on .rk-area-matrix-table td:nth-child(2) { text-align: left; }
-  body.rh-desk-on .rk-rules-emp-picker { display: grid; grid-template-columns: minmax(220px, .8fr) minmax(260px, 1.2fr); gap: 12px; margin-top: 10px; }
-  body.rh-desk-on .rk-rules-emp-picker label { display: grid; gap: 5px; font-size: 11.5px; font-weight: 700; color: #3D5547; }
-  body.rh-desk-on .rk-rules-emp-editor { margin-top: 14px; padding: 14px; border-radius: 10px; background: #F5FAF6; border: 1px solid #D7E6DC; }
-  body.rh-desk-on .rk-rules-emp-mode { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 12px; font-size: 12.5px; font-weight: 700; color: #204231; }
-  body.rh-desk-on .rk-rules-emp-mode label { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; }
-  body.rh-desk-on .rk-emp-area-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-  body.rh-desk-on .rk-emp-area-chip {
-    display: inline-flex;
+  body.rh-desk-on .rk-rules-matrix-toolbar {
+    margin: 2px 0 12px;
+    display: flex;
     align-items: center;
-    gap: 7px;
-    padding: 7px 11px;
-    border-radius: 8px;
+    gap: 10px;
+  }
+  body.rh-desk-on .rk-rules-matrix-toolbar input.rk-in {
+    width: 100%;
+    max-width: 360px;
+    padding: 8px 13px;
+    font-size: 13px;
+    border: 1.5px solid var(--rk-line);
+    border-radius: 10px;
     background: #FFFFFF;
-    border: 1px solid #D5E4DA;
-    font-size: 12px;
-    font-weight: 700;
-    color: #214533;
+    color: var(--rk-ink);
+    font-family: inherit;
+  }
+  body.rh-desk-on .rk-rules-matrix-toolbar input.rk-in:focus {
+    outline: none;
+    border-color: var(--rk-green);
+  }
+  body.rh-desk-on .rk-rules-matrix-wrap {
+    max-height: 460px;
+    overflow: auto;
+    border: 1px solid #DCE7DF;
+    border-radius: 9px;
+  }
+  body.rh-desk-on .rk-rules-matrix-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #F4F8F5;
+    white-space: nowrap;
+  }
+  body.rh-desk-on .rk-rules-matrix-table th:nth-child(n+3),
+  body.rh-desk-on .rk-rules-matrix-table td.rk-rules-matrix-chk {
+    text-align: center;
+    vertical-align: middle;
+  }
+  body.rh-desk-on .rk-rules-matrix-chk input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #007850;
     cursor: pointer;
   }
-  body.rh-desk-on .rk-rules-emp-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-  body.rh-desk-on .rk-rules-restricted-list { margin-top: 16px; padding-top: 14px; border-top: 1px solid #E6EFE9; }
-  body.rh-desk-on .rk-rules-restricted-list h4 { margin: 0 0 10px; font-size: 13px; color: #19422F; }
   body.rh-desk-on .rk-rules-policy-grid { display: grid; gap: 10px; }
   body.rh-desk-on .rk-rules-shortcuts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid #E8EFEA; }
   body.rh-desk-on .rk-rules-footer {
     margin-top: 14px;
     padding: 14px 18px;
-    border-radius: 12px;
+    border-radius: 10px;
     background: #FFFFFF;
     border: 1px solid #DCE7DF;
     display: flex;

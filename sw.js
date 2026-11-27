@@ -6,9 +6,9 @@
  */
 'use strict';
 
-const RH_SW_RELEASE = 'v80-pwa-egress-rules';
-const RH_EXPECTED_HTML_RELEASE = 'v14.9.3-pwa-optimization';
-const RH_SHELL_CACHE = 'rehholz-app-shell-v80';
+const RH_SW_RELEASE = 'v81-dashboard-settings-notif-opt';
+const RH_EXPECTED_HTML_RELEASE = 'v14.9.4-dashboard-settings-notif-opt';
+const RH_SHELL_CACHE = 'rehholz-app-shell-v81';
 const RH_ASSET_CACHE = 'reholz-app-assets-v3';
 const RH_CDN_CACHE = 'reholz-cdn-libs-v1';
 const RH_ASSET_URLS = [

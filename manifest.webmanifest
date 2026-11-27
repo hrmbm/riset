@@ -1,10 +1,10 @@
 {
-  "id": "/",
+  "id": "./",
   "name": "ReHolz HRIS",
   "short_name": "ReHolz",
   "description": "Portal sistem terintegrasi untuk mengelola data karyawan ReHolz.",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "orientation": "any",
   "theme_color": "#007850",
@@ -13,19 +13,19 @@
   "categories": ["business", "productivity"],
   "icons": [
     {
-      "src": "/assets/pwa-192x192.png",
+      "src": "assets/pwa-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/pwa-512x512.png",
+      "src": "assets/pwa-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/pwa-maskable-512x512.png",
+      "src": "assets/pwa-maskable-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
