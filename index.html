@@ -13426,14 +13426,20 @@ function showHrPlaceholder(title, group, description) {
     var filtered = q ? people.filter(function (x) {
       return String(x.nama || '').toLowerCase().indexOf(q) >= 0 ||
         String(x.nik || '').toLowerCase().indexOf(q) >= 0 ||
+        String(x.jobCode || x.job_code || '').toLowerCase().indexOf(q) >= 0 ||
+        String(x.jobPosition || x.job_position || x.jabatan || '').toLowerCase().indexOf(q) >= 0 ||
+        String(x.department || x.departemen || '').toLowerCase().indexOf(q) >= 0 ||
         String(x.cabang || x.branch || '').toLowerCase().indexOf(q) >= 0;
     }) : people;
     if (!filtered.length) {
-      return '<tr><td colspan="9"><div class="rk-empty">Tidak ada karyawan yang cocok.</div></td></tr>';
+      return '<tr><td colspan="12"><div class="rk-empty">Tidak ada karyawan yang cocok.</div></td></tr>';
     }
     var rulesMap = (draft && draft.employeeAreaRules) || {};
     return filtered.map(function (emp) {
       var nik = String(emp.nik || '').trim();
+      var jobCode = String(emp.jobCode || emp.job_code || emp.kode_jabatan || '—');
+      var jobPos = String(emp.jobPosition || emp.job_position || emp.jabatan || emp.posisi || '—');
+      var dept = String(emp.department || emp.departemen || emp.org || emp.organization || '—');
       var rule = rulesMap[nik];
       var isRestricted = !!(rule && rule.mode === 'RESTRICTED');
       var allowed = isRestricted && Array.isArray(rule.allowedAreas)
@@ -13443,6 +13449,9 @@ function showHrPlaceholder(title, group, description) {
       return '<tr data-rk-emp-matrix-row="' + escH(nik) + '">' +
         '<td><code>' + escH(nik) + '</code></td>' +
         '<td><b>' + escH(emp.nama || nik) + '</b></td>' +
+        '<td><code>' + escH(jobCode) + '</code></td>' +
+        '<td>' + escH(jobPos) + '</td>' +
+        '<td>' + escH(dept) + '</td>' +
         wr.standardAreas.map(function (a) {
           var checked = !isRestricted || allowed.indexOf(a.value) >= 0;
           return '<td class="rk-rules-matrix-chk"><input type="checkbox" aria-label="' + escH((emp.nama || nik) + ' - ' + a.defaultLabel) + '" data-rk-emp-matrix-nik="' + escH(nik) + '" data-rk-emp-matrix-area="' + escH(a.value) + '"' + (checked ? ' checked' : '') + disabledAttr + '></td>';
@@ -13522,9 +13531,9 @@ function showHrPlaceholder(title, group, description) {
           '<section class="rk-card rk-rules-card">' +
             '<div class="rk-section-head"><h3>Pembatasan Area Per Karyawan</h3><span class="rk-pill" id="rkRuleRestrictedCount">' + (restrictedCount ? (restrictedCount + ' dibatasi') : 'Semua diizinkan') + '</span></div>' +
             '<div class="rk-rules-matrix-toolbar">' +
-              '<input type="search" id="rkRuleEmpSearch" class="rk-in" placeholder="Cari NIK, nama karyawan, atau cabang…" value="' + escH(workRulesUI.empQuery) + '">' +
+              '<input type="search" id="rkRuleEmpSearch" class="rk-in" placeholder="Cari NIK, nama karyawan, jobcode, jabatan, departemen…" value="' + escH(workRulesUI.empQuery) + '">' +
             '</div>' +
-            '<div class="rk-table-wrap rk-rules-matrix-wrap"><table class="rk-table rk-rules-matrix-table"><thead><tr><th>NIK</th><th>Nama Karyawan</th><th>Area 1</th><th>Area 2</th><th>Area 3</th><th>Area 4</th><th>Area Lain</th><th>Area Sekitar</th><th>Izinkan Semua</th></tr></thead><tbody id="rkRuleEmpMatrixBody">' +
+            '<div class="rk-table-wrap rk-rules-matrix-wrap"><table class="rk-table rk-rules-matrix-table"><thead><tr><th>NIK</th><th>Nama Karyawan</th><th>Jobcode</th><th>Jabatan</th><th>Departemen</th><th>Area 1</th><th>Area 2</th><th>Area 3</th><th>Area 4</th><th>Area Lain</th><th>Area Sekitar</th><th>Izinkan Semua</th></tr></thead><tbody id="rkRuleEmpMatrixBody">' +
               renderWorkRulesEmpMatrixRows(draft, people, workRulesUI.empQuery) +
             '</tbody></table></div>' +
           '</section>' +
@@ -20182,7 +20191,65 @@ function renderIncentiveFormulaPage(){
     });
   }
 
+  function rhInitTableSorting() {
+    if (window.__rhTableSortingInitialized) return;
+    window.__rhTableSortingInitialized = true;
+    document.addEventListener('click', function (ev) {
+      var th = ev.target.closest ? ev.target.closest('th') : null;
+      if (!th) return;
+      var table = th.closest('table');
+      if (!table) return;
+      var thead = table.querySelector('thead');
+      if (!thead || !thead.contains(th)) return;
+      if (th.querySelector('input, button, select, [contenteditable]')) return;
+
+      var tr = th.parentElement;
+      var ths = Array.from(tr.children);
+      var colIdx = ths.indexOf(th);
+      if (colIdx < 0) return;
+
+      var tbody = table.querySelector('tbody');
+      if (!tbody) return;
+
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      if (rows.length <= 1) return;
+      if (rows.length === 1 && rows[0].querySelector('[colspan]')) return;
+
+      var currentAsc = th.classList.contains('sort-asc');
+      var nextAsc = !currentAsc;
+
+      ths.forEach(function (h) {
+        h.classList.remove('sort-asc', 'sort-desc');
+      });
+      th.classList.add(nextAsc ? 'sort-asc' : 'sort-desc');
+
+      rows.sort(function (rowA, rowB) {
+        var cellA = rowA.children[colIdx];
+        var cellB = rowB.children[colIdx];
+        var valA = cellA ? cellA.textContent.trim() : '';
+        var valB = cellB ? cellB.textContent.trim() : '';
+
+        var cleanA = valA.replace(/[^\d.-]/g, '');
+        var cleanB = valB.replace(/[^\d.-]/g, '');
+        var numA = parseFloat(cleanA);
+        var numB = parseFloat(cleanB);
+        var isNum = !isNaN(numA) && !isNaN(numB) && cleanA !== '' && cleanB !== '' && !/^[A-Z]{2,}\d+/.test(valA) && !/^RH\d+/.test(valA);
+
+        if (isNum) {
+          return nextAsc ? numA - numB : numB - numA;
+        }
+
+        return nextAsc ? valA.localeCompare(valB, 'id', { numeric: true }) : valB.localeCompare(valA, 'id', { numeric: true });
+      });
+
+      rows.forEach(function (r) {
+        tbody.appendChild(r);
+      });
+    });
+  }
+
   function initDom() {
+    rhInitTableSorting();
     // Logo sidebar konsol memakai logo login yang sama
     var logoImg = document.querySelector('#s-login .rh-login-logo-wrap img');
     var rkLogo = document.getElementById('rkLogo');
@@ -23158,6 +23225,33 @@ body.rh-desk-on .rk-cuti-detail-actions button:disabled {
   body.rh-desk-on #rkp-dash .rk-dashboard-panels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   body.rh-desk-on .rk-adjustment-form { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
 }
+
+  /* Global sortable table headers */
+  table th, .rk-table th, .rk-incentive-table th, .rh-reimburse-table th, .rk-manage-table th {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding-right: 20px !important;
+  }
+  table th::after, .rk-table th::after, .rk-incentive-table th::after, .rh-reimburse-table th::after, .rk-manage-table th::after {
+    content: '⇅';
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    opacity: 0.35;
+  }
+  table th.sort-asc::after, .rk-table th.sort-asc::after, .rk-incentive-table th.sort-asc::after, .rh-reimburse-table th.sort-asc::after, .rk-manage-table th.sort-asc::after {
+    content: '▲';
+    opacity: 0.9;
+    color: var(--wood, #007850);
+  }
+  table th.sort-desc::after, .rk-table th.sort-desc::after, .rk-incentive-table th.sort-desc::after, .rh-reimburse-table th.sort-desc::after, .rk-manage-table th.sort-desc::after {
+    content: '▼';
+    opacity: 0.9;
+    color: var(--wood, #007850);
+  }
 
 @media (prefers-reduced-motion: reduce) {
   body.rh-desk-on #rkp-dash .rk-dash-animate,
